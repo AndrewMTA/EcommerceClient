@@ -1,0 +1,1512 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.list {
+  margin: 10px;
+
+}
+
+.settings {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+flex:.3;
+  font-size: 24px;
+  cursor: pointer;
+
+
+}
+
+.payouts{
+ padding-top: 70px;
+padding-right: 100px;
+  background-color: rgba(0, 255, 255, 0);
+}
+
+.pay-dash {
+  padding-top: 50px;
+  width: 100%;
+  display: flex;
+  height: 600px;
+  max-width: 1000px;
+  padding-right: 250px;
+  max-height: 600px;
+column-gap: 100px;
+}
+
+.payments {
+  display: flex;
+  justify-content: center;
+}
+
+input[type="text"],
+input[type="password"],
+button,
+
+label,
+button {
+  margin-top: 1rem;
+}
+
+.addressBox {
+  width: 300px;
+  padding: 10px 15px;
+  margin:15px 0px ;
+  font-size: medium;
+  text-align: start;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.wrap {
+   display:flex
+}
+
+.min {
+  width: 90px;
+}
+
+.tots{
+  font-size: medium;
+margin-top: 3px;
+  margin-left: 12px;
+  
+}
+
+
+.smaller {
+  margin-top: 5px;
+  margin-left: 5px;
+   font-size: small;
+}
+
+.addressBox:hover {
+  background-color: rgb(228, 255, 253);
+  transition: .3s ease-in-out;
+}
+
+.sha_boing {
+  background-color: rgb(126, 126, 126);
+  padding-bottom: 20px;
+  margin: 10px;
+}
+
+.elementWrap {
+  border: 1px solid;
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+
+.total {
+  background-color: rgba(128, 128, 128, 0.715);
+  padding: 5px 35px;
+  height: 180px;
+  width: 100%;
+  margin-left: 50px;
+}
+
+.zza {
+  width: 100%;
+  cursor: pointer;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.other{
+position: absolute;
+margin-left: 110px;
+margin-top: 90px;
+font-weight: 700;
+font-size: larger;
+}
+
+.pp {
+  font-weight: 700;
+  font-size: larger;
+  padding-right: 115px;
+  
+}
+
+
+.circle {
+  margin-left: 15px;
+  background-color: rgb(143, 143, 143);
+  font-weight: 400;
+  padding: 0px 3px;
+  cursor: pointer;
+
+}
+
+.circle-m {
+  margin-right: 15px;
+  background-color: rgb(143, 143, 143);
+  padding: 0px 6px;
+  cursor: pointer;
+  font-weight: 600;
+
+}
+
+
+.Save {
+padding: 10px;
+  background-color: rgb(199, 199, 199);
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+}
+
+ .quantity-indicator {
+  border: 1px solid rgb(199, 199, 199);
+  background-color: rgb(203, 203, 203);
+
+ }
+.spread {
+  display: flex;
+  column-gap: 80px;
+  margin-left: 100px;
+  font-size: larger;
+  font-weight: 700;
+}
+
+
+.infoWrap {
+  display: flex;
+  margin: 10px;
+  row-gap: 5px;
+  max-width: 275px;
+  flex-direction: column;
+}
+
+td {
+  margin-left: -10px;
+}
+.imgWrap {
+  margin: 15px 0px;
+
+  background-color: rgb(207, 207, 207);
+  
+  align-items: center;
+  display: flex;
+
+
+}
+
+.checkoutWrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.checkout_btn {
+  background-color: rgb(89, 183, 89);
+  color: white;
+  padding: 10px;
+  margin-top: -10px;
+  cursor: pointer;
+}
+.fixer {
+  display: flex;
+  margin-left: 244px;
+  margin-top: 90px;
+  column-gap: 100px;
+  font-weight: 700;
+  font-size: larger;
+  position: absolute;
+}
+
+.gap {
+  display: flex;
+  column-gap: 80px;
+  font-size: larger;
+  justify-content: center;
+
+}
+
+
+td {
+  margin-left: 50px;
+  background-color: rgb(240, 240, 250);
+  padding: 5px 30px;
+  border: 1px solid rgb(152, 152, 152);
+}
+
+
+.center-div {
+  margin-top: 70px;
+  display: flex;
+
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-items: center;
+  justify-content: center;
+}
+
+.flex-col-a {
+  display: flex;
+  flex-direction: column;
+}
+
+.green {
+  background-color: rgb(79, 187, 79);
+  width: 150px;
+  cursor: pointer;
+  margin-left: 5px;
+
+}
+
+.not-green {
+  background-color: rgb(190, 190, 190);
+  width: 150px;
+  cursor: pointer;
+  margin-left: 5px;
+  
+}
+
+
+.flex-col-b {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+}
+
+.flex-cont {
+  display: flex;
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid rgb(173, 173, 173)
+}
+
+th {
+  margin-left: 0px;
+  background-color: rgb(14, 14, 14);
+  padding: 10px 10px;
+  color: white;
+
+  border: 1px solid rgb(106, 106, 106);
+}
+
+.dashboard {
+  position: fixed;
+  background-color: white;
+  border-bottom: solid black 1px;
+  padding-top: 65px;
+  color: rgb(0, 0, 0);
+  display: flex;
+  width: 100%;
+  z-index: 90;
+}
+
+.dash-options 
+{
+  padding-left: 25px;
+margin: 10px;
+cursor: pointer;
+
+}
+
+.gap2 {
+  display: flex;
+  column-gap: 80px;
+  font-size: larger;
+
+}
+
+
+.loge {
+  width:75px
+
+
+}
+
+button {
+  padding: 0.5rem;
+}
+
+
+.cart {
+  background-color: aquamarine;
+  display: flex;
+  justify-content: center;
+   column-gap: 40px;
+}
+
+li {
+    list-style-type: none;
+}
+
+
+.log {
+  width: 60px;
+  margin-top: -18px;
+  margin-left: 10px;
+  position: absolute;
+}
+
+
+.inputOnboard60 {
+  margin-top: 2px;
+  padding: 12px;
+  width: 400px;
+
+}
+
+.arrow{
+  width: 40px;
+}
+
+.valid {
+    color: limegreen;
+    margin-left: 0.25rem;
+}
+
+.invalid {
+    color: red;
+    margin-left: 0.25rem;
+}
+
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+.hide {
+    display: none;
+}
+
+.valid {
+    color: limegreen;
+    margin-left: 0.25rem;
+}
+
+.invalid {
+    color: red;
+    margin-left: 0.25rem;
+}
+
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.line {
+    display: inline-block;
+}
+
+.NavTitle
+
+
+.persistCheck {
+    font-size: 0.75rem;
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.persistCheck label {
+    margin: 0;
+}
+
+[type="checkbox"] {
+    height: 20px;
+    width: 20px;
+    margin: 0 5px 2px 2px;
+}
+.flexNav6 {
+    
+    color: rgb(0, 0, 0);
+    padding: 20px;
+    width: 100%;
+    margin-top: -4px;
+    position:fixed;
+      background-color: rgb(255, 255, 255);
+      display: flex;
+    z-index: 1889;
+      justify-content: space-between;
+    }
+
+.card{
+    background-color: rgb(231, 231, 231);
+    
+      overflow: hidden;
+      border-top-left-radius: .5rem;
+      border-top-right-radius: .5rem;
+      position: relative;
+      max-width: 650px;
+      min-width: 30px;
+      min-height: 100px;
+
+      border: 1px solid rgba(128, 128, 128, 0.249);
+    }
+    
+
+    .card2{
+      background-color: rgb(227, 227, 227);
+      
+        overflow: hidden;
+     
+        position: relative;
+        max-width: 650px;
+        min-width: 30px;
+        min-height: 100%;
+        max-height: 100%;
+        border: 1px solid rgba(128, 128, 128, 0.249);
+      }
+      
+    
+    .flexNav3
+    
+    
+    .DisplayWrap {
+    margin-top: 30px;
+    
+    }
+    
+    .CardPic
+    
+    .CardPic{
+      width: 100%;
+     height: 100%;
+      cursor: pointer;
+      object-fit: cover;
+    
+    }
+
+
+    .card2
+    .CardPic8{
+      width: 100%;
+     height: 100%;
+     width: 200px;
+     height: 140px;
+     border-radius: 0;
+      cursor: pointer;
+      object-fit: cover;
+    
+    }
+    
+    /* || UTILITY CLASSES */
+    
+    
+    /* || GENERAL STYLES */
+    
+    .form
+    .inputWrap 
+    
+    input,
+    button,
+    textarea {
+      font: inherit;
+    }
+    
+    .packWraps{
+      display: flex;
+      flex-direction: row;
+    }
+
+    
+    
+    .package {
+      border: 1px solid rgb(175, 175, 175);
+      margin: 20px;
+      border-radius: 10px;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+      
+    
+    }
+    
+    .back {
+      background-color: rgb(226, 226, 226);
+      border: 1px solid black;
+      padding: 8px 14.5px;
+   
+    }
+    
+    .selectz{
+      width: 100%;
+      background-color:rgb(252, 252, 252);
+      padding: 5px;
+      margin-top: 8px;
+      margin-bottom: 5px;
+    }
+    
+    
+    
+    
+    .popular {
+      background-color: rgb(110, 184, 110);
+      color: white;
+      padding: 5px 10px;
+      font-size: smaller;
+      font-weight: 500;
+      position: absolute;
+      margin-top: -45px;
+      border-radius: 15px;
+    }
+    
+    
+    .selectz-black {
+      width: 100%;
+      background-color: rgb(19, 22, 23);
+      padding: 10px;
+      margin-top: 20px;
+      color: white;
+    }
+    
+    
+    .label3{
+      margin-top: 20px;
+    }
+    .border-box{
+      border: solid rgba(0, 0, 0, 0.565) 1px;
+    
+      padding: 10px;
+    
+      margin-bottom: 12px;
+    }
+    
+    .Price{
+      font-size: 50px;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+    
+    
+    
+    
+    .progress-container {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      padding: 1rem;
+      border: 1px solid #000;
+      border-radius: 10px;
+      background-color: whitesmoke;
+    }
+    
+
+.print { 
+
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.print-g { 
+  background-color: rgb(73, 218, 90);
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.box-time {
+  border: 1px solid black;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-top: 10px;
+  padding-bottom: 15px;
+}
+
+
+   .id-1 {
+width: 267px;
+
+
+   }
+   .id-2 {
+    width: 143px;
+   }
+   .id-3 {
+    width:142px
+   }
+   .id-4 {
+    width: 105px;
+   }
+   .id-5 {
+    width: 457px;
+   }
+
+
+    .barmarker-container {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-around;
+    }
+    
+    .barmarker {
+      width: 100%;
+      display: grid;
+      place-content: center;
+    }
+    
+    .barmarker:is(:not(:last-child)) {
+      border-right: 1px solid #000;
+    }
+    
+    
+    .progress {
+      width: 100%;
+      height: 24px;
+    }
+    
+    .form {
+      width: 100%;
+      max-width: 650px;
+      margin: auto;
+      padding: 0.75rem;
+      border: 1px solid #000;
+      border-radius: 10px;
+      padding: 5px;
+      background-color: whitesmoke;
+    }
+    
+
+.warning {
+  background-color: rgb(0, 183, 255);
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.success {
+  background-color: yellow;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+    .form-header {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .button-container {
+      display: flex;
+      flex-flow: row nowrap;
+      gap: 0.5rem;
+    }
+    
+    .button {
+      padding: 0.5rem;
+    
+    }
+    
+    .select
+    
+    input,
+    select {
+    
+    
+      width: 100%;
+    }
+    
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-right: 0.5rem;
+    }
+    
+    ul {
+      list-style-type: none;
+      margin-bottom: 1rem;
+    }
+    
+    
+    
+    .navv{
+      border-bottom: solid 1px gray;
+    }
+    
+    .optionWrap {
+      margin-right: 60px;
+    }
+    
+    
+    .CardPic{
+      width: 100%;
+     height: 320px;
+      cursor: pointer;
+      object-fit: cover;
+    
+    }
+    
+    
+    .button {
+    
+      background-color: white;
+      padding: 10px;
+      margin-top: 30px;
+      cursor: pointer;
+      border: solid 2px rgb(0, 0, 0);
+    
+    }
+    .lazywrap {
+      display: flex;
+      justify-content: center;
+    }
+    .formWrap1{
+      width:600px;
+    
+      border-radius: 5px;
+      padding: 5px;
+      
+    }
+    
+    .pusher {
+      margin-top: 165px;
+      margin-left: 30px;
+      margin-bottom: 0px;
+    }
+    
+ 
+    .arrow {
+      margin: 0;
+    }
+    
+    .slider {
+      margin-left: 25px;
+       margin-right: -23px;
+    }
+    
+    
+    
+    .CardPic4{
+      
+      width: 50%;
+      cursor: pointer;
+      height: 347px;
+      object-fit: cover;
+     
+    }
+    
+    
+    
+    .displayFlex {
+      margin-top: -11px;
+      position: relative;
+    z-index: 9;
+    
+    }
+    
+    
+    
+    
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    
+    }
+    
+    code {
+      font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+    }
+    
+    
+    
+    .iconImg {
+      margin-bottom: 15px;
+    }
+    
+    .flex11{
+      display: flex;
+    
+    
+    
+    }
+    
+    
+    
+    
+    .innerWrapper{
+    
+    
+    margin-bottom: 10px;
+      display: flex;
+    
+      justify-content: center;
+      flex-direction: column;
+      cursor: pointer; 
+    
+    }
+    
+    .iconImg{
+      width: 60px;
+      margin-left: 35px;
+
+    }
+    
+    
+    
+    .innerWrapper3{
+      border: solid 1px;
+    
+    margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      cursor: pointer; 
+      width: 187px;
+      height: 102px;
+    }
+    
+    .iconImg3{
+      font-size: 70px;
+     margin-left: 68px;
+    margin-top: -10px;
+     margin-bottom: 5px;
+    }
+    
+    .innerWrapper2{
+      border: solid 1px;
+    
+    margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      cursor: pointer; 
+      width: 187px;
+      height: 102px;
+      background-color: rgba(128, 128, 128, 0.283);
+    }
+    
+    
+    
+    .selectors
+    
+    .campaign-pic {
+      height: 225px;
+    width: 400px;
+    margin-bottom: 20px;
+    }
+    .iconImg2{
+      font-size: 70px;
+     margin-left: 68px;
+    margin-top: -10px;
+    
+     margin-bottom: 15px;
+    }
+    .NavOption
+    .navA{
+      color: white;
+    }
+    .row {
+      display: flex;
+    }
+    
+    .ptaged2 {
+    margin-left: 15px;
+    }
+    .h3 {
+      margin: 0px;
+    }
+    
+    .p{
+      margin-top: 5px;
+      margin-bottom: 0px;
+      margin-left:0px;
+    }
+
+    .lil {
+      border: 1px solid black;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      max-width: 80%;
+      padding: 50px;
+      margin-left: 60px;
+      box-shadow: 1px 2px 8px 1px rgba(11, 11, 11, 0.645);
+    }
+    
+
+.deletePic {
+  background-color: rgb(255, 255, 255);
+  border-radius: 5000px;
+  position: absolute;
+  z-index: 99;
+  width: 25px;
+  margin-left: -6px;
+  margin-top: -2px;
+  cursor: pointer;
+  margin-bottom: -30px;
+
+}
+
+.deletePic:hover {
+  background-color: rgb(255, 82, 82);
+  transition: .3s ease-in-out;
+  position: absolute;
+  z-index: 99;
+}
+
+    .NavOption {
+      margin-right:50px ;
+      font-weight: 600;
+      cursor: pointer;
+      color: #000;
+      vertical-align: -5px;
+    }
+    
+    
+    .NavTitle{
+      margin-left: 10px;
+      font-size: 25px;
+      position: absolute;
+      color: #000;
+      border-bottom: white solid 1px;
+      cursor: pointer;
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+
+    .NavTitle9{
+  
+      font-size: 25px;
+      position: absolute;
+      color: #000;
+      border-bottom: white solid 1px;
+      cursor: pointer;
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+
+
+    
+    .button
+    
+    .NavTitle2{
+      font-size: 25px;
+      border-bottom: white solid 1px;
+      cursor: pointer;
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      margin-top: -30px;
+    }
+    
+    
+    
+    .DisplayWrap2 {
+    display: grid;
+    
+      margin-top:-80px;
+    margin-left: 30px;
+    
+      
+      }
+    
+    .Wrapped{
+      display: flex;
+      margin: 0px;
+    }
+    
+    .picFlex {
+      display: flex;
+    }
+    
+    .Phone {
+      border: white 1px solid;
+      padding: 15px;
+      width: 100%;
+    
+    }
+      .FormTitle {
+        margin: 0px;
+      }
+    
+      .CardPic
+    
+      .Submit {
+        border: none;
+        outline: none;
+        padding: 10px;
+        font-size: larger;
+        margin: 5px;
+      }
+    
+    
+    
+    
+    .sp
+    .lp{
+      margin-top: 5px;
+      margin-bottom: 5px;
+      margin-left: 0px;
+      color: rgb(108, 108, 108);
+    }
+    .homepic {
+      width: 1350px;
+    }
+    .Textbox {
+      padding: 10px;
+      margin: 0;
+    }
+    
+    .flexBox {
+    
+     display: flex;
+      max-width: 950px;
+      width: 950px;
+    }
+    
+    .picBoxUpload {
+      cursor: pointer;
+      width: 30%;
+      border: 1px solid black;
+      margin-top: -35px;
+      margin-bottom: 25px;
+      height: 130px;
+      padding: 20px;
+    }
+    
+    .flex-row {
+    
+      display: flex;
+    }
+    
+    .card
+    
+    .c{
+      position:relative;
+     vertical-align: 2px;
+     font-size: 18px;
+      }
+    .ContactForm
+    
+    .sp:hover{
+    background-color: rgba(0, 0, 0, 0.398);
+    transition: .3s all ease-in-out;
+    cursor: pointer;
+      }
+    
+
+
+.inputOnboard3
+
+    .sp3{
+      position: absolute;
+      z-index: 199;
+      margin-left: 65px;
+      margin-top: 20px;
+      padding: 2px;
+      border-radius: 900px;
+      font-size: 25px;
+      padding-right: 7px ;
+      padding-left: 7px;
+      padding-bottom: 12px;
+      background-color: rgba(0, 0, 0, 0.622);
+      }
+    
+    .CardPic2{
+      width: 100%;
+      height: 102px;
+    
+      cursor: pointer;
+      object-fit: cover;
+    }
+    
+    
+    .listSelect {
+    
+      width: 100%;
+    
+    padding: 10px;
+    
+    
+    
+    }
+    
+    .button1 {
+      background-color: white;
+      padding: 10px;
+      width: 100%;
+    cursor: pointer;
+    }
+    
+    
+    .button1:hover {
+      background-color: rgb(228, 227, 255);
+      transition: .3s ease-in-out;
+    }
+    
+    .CardPic22{
+      width: 100%;
+      height: 102px;
+    margin: 0px;
+      margin-top: 5px;
+      cursor: pointer;
+      object-fit: cover;
+     
+    }
+    .selection {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+       padding: 5px;
+    background-color: rgba(223, 223, 223, 0.148);
+      border: solid 1px gray;
+    }
+    
+    .selection:hover {
+      cursor: pointer;
+       padding: 5px;
+       color: rgb(61, 61, 61);
+       background-color: rgba(240, 248, 255, 0);
+       transition: .3s ease-in-out;
+      border: solid 1px gray;
+    }
+    
+    .slider-box
+    
+    .loadWrap{
+      display: flex;
+      justify-content: center;
+      margin-left: 100px;
+      padding: 30px;
+    }
+    
+    .load{
+      margin-left: 330px;
+      background-color: rgb(49, 88, 157);
+      color: white; 
+      padding: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    
+    }
+    
+    
+    .flexNav3 {
+    
+    color: rgb(0, 0, 0);
+    padding: 20px;
+    width: 100%;
+    margin-top: -54px;
+    position:fixed;
+      background-color: rgb(255, 255, 255);
+      display: flex;
+    z-index: 1889;
+      justify-content: space-between;
+    }
+    
+    
+    
+    .flexNav {
+    
+      color: white;
+      padding: 30px 10px;
+      padding-left: 40px;
+      width: 100%;
+      margin-top: 10px;
+      position:fixed;
+        background-color: rgba(45, 73, 122, 0.224);
+        display: flex;
+      z-index: 9999;
+        justify-content: space-between;
+      }
+    a {
+      text-decoration: none;
+      color: black;
+    }
+    
+    .selectors  {
+      position: fixed;
+      background-color: rgb(255, 255, 255);
+      width: 100%;
+      padding-top: 14px;
+    
+    
+    display: flex;
+    z-index: 908;
+      margin-top: 38px;
+    }
+    
+    .ContactBox
+    
+    
+      .flex-row{
+        width: 600px
+      }
+    .DisplayWraping {
+     display: flex;
+     align-items: center;
+    }
+    
+    .titleWrap {
+      padding: 15px;
+    }
+    
+    .otherTitle {
+      border-bottom: 1px solid black;
+      margin-top: 15px;
+    }
+    
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    .slider2
+    
+    /* || UTILITY CLASSES */
+    
+    .remove-button {
+      display: none;
+    }
+    
+    .offscreen {
+      position: absolute;
+      left: -10000px;
+    }
+    
+    .split-container {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-evenly;
+      gap: 1rem;
+    }
+    
+    .radioLabel {
+      margin-top: 25px;
+    }
+    
+    
+    .form
+    
+    
+    .flex-col {
+      display: flex;
+      flex-flow: column nowrap;
+      gap: 0.35rem;
+      width: 100%;
+      min-width: 525px;
+      background-color: white;
+      margin-top: -30px;
+      margin-left: 25px;
+      justify-content: center;
+      justify-items: center;
+    }
+    
+    
+    
+    
+   
+    .flex5
+    /* || GENERAL STYLES */
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+     
+    
+    }
+    
+    .formWrap1
+    
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+    
+    #root {
+      display: flex;
+      flex-flow: column nowrap;
+      gap: 0.5rem;
+    }
+    
+    
+
+    
+    .form {
+      width: 100%;
+      max-width: 525px;
+      margin: auto;
+      padding: 0.75rem;
+      border: 1px solid #000;
+      border-radius: 10px;
+      
+      background-color: whitesmoke;
+    }
+    
+
+
+    
+    
+    
+    
+    .images-preview-container{
+      display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));;
+     grid-gap: 1.0rem;
+     margin-right: 45px;
+     padding: 0px;
+     padding-right: 80px;
+    }
+    
+    
+    .button-container {
+      display: flex;
+      flex-flow: row nowrap;
+      gap: 0.5rem;
+    }
+    
+    
+    .button {
+      padding: 0.5rem;
+     width: 52px
+    }
+    
+
+    .p {
+      margin: 5px 0px;
+    }
+    
+    .deletePic
+
+    
+    
+    .button {
+      padding: 0.5rem;
+     width: 52px
+    }
+    .button:focus {
+      outline: 2px solid gold;
+    }
+    
+    .NavOption
+    
+    .flex-col
+    .pics-preview
+    
+    input,
+    select {
+      padding: 0.5rem;
+    
+      width: 100%;
+    }
+    
+    
+
+
+    
+    
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-right: 0.5rem;
+    }
+
+    .div-start{
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      text-align: left;
+    }
+    
+
+.confirm-pick {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  
+  padding: 10px;
+  padding-top: 0;
+
+}
+
+
+.row-flex {
+  display: flex;
+}
+
+    .date-choice {
+      font-size: larger;
+      cursor: pointer;
+      margin: 10px;
+      border: 1px solid black ;
+      padding: 10px;
+      width: 32%;
+    }
+
+    .fed {
+      width: 32%;
+      display: flex;
+      cursor: pointer;
+      text-align: start;
+      margin-left: 10px;
+      padding-left: 20px;
+    }
+    .fed-logo {
+      position: absolute;
+      width: 74px;
+      margin-left: 69px;
+      margin-top: 8px;
+    }
+    ul {
+      list-style-type: none;
+      margin-bottom: 1rem;
+    }
+    .burger {
+
+      width: 30px;
+      height: 25px;
+ 
+    }
+
+       @media (min-width: 800px) {
+      .burger{
+        display: none;
+      } 
+      
+      .Filter_btn{
+        display: none;
+      }
+      
+      
+      }  
+    
+    @media (max-width: 800px) {
+      .optionWrap{
+        display: none;
+      } 
+    
+      
+      
+      
+      }  

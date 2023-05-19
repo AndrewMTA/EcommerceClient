@@ -1,0 +1,538 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+.Modal {
+    position: absolute;
+    max-width: 860px ;
+    max-height: 470px;
+    min-width: 860px;
+    min-height: 470px;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    z-index: 1111101000;
+    width: 1020px;
+    height: 620px;
+    border-radius: 10px;
+}
+
+.Modal9 {
+  position: absolute;
+  max-width: 460px ;
+  max-height: 500px;
+  min-width: 460px;
+  min-height: 500px;
+  top: 42%;
+  left: 50%;
+  padding-top: 5px;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  z-index: 1111101000;
+  width: 1020px;
+  height: 620px;
+  border-radius: 10px;
+}
+
+
+
+
+.Overlay3 {
+  background-color: rgba(34, 34, 34, 0.585);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  overflow: hidden;
+  overflow-y: scroll;
+  z-index: 10000;
+}
+
+.Modal6 {
+  position: absolute;
+  max-width: 860px ;
+  max-height: 470px;
+  min-width: 860px;
+  min-height: 470px;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  z-index: 1111101000;
+  width: 1020px;
+  height: 620px;
+  border-radius: 10px;
+}
+
+.Modal7 {
+  position: absolute;
+  max-width: 820px ;
+  max-height: 470px;
+  min-width: 820px;
+  min-height: 470px;
+  top: 37%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  z-index: 1111101000;
+  width: 1020px;
+  height: 620px;
+  border-radius: 10px;
+}
+
+.CarMain7 {
+  border: 3px solid white;
+  width: 100%;
+  height: 75%;
+  min-height: 75%;
+  max-height: 75% ;
+  max-height: 430px;
+  object-fit: cover;
+}
+
+
+.add {
+  color: blue;
+  font-size: medium;
+  margin-left: 10px;
+  
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.CenterMod {
+
+  display: flex;
+  justify-content: center;
+}
+
+.Modal1 {
+  position: absolute;
+  padding:25px;
+  max-width: 350px;
+  width: 350px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  z-index:999999999990;
+
+  border-radius: 10px;
+}
+
+.flex-colx {
+display: flex;
+row-gap: 10px;
+flex-direction: column;
+}
+
+.Modal2 {
+  position: absolute;
+  padding:25px;
+  max-width: 70%;
+  width: 70%;
+  margin-top: 93px;
+  border: 1px solid gray;
+  top: 60%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  z-index:999999999990;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+
+.sbtn {
+  color: rgb(0, 0, 0);
+  font-size: 85px;
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; 
+}
+
+
+
+
+.sbtn3 {
+  color: rgb(0, 0, 0);
+  font-size: 95px;
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; 
+}
+
+
+
+
+.closeB {
+  width: 30px;
+  margin-top: -4px;
+  margin-left: 270px;
+
+}
+
+.closeB:hover {
+background-color: rgba(255, 0, 0, 0.088);
+border-radius: 600px;
+transition: ease-in-out .3s;
+}
+
+.flex-row1 {
+  margin-top: 0px;
+width: 100%;
+  display: flex;
+  margin-top: -45px;
+  padding: 10px;
+  background-color: white;
+  justify-content: space-between;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.flex-row2 {
+
+  margin-top: -293px;
+  margin-left:-27px;
+  padding: 15px;
+  max-width: 100%;
+  background-color: rgba(0, 255, 255, 0);
+width: 100%;
+position: absolute;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+
+.close {
+  margin: 10px 15px;
+  cursor: pointer;
+}
+.x {
+  font-size: 24px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+
+.CarMain7 {
+  border: 3px solid white;
+  width: 100%;
+  height: 75%;
+  min-height: 75%;
+  max-width: 820px ;
+  max-height: 440px;
+  min-width: 820px;
+  min-height: 440px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  object-fit: cover;
+}
+
+
+
+.CarMain6 {
+  border: 3px solid white;
+  width: 100%;
+  height: 75%;
+  min-height: 75%;
+  max-width: 860px ;
+  max-height: 470px;
+  min-width: 860px;
+  min-height: 470px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  object-fit: cover;
+}
+
+.CarMain8 {
+  border: 3px solid white;
+  width: 100%;
+  height: 75%;
+  min-height: 75%;
+  max-width: 860px ;
+  max-height: 470px;
+  min-width: 860px;
+  min-height: 470px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  object-fit: cover;
+}
+
+
+.OverLay {
+    background-color: rgba(34, 34, 34, 0.513);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    overflow: hidden;
+    overflow-y: scroll;
+    z-index: 10000;
+}
+
+
+.OverLay1 {
+  background-color: rgba(48, 48, 48, 0.509);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  overflow-y: scroll;
+  z-index: 10000;
+}
+
+
+
+.OverLay2 {
+  background-color: rgba(40, 40, 40, 0.064);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  overflow-y: scroll;
+  z-index: 10000;
+}
+
+
+.deleteL {
+  color: red;
+}
+
+
+
+.avatarPic {
+  width: 43px;
+  height: 60px;
+  border-radius: 100%;
+  border: 0px solid white;
+  object-fit: cover;
+}
+
+.editPic {
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  border: 2px solid white;
+  position: absolute;
+  right: 5px;
+  bottom: 4px;
+}
+
+.Modal .modalInput {
+    margin-top: 12px;
+    padding: 10px 50px;
+}
+
+
+.label1{
+  margin-top: 15px;
+}
+.Close {
+    align-self: end;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 255, 0.382);
+}
+
+.inputWrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.descrip{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-top: 1px solid rgba(128, 128, 128, 0.637);
+}
+
+
+
+.button3{
+  color:rgb(164, 164, 164);
+  margin-bottom: 35px;
+}
+
+
+
+
+
+@media (min-width: 800px) {
+  .closeB{
+    display: none;
+  }
+
+  .flex-colx {
+    display: none;
+  }
+
+
+}
+
+
+
+
+
+
+
+@media (max-width: 1000px) {
+
+  
+
+  .Modal7 {
+    position: absolute;
+    max-width: 560px ;
+    max-height: 470px;
+    min-width: 360px;
+    min-height: 470px;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    z-index: 1111101000;
+    width: 1020px;
+    height: 620px;
+    border-radius: 10px;
+  }
+  .Modal {
+    position: absolute;
+  
+   max-width: 560px ;
+   max-height: 370px;
+   min-width: 560px;
+   min-height: 370px;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    z-index: 1111101000;
+  
+    border-radius: 10px;
+  }
+
+  .CarMain6 {
+    max-width: 560px ;
+    max-height: 370px;
+    min-width: 560px;
+    min-height: 370px;
+  }
+
+  .CarMain8 {
+    max-width: 100% ;
+    max-height: 370px;
+    min-width: 0px;
+    min-height: 270px;
+  }
+  
+
+  .CarMain7 {
+    max-width: 560px ;
+    max-height: 370px;
+    min-width: 560px;
+    min-height: 370px;
+  }
+  
+  .CarMain7 {
+    border: 3px solid white;
+    width: 100%;
+    height: 75%;
+    min-height: 75%;
+    max-height: 75% ;
+    max-height: 370px;
+    object-fit: cover;
+  }
+
+
+}
+
+
+@media (max-width: 864px) {
+
+
+  .OverLay {
+    display: none;
+  }
+
+  .flex-row2 {
+
+
+    margin-left:-27px;
+    padding: 15px;
+    max-width: 100%;
+    background-color: rgba(0, 255, 255, 0);
+  width: 100%;
+  position: absolute;
+    display: flex;
+    justify-content: space-between;
+  }
+
+}
+
+
+@media (max-width: 744px) {
+
+  .Modal7 {
+    position: absolute;
+    max-width: 360px ;
+    max-height: 380px;
+    min-width: 360px;
+    min-height: 380px;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    z-index: 1111101000;
+    width: 1020px;
+    height: 630px;
+    border-radius: 10px;
+  }
+  .OverLay {
+    display: none;
+  }
+
+  .CarMain7 {
+    max-width: 360px ;
+    max-height: 370px;
+    min-width: 360px;
+    min-height: 370px;
+  }
+  
+  .CarMain7 {
+    border: 3px solid white;
+    width: 100%;
+    height: 75%;
+    min-height: 75%;
+    max-height: 75% ;
+    max-height: 370px;
+    object-fit: cover;
+  }
+
+  .flex-row2 {
+
+    margin-top: -203px;
+    margin-left:-27px;
+    padding: 15px;
+    max-width: 100%;
+    background-color: rgba(0, 255, 255, 0);
+  width: 100%;
+  position: absolute;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+
+}
