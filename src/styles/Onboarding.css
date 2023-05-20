@@ -400,7 +400,7 @@ background-color: rgba(0, 0, 0, 0.622);
      -moz-user-select: none; /* Old versions of Firefox */
       -ms-user-select: none; /* Internet Explorer/Edge */
           user-select: none; 
-  
+
   margin-bottom: 25px;
   margin: 0px 20px;
   }
@@ -409,7 +409,7 @@ background-color: rgba(0, 0, 0, 0.622);
 
 .CarMain {
     width: 100%;
-    height:50%;
+    height:80%;
     grid-column: auto/span 2;
      cursor: pointer;
      object-fit: cover;
@@ -457,24 +457,34 @@ min-height: 600px;
 
     }
 
-.push
+.seller-profile {
+  border: 1px solid black;
+  padding: 10px;
+  width: 48.5%;
+}
+    .bottom-section {
+      display: flex;
+      justify-content: space-between;
+      margin: 35px;
+      margin-top: -200px;
+
+    }
 
 .ContactForm {
-    color: white;
-    background-color: rgb(49, 88, 157);
-    padding: 15px;
-padding-top: 15px;
+    color: rgb(0, 0, 0);
+
+
     width: 100%;
-    margin-top: 20px;
+   
   vertical-align: top;
     align-items: start;
-    height: 65.8%;
+    height: 70%;
     margin-top: 0px;
     margin-bottom: 0px;
   display: flex;
   flex-direction: column;
   justify-content:flex-start;
-      color: white;
+ 
     
     }
 
@@ -519,8 +529,9 @@ padding-top: 15px;
     }
     .CardPic2{
         width: 100%;
-        height: 78%;
+        height: 118%;
       min-width: 100px;
+      margin-bottom: 15px;
         cursor: pointer;
         object-fit: cover;
       }
@@ -654,7 +665,7 @@ padding-top: 15px;
   width: 100%;
   height: 80%;
   max-width: 900px;
-  max-height: 1140px;
+  
   align-items: center;
   grid-column: auto/span 2;
    cursor: pointer;

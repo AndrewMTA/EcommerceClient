@@ -4,11 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateProducts } from "../../features/productSlice";
 import Modal from "./Modal";
 import { useParams } from "react-router-dom";
-
 import Navbar from "../Navbar";
 import Soon from "../../assets/Soon.png";
 import ana from "./ana.png";
-
 import CarsCard2 from "../CarsCard2";
 import { axiosPrivate } from "../../api/axios";
 import { useAddToCartMutation } from "../../services/appApi";

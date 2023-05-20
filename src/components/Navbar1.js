@@ -33,7 +33,7 @@ const handleLogout =  () => {
 
     
     <div className='flexNav3'>
-    <a className='navA'  href="/cars"><img src={logo} className="log"/> </a>
+    <a className='navA'  href="/pizza"><img src={logo} className="log2"/> </a>
    
    
     {showingNav &&  <img  onClick={handleOpenNav}  className='burger' src={Hamburger}/>
@@ -75,12 +75,14 @@ const handleLogout =  () => {
             </div>
           )} 
       <div className='optionWrap'>
+
+        { user?.seller &&
       <a className='navA' href="/cars"><span className='NavOption'>My Shop</span> </a>
 
-
+        }
 
  
- 
+ 2
     {!user && (
 
       <>

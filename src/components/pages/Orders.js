@@ -231,7 +231,7 @@ console.log("uuu", time, dateSubmit, timeSubmit)
                 countryCode: "US"
               }
             },
-            readyDateTimestamp :`2023-05-19T11:06:00Z`,
+            readyDateTimestamp :`2023-05-22T11:06:00Z`,
             customerCloseTime: "17:00:00"
           },
           carrierCode: "FDXE"
@@ -383,7 +383,7 @@ console.log("uuu", time, dateSubmit, timeSubmit)
   <Navbar />
   
   <div className="dashboard">
-  <a href="/checkout">
+  <a href="/add-product">
       <div className="dash-options">
         Add Products
       </div>

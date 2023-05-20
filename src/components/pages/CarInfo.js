@@ -12,6 +12,8 @@ import {
    makes,
    listings,
  } from "../../catagories";
+
+ import Profile from "./zza.jpg"
  import Left from './pagesAssets/Left.png'
  import Right from './pagesAssets/Right.png'
 import {useParams} from 'react-router-dom'
@@ -199,8 +201,8 @@ const goToSlide = (slideIndex) => {
  
         
  { description !== " " ? <> 
- <div className='descrip'><h3>Description</h3></div>
-<p className="pd">{description || "null"} </p>
+
+
 
 
 </>
@@ -211,11 +213,11 @@ const goToSlide = (slideIndex) => {
 
 <div>
 
-  <div className='specs'><h3>Instructions</h3></div>
+  
 <div className='flex-rowzx'>
 
   <div className='flex-columnzx'>
-<div className="spec"><b>Make          </b> </div>
+
 
 </div>
 
@@ -247,10 +249,10 @@ const goToSlide = (slideIndex) => {
  <img className="CardPic2"  onClick={() => setIsOpen(true)}  src={pic[2 ].url}/>
 
 
- <div className='descripti'><h3 >See All Media</h3></div>
- <div className="simList">
- <div className="dealerInfo">
-    <h3><b>Sold By</b></h3>
+{/** 
+ <div >
+ <div >
+   
     <div ><p className='one'>    
      {Selector.map((post) => {
             return (
@@ -266,21 +268,18 @@ const goToSlide = (slideIndex) => {
                 </div>
               </div>
             );
-          })}</p></div>
+          })}</p></div> 
     <div> <a href={`/seller/${listUser}`}><p> All Listings By Seller </p> </a> </div>
-    <div><p>See Address</p></div>
+
  
     </div>
 
-    <h2 className='similar'>Similar Listings:</h2>
-<div className='recomendations'> 
+ 
 
-{cars.slice(firstIndex, lastIndex).map((SelectMax15) => (
-            <CarsCard key={SelectMax15} {...SelectMax15} />
-          ))}
-</div>
-<div className="center"> <button className='Submitz'>See More Listings</button></div>
-</div>
+
+</div> */}
+
+
 
  </div>
  {/*\
@@ -290,70 +289,58 @@ const goToSlide = (slideIndex) => {
 
 
  <div className='ContactBox'>
- <div className='priceBox3'>
-    <h2 className='price'>${price.toLocaleString('en-US') || "null"}</h2>
- </div>
+ 
 
  { !show && 
 
  <>
     <div className='ContactForm'>
-
-
-   
-    <button size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.price, image: car.pic[0].url })}>
+<h1 className='header' >2 Neopalitin pizzas</h1> <h2>from mazas pizza</h2>
+<br/>
+<h2>Get it by: May 22nd</h2>
+<br/>
+<h3>Select other dates</h3>
+<br/>
+<h2 className='price'>${price.toLocaleString('en-US') || "null"}</h2>
+  <br/>
+  
+    <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.price, image: car.pic[0].url })}>
                                 Add to cart
                             </button>
                             {isSuccess && <div>Added!</div>}
     </div>
     </>
 }
-{ show && 
-
-<>
-   <form className='ContactForm1'>
-  <h3 className='FormTitle'> Form Submitted</h3> 
- <img className="check" src={Check}/>
-   </form>
-   </>
-}
-<div className="dealerInfo2">
-    <h3><b>Dealer Info</b></h3>
-    <div ><p className='one'>Sold By :       
-     {Selector.map((post) => {
-            return (
-              <div
-       
-                key={post._id }
-              >
-             
-             
-                <div
-               >   <a href={`/seller/${listUser}`}> {post.sellerName}</a>
-               
-                </div>
-              </div>
-            );
-          })}</p></div>
-    <div> <a href={`/seller/${listUser}`}><p> All Listings By Seller </p> </a> </div>
-    <div><p>See Address</p></div>
- 
-    </div>
-<div className="listingsz">
-<h2 className='similar'>Similar Listings:</h2>
-<div className='recomendations'> 
-
-{cars.slice(firstIndex, lastIndex).map((SelectMax15) => (
-            <CarsCard key={SelectMax15} {...SelectMax15} />
-          ))}
-</div>
-<a href="/cars" className="center"> <div className='Submitz'>See More Listings</div></a>
-
 
 </div>
+
+
+
+</div> 
+
+<div className='bottom-section'>
+
+<div className='instructions'>
+<h2>Details</h2>
+<h2>Ingredients</h2>
+</div>
+
+
+<div className='seller-profile'>
+<h2>About Mazas Pizza </h2> 
+  <div className="wrap-about">
+  
+<img className='img-pro' src={Profile}/> <div>Chicago, Illinois</div>
+</div>
+  <div>
+  We're a family-owned and operated pizzeria that has been serving delicious pizzas since 1959. Founded by Joe Aurelio in Homewood, Illinois, Aurelio’s Pizza has grown to over 40 locations across the US, offering a variety of pizzas, salads, sandwiches, and desserts. Aurelio’s Pizza is known for its Super Six "The Works"® pizza, which features sausage, ham, pepperoni, green peppers, mushrooms, and cheese, as well as its Calabrese™
+  </div>
+</div>
+</div>
+
  </div>
 
- </div> 
+
 
   
   
@@ -362,7 +349,7 @@ const goToSlide = (slideIndex) => {
   
   
 
- </div>
+
 
 
  

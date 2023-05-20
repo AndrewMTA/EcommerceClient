@@ -345,10 +345,18 @@ li {
 
 
 .log {
-  width: 60px;
+  width: 70px;
   margin-top: -18px;
-  margin-left: 10px;
-  position: absolute;
+  margin-left: 80px;
+
+}
+
+
+.log2 {
+  width: 60px;
+  margin-top: -15px;
+  margin-left: 40px;
+
 }
 
 
@@ -382,6 +390,9 @@ li {
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bona+Nova&family=EB+Garamond&display=swap');
+
+
 
 * {
     margin: 0;
@@ -393,6 +404,19 @@ li {
 
 .hide {
     display: none;
+}
+
+
+.btn-add {
+  background-color: rgb(112, 49, 131);
+  color: white;
+  width: 200px;
+  cursor: pointer;
+}
+.img-pro {
+  width: 75px;
+  border-radius: 2000px;
+  margin-right: 10px;
 }
 
 .valid {

@@ -96,7 +96,9 @@ const Payouts = () => {
       
       <Navbar />
       <div className="dashboard">
+        <a href='/add-product'>
         <div className="dash-options">Add Products</div>
+        </a>
         <a href="/orders">
           <div className="dash-options">Orders</div>
         </a>

@@ -529,15 +529,10 @@ function deletePic(imgObj) {
 
           
 <div className="border-box">
-              <CardInput />
+            
             </div>
            
 
-                <button className="button1" onClick={handleSubmitPay}>
-                <span id="button-text">
-                  {isProcessing ? "Processing ... " : "Pay now"}
-                </span>
-              </button>
         
             
 

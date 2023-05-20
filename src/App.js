@@ -32,6 +32,7 @@ import { Routes, Route } from 'react-router-dom';
 import Orders from './components/pages/Orders';
 import Status from './components/pages/Status';
 import Footer from './components/Footer';
+import Product from './components/pages/checkout';
 import Cart from './components/pages/CartPage'
 const ROLES = {
   'User': 2001,
@@ -60,7 +61,7 @@ function App() {
 
         <Route path="/" element={<Hero/>} />
         <Route path="/orders" element={<Orders/>} />
-
+        <Route path="/add-product" element={<Product/>} />
         <Route path="/orders/status/:id" element={<Status/>} />
        
 

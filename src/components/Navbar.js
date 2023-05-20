@@ -36,7 +36,7 @@ const handleLogout =  () => {
 
     
     <div className='flexNav6'>
-    <a className='navA'  href="/cars"><img src={logo} className="log"/> </a>
+    <a className='navA'  href="/pizza"><img src={logo} className="log2"/> </a>
 
     {showingNav &&  <img  onClick={handleOpenNav}  className='burger' src={Hamburger}/>
 }
@@ -46,14 +46,21 @@ const handleLogout =  () => {
     {!showingNav && <img onClick={handleClosesNav}  className='closeB' src={Close}/> }
                <form className="Modal2">
                 <div className="flex-colx">
-                <a className='navA' href="/emaillist"><span className='NavOption'>Buy zza</span> </a>
 
+                  {
+                  
+                  !user?.seller &&
+                  <>
+                <a className='navA' href="/emaillist"><span className='NavOption'>Buy zza</span> </a>
+                </>   
+                
+                }
                  
 
   {user?.seller === false ? (
 <>
 <span className='NavOption'>My Cart {user.cart?.count}</span> 
-  <span  className='un' > <a className='navA' href={`/sellzza`}>  <span className='NavOption'>Sell</span> </a></span>
+  
   <span  className='un' > <a className='navA' ><span onClick={handleLogout} className='NavOption'>Logout</span></a> </span>
  
  
@@ -65,7 +72,7 @@ const handleLogout =  () => {
 
 <>
 <a className='navA' href="/application"><span className='NavOption'>Sell zza</span> </a>
-       
+<span className='un' ><a className='navA'href="/login"> <span className='NavOption'>Login</span> </a> </span>
 </>
 )}</div>
 
@@ -78,27 +85,36 @@ const handleLogout =  () => {
             </div>
           )} 
       <div className='optionWrap'>
+        
+      {
+                  
+                  !user?.seller &&
+                  <>
       <a className='navA' href="/emaillist"><span className='NavOption'>Buy zza</span> </a>
-
+</>
+}
 
 
  
- 
+ 1
     {!user && (
 
       <>
             <a className='navA' href="/application"><span className='NavOption'>Sell zza</span> </a>
-
-     </>
+            <span className='un' ><a className='navA'href="/login"> <span className='NavOption'>Login</span> </a> </span>
+</>
+     
      )}
+{user?.seller &&
+<a className='navA' href={`/listings/${user._id}`}><span className='NavOption'>Dashboard</span> </a>
 
 
-
+}
 {!user?.seller && (
 
   <>
     <a href="/cart"> <span className='NavOption'>My Cart {user?.cart?.count}</span> </a>
-     <a className='navA' href={`/checkout/${user?._id}`}>  <span className='NavOption'>Sell</span> </a>
+  
    
      </>
      )}

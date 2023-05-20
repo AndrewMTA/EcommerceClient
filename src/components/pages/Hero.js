@@ -62,7 +62,7 @@ e.preventDefault()
         <div className="center__title">         <img className="bannerImg" src={Homes}/> <h2 className="Image-text">The Best Pizza Shipped Straight To You</h2></div>
         
         <div className="btn__wrapper">
-        <a href="/emaillist"><div className="By">Get Pizza →</div> </a>
+        <a href="/pizza"><div className="By">Get Pizza →</div> </a>
         
         <a href="/application">
         <div className="Sell" >Sell Pizza →</div>
@@ -139,10 +139,10 @@ e.preventDefault()
 </div>
 <div className="footer">
 
+<div>
+<img src={logo} className="log"/> </div>
 
-<a className='navA'  href="/cars"><img src={logo} className="log"/> </a>
-
-<div className="footer-wrap1">
+<div className="footer-wrap">
 <ul>
 <h4>Ship Slices</h4>
 <li>About Us</li>
