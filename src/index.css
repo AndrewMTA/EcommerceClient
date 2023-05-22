@@ -461,10 +461,41 @@ li {
     width: 20px;
     margin: 0 5px 2px 2px;
 }
+
+.big {
+  font-size: 50px;
+}
+
+.border-box-1 {
+  border: 1px solid rgb(122, 122, 122); 
+  padding: 12px;
+}
+
+.lill {
+  font-size: medium;
+}
+
+.add-products {
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: 15px;
+  color: rgb(0, 0, 0);
+  border: 1px solid rgb(131, 131, 131);
+  padding: 7px;
+}
+
+
+.checker {
+  vertical-align: -3px;
+  padding-top: 5px ;
+  margin-top: 3px;
+}
+
 .flexNav6 {
     
     color: rgb(0, 0, 0);
     padding: 20px;
+    padding-bottom: 10px ;
     width: 100%;
     margin-top: -4px;
     position:fixed;

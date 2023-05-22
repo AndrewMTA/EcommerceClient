@@ -383,17 +383,22 @@ console.log("uuu", time, dateSubmit, timeSubmit)
   <Navbar />
   
   <div className="dashboard">
-  <a href="/add-product">
+  <a href={`/listings/${user._id}`}>
       <div className="dash-options">
-        Add Products
+        Products
       </div>
       </a>
      <a href="/orders"> <div className="dash-options"> 
         Orders
       </div> </a>
+      <a href="/accountc"> <div className="dash-options"> 
+        Account
+      </div> </a>
       <a href="/payout">   <div className="dash-options">
         Payments
       </div>
+   
+      
       </a>
 
       </div>

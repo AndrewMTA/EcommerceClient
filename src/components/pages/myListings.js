@@ -72,7 +72,7 @@ if (car) {
 
       <div className="dashboard">
       <div className="dash-options">
-        Add Products
+        Products
       </div>
      <a href="/orders"> <div className="dash-options"> 
         Orders
@@ -84,7 +84,7 @@ if (car) {
 
       <div className="DisplayWrap">
         <div className="navv">
-          <h1 className="pusher">{!car ? <>No listings yet <a className="add" href={`/checkout/${user._id}`}>Click to add</a></> : <>Manage Listings</>}</h1> 
+          <h1 className="pusher">{!car ? <>No listings yet <a className="add" href={`/checkout/${user._id}`}>Click to add</a></> : <>Manage Products <a className="add-products" href={`/add-product`}>+ add a product</a> </>}</h1> 
         </div>
 
 

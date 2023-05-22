@@ -3,6 +3,7 @@ import useAuth from '../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useLoginMutation } from "../services/appApi";
 import axios from '../api/axios';
+import logo from "./pages/Frame 9.png"
  //const LOGIN_URL = 'https://backend-6olc.onrender.com/auth';
 const LOGIN_URL = 'http://localhost:3500/auth';
 
@@ -79,7 +80,7 @@ const Login = () => {
 
             <form onSubmit={handleSubmit}  className="form">
 
-            <div className="NavTitle3">Track & Road</div>
+            <a className='navA'  href="/"><img src={logo} className="loge"/> </a>
        
 <h1>Welcome Back</h1>
 <label htmlFor="username">Email:</label>

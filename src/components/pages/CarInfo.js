@@ -303,11 +303,15 @@ const goToSlide = (slideIndex) => {
 <br/>
 <h2 className='price'>${price.toLocaleString('en-US') || "null"}</h2>
   <br/>
-  
-    <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.price, image: car.pic[0].url })}>
+  <>
+  {! user?.seller ? <>
+  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.price, image: car.pic[0].url })}>
                                 Add to cart
                             </button>
-                            {isSuccess && <div>Added!</div>}
+                            {isSuccess && <div>Added!</div>} </> : <>  <button className="btn-add" size="lg" >
+                                Add to cart
+                            </button></>}
+    </>
     </div>
     </>
 }
