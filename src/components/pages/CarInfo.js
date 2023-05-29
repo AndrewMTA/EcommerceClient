@@ -32,7 +32,7 @@ const CarInfo = () => {
   const {carID} = useParams()
   const car = cars.find((car) => car._id === carID)
   const user = useSelector((state) => state.user);
-  const {  listUser, pic, description, price, } = car;
+  const {  listUser, pic, description, price, title, ingredients, seller, quantity, category } = car;
   const dotsContainerStyles = {
     display: "flex",
     justifyContent: "center",
@@ -45,7 +45,7 @@ const CarInfo = () => {
   };
     const [page, setPage] = useState(2);
   
-   console.log("hu", description)
+ 
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -137,6 +137,8 @@ const goToSlide = (slideIndex) => {
       
         pic: car.pic[0].url
       });
+  
+
   
      
   
@@ -295,7 +297,7 @@ const goToSlide = (slideIndex) => {
 
  <>
     <div className='ContactForm'>
-<h1 className='header' >2 Neopalitin pizzas</h1> <h2>from mazas pizza</h2>
+<h1 className='header' >{quantity} {title} {category}{quantity > 1 && <>s</>}</h1> <h2>from {seller}</h2>
 <br/>
 <h2>Get it by: May 22nd</h2>
 <br/>
@@ -304,13 +306,15 @@ const goToSlide = (slideIndex) => {
 <h2 className='price'>${price.toLocaleString('en-US') || "null"}</h2>
   <br/>
   <>
-  {! user?.seller ? <>
-  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.price, image: car.pic[0].url })}>
+  {user ? <>
+
+ 
+  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.price, image: car.pic[0].url, listUser: car.listUser})}>
                                 Add to cart
                             </button>
-                            {isSuccess && <div>Added!</div>} </> : <>  <button className="btn-add" size="lg" >
+                            {isSuccess && <div>Added!</div>} </> : <a href="/register">  <button className="btn-add" size="lg" >
                                 Add to cart
-                            </button></>}
+                            </button></a>}
     </>
     </div>
     </>
@@ -326,18 +330,20 @@ const goToSlide = (slideIndex) => {
 
 <div className='instructions'>
 <h2>Details</h2>
+{description}
 <h2>Ingredients</h2>
+{ingredients}
 </div>
 
 
 <div className='seller-profile'>
-<h2>About Mazas Pizza </h2> 
+<h2>{seller}</h2> 
   <div className="wrap-about">
   
 <img className='img-pro' src={Profile}/> <div>Chicago, Illinois</div>
 </div>
   <div>
-  We're a family-owned and operated pizzeria that has been serving delicious pizzas since 1959. Founded by Joe Aurelio in Homewood, Illinois, Aurelio’s Pizza has grown to over 40 locations across the US, offering a variety of pizzas, salads, sandwiches, and desserts. Aurelio’s Pizza is known for its Super Six "The Works"® pizza, which features sausage, ham, pepperoni, green peppers, mushrooms, and cheese, as well as its Calabrese™
+ 
   </div>
 </div>
 </div>

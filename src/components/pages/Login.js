@@ -46,7 +46,9 @@ import useAuth from '../../components/hooks/useAuth';
             setUser('');
             setPwd('');
             login({ email, password: pwd });
-                navigate("/cars")
+
+            if (response?.data?.seller === true)
+                navigate("/orders")
           
         } catch (err) {
             if (!err?.response) {
@@ -77,7 +79,7 @@ import useAuth from '../../components/hooks/useAuth';
 
 <form onSubmit={handleLogin} className="form">
         <div className="inputWrap">
-        <div className="NavTitle">Track & Road</div>
+        <div className="NavTitle">Trackz & Road</div>
 <h1>Welcome Back</h1>
           <label className="onboardLabel1" htmlFor="username">Email</label>
           <input

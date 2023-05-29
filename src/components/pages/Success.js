@@ -10,14 +10,19 @@ export default () => {
 
     <div className="wrapping">
 <form className="reset">  
-<h1>Success! 🎉</h1>
+<h1>Order Placed! 🎉</h1>
 
 <br/>
 <p></p>
+Your confirmation id is
+<a href='/cars'><div className="select">#87vff8f8fvg7thu89y</div></a>
+A full receipt has been sent to your email
 
-<a href='/cars'><div className="select">See Listing</div></a>
 </form>
+
+
         </div>
+       
         
     <div className="cut">
   

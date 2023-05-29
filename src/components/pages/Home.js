@@ -249,16 +249,19 @@ console.log("country", country)
       <>
         <div className="flex">
           {page === "poop" ? setPage(1) : <></>}
-          {Display.length === 0 && loading === true ?  (<>
+          {Display.length === 0 && loading === true ?  (<div className="load-center">
              <ClipLoader color={color} loading={loading} size={150} />
            
-            </>
+            </div>
           ) : (
             ""
           )}
-           {Display.length === 0 ?  (<>
-            
+           {Display.length === 0 && loading !== true ?  (<>
+            <div className="load-center">
             <h1 className="pusher"> No Listings Matching Search</h1>
+           
+            </div>
+           
             </>
           ) : (
             ""

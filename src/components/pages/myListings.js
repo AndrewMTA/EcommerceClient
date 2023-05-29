@@ -11,7 +11,8 @@ import CarsCard2 from "../CarsCard2";
 import { axiosPrivate } from "../../api/axios";
 import { useAddToCartMutation } from "../../services/appApi";
 import Footer from "../Footer";
-
+import SubNav from "./subNav";
+import Profile from "./zza.jpg"
 const MyListings = () => {
   const user = useSelector((state) => state.user);
   console.log("user1", user);
@@ -70,28 +71,36 @@ if (car) {
     <>
       <Navbar />
 
-      <div className="dashboard">
-      <div className="dash-options">
-        Products
-      </div>
-     <a href="/orders"> <div className="dash-options"> 
-        Orders
-      </div> </a>
-      <div className="dash-options">
-        Payments
-      </div>
-      </div>
+     <SubNav/>
 
       <div className="DisplayWrap">
+      <div className='seller-profile-1'>
+<h2>{user.sellerName}</h2> 
+  <div className="wrap-about">
+  
+<img className='img-pro' src={Profile || null}/> <div>{user.address[0]?.city || "Chicago"}, {user.address[0]?.state || "Illinois"}</div>
+</div>
+ {/** <div className="text-wrapping">
+  We're a family-owned and operated pizzeria that has been serving delicious pizzas since 1959. Founded by Joe Aurelio in Homewood, Illinois, Aurelio’s Pizza has grown to over 40 locations across the US, offering a variety of pizzas, salads, sandwiches, and desserts. Aurelio’s Pizza is known for its Super Six "The Works"® pizza, which features sausage, ham, pepperoni, green peppers, mushrooms, and cheese, as well as its Calabrese™
+  </div> */} 
+</div>
+
         <div className="navv">
-          <h1 className="pusher">{!car ? <>No listings yet <a className="add" href={`/checkout/${user._id}`}>Click to add</a></> : <>Manage Products <a className="add-products" href={`/add-product`}>+ add a product</a> </>}</h1> 
+          
+      
+          
+          
+          
+                    <h1 className="pusher">Manage Products <a  className="hu"href={`/add-product`}><div >+ Add a product</div></a></h1> 
         </div>
 
 
 
 {   !car  ? 
  <div className="flex">
-<h1>No listings yet</h1> </div> :       <div className="flex">
+{!car ? <> <a className="add" href={`/add-product`}><div className="listingBox">+ Add a product</div></a></> : <>Manage Products <a className="add-products" href={`/add-product`}></a> </>}
+  
+</div> :       <div className="flex">
 
           {cars
             .filter((carz) => {
@@ -106,15 +115,19 @@ if (car) {
                   {/* carz.sponsered === true ? <h2 className="PrivateList1">Sponsored</h2 > : <></> */}
                   <img className="CardPic" src={carz.pic[0].url || Soon} />
                   <div className="Textbox">
+                       {carz.seller}
                     <div className="impression">
+
+                   
+                 
                       {" "}
                       <h3 className="h3">
                         ${carz.price || "Nothing yet"}{" "}
                       </h3>{" "}
                       {/*<img className="ana"src={ana}/> */}
                     </div>
-                    {carz.make || "Nothing yet"} {carz.model || "Nothing yet"}{" "}
-                    {carz.model || "Nothing yet"}
+                    {carz.quantity || "Nohing yet"} {carz.title || "Nothing yet"} {carz.category || "Nothing yet"}{carz.quantity > 1 && <>s</>}
+                 
                     <div className="displayEdit">
                       
                       <a href={`/edit/${carz._id}`}>
@@ -157,7 +170,7 @@ if (car) {
       
 }
       </div>
-      <Footer/>
+
     </>
   );
 };

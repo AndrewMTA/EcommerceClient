@@ -71,7 +71,7 @@ const handleLogout =  () => {
     {!user && (
 
 <>
-<a className='navA' href="/application"><span className='NavOption'>Sell zza</span> </a>
+<a className='navA' href="/register"><span className='NavOption'>Sell zza</span> </a>
 <span className='un' ><a className='navA'href="/login"> <span className='NavOption'>Login</span> </a> </span>
 </>
 )}</div>
@@ -90,7 +90,7 @@ const handleLogout =  () => {
                   
                   !user?.seller &&
                   <>
-      <a className='navA' href="/emaillist"><span className='NavOption'>Buy zza</span> </a>
+      <a className='navA' href="/pizza"><span className='NavOption'>Shop</span> </a>
 </>
 }
 
@@ -120,7 +120,7 @@ const handleLogout =  () => {
      )}
 
      {user && 
- <a className='navA'> <span onClick={handleLogout} className='NavOption'>Logout</span></a>
+ <a href="/"className='navA'> <span onClick={handleLogout} className='NavOption'>Logout</span></a>
      }
      </div>
 

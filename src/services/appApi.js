@@ -22,6 +22,15 @@ export const appApi = createApi({
             }),
         }),
 
+        addAddress: builder.mutation({
+            query: (body) => ({
+              url: `/user/address/`,
+              method: "POST",
+              body
+            }),
+          }),
+          
+
         getDealer: builder.mutation({
             query: (user) => ({
                 url: "/all",
@@ -112,6 +121,7 @@ export const appApi = createApi({
 });
 
 export const {
+    useAddAddressMutation,
     useSignupMutation,
     useLoginMutation,
     useGetDealerMutation,

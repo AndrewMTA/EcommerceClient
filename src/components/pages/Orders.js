@@ -3,7 +3,10 @@ import { DateTime } from 'luxon';
 import Fed from "./Fed.png"
 import { useSelector } from "react-redux";
 import axios from "../../api/axios";
+import SubNav from "./subNav"
 import Navbar from "../Navbar";
+import GoogleMapReact from 'google-map-react';
+import {GoogleMap , useLoadScript, Marker} from "@react-google-maps/api"
 function OrdersPage() {
     const user = useSelector((state) => state.user);
     const [orders, setOrders] = useState([]);
@@ -32,7 +35,7 @@ function OrdersPage() {
   const pageCount = Math.ceil(orders.length / carsPerPage);
   const [optionsPick, setOptionsPick] = useState()
   const numbers = [...Array(pageCount + 1).keys()].slice(1);
-
+  const productState = useSelector((state) => state.products);
   const nextPage = () => {
     if (page !== pageCount) {
       setPage(page + 1);
@@ -62,8 +65,14 @@ setMatch(index)
     console.log(orderId);
   };
   
+
+
+
   const handleLabel = (addressObj, index) => {
       setOrderAddress(addressObj)
+
+      console.log("pp",addressObj)
+      console.log("peepee",addressObj[0].street)
       setLabelLoading(true)
     if (orderAddress.length > 0) 
     {
@@ -74,15 +83,15 @@ setMatch(index)
         requestedShipment: {
           shipper: {
             contact: {
-              personName: "SHIPPER NAME",
-              phoneNumber: 1234567890,
-              companyName: "Shipper Company Name"
+              personName: user?.sellerName,
+              phoneNumber: 3317774958,
+              companyName: user?.sellerName
             },
             address: {
               streetLines: [
-                "SHIPPER STREET LINE 1"
+                user?.address[0].street
               ],
-              city: "HARRISON",
+              city: user?.address[0].city,
               stateOrProvinceCode: "AR",
               postalCode: 72601,
               countryCode: "US"
@@ -97,12 +106,12 @@ setMatch(index)
               },
               address: {
                 streetLines: [
-                  "RECIPIENT STREET LINE 1",
-                  "RECIPIENT STREET LINE 2"
+                  addressObj[0].street,
+                
                 ],
-                city: "Collierville",
-                stateOrProvinceCode: "TN",
-                postalCode: 38017,
+                city: addressObj[0].city,
+                stateOrProvinceCode: "IL",
+                postalCode: 60516,
                 countryCode: "US"
               }
             }
@@ -155,21 +164,53 @@ setMatch(index)
 }
 };
 
-  
 
-  function showOrder(productsObj, orderId) {
-    let productsToShow = products.filter((product) => productsObj[product._id]);
-    productsToShow = productsToShow.map((product) => {
-        const productCopy = { ...product };
-        productCopy.count = productsObj[product._id];
-        delete productCopy.description;
-        return productCopy;
-    });
-    console.log(productsToShow);
-    setOrderID(orderId)
-    setShow(true);
-    setOrderToShow(productsToShow);
+
+const orderProductIds = orders.map((order, index) => {
+  const productId = Object.keys(order.products)[2];
+  return `${productId}`;
+});
+
+
+const idMatch = productState.filter((product) => {
+  const productId = product._id.toString();
+  return orderProductIds.includes(productId);
+});
+
+const productMatch = idMatch.filter((match) => {
+  const matchId = match.listUser.toString();
+  const userId = user?._id.toString();
+  return matchId === userId;
+});
+
+console.log("ii",productMatch)
+
+console.log("match",idMatch);
+
+console.log("hh", orderProductIds)
+
+function showOrder(productsObj, orderId) {
+  let productsToShow = products.filter((product) => {
+    const cartProductId = `${product._id}`; // Combine product ID and seller ID
+    return productsObj[cartProductId];
+  });
+
+  productsToShow = productsToShow.map((product) => {
+    const cartProductId = `${product._id}`; // Combine product ID and seller ID
+    const productCopy = { ...product };
+    productCopy.count = productsObj[cartProductId].count;
+    delete productCopy.description;
+    return productCopy;
+  });
+
+  console.log("go", productsToShow);
+  setOrderID(orderId);
+  setShow(true);
+  setOrderToShow(productsToShow);
 }
+
+
+
   const changeCPage = (id) => {
     setPage(id);
   };
@@ -249,7 +290,27 @@ console.log("uuu", time, dateSubmit, timeSubmit)
         setOpen(false);
      
     } 
-    const handlePickup = () => {
+
+   
+    const filteredOrders = orders.filter((order) => {
+      const productKeys = Object.keys(order.products);
+    
+      for (let j = 0; j < productKeys.length; j++) {
+        const productKey = productKeys[j];
+        const product = order.products[productKey];
+    
+        if (product.sellerId && product.sellerId === user?._id) {
+          return true;
+        }
+      }
+    
+      return false;
+});
+    console.log("jj",filteredOrders)
+
+    const totalOrderAmount = filteredOrders.reduce((total, order) => total + order.total, 0);
+
+        const handlePickup = () => {
    const checkData = {
       pickupAddress: {
         postalCode: "60516",
@@ -278,35 +339,46 @@ console.log("uuu", time, dateSubmit, timeSubmit)
       setOpen(true);
    
     };
-
+    useLoadScript({googleMapsApiKey: 'AIzaSyDafqAOtxds8RDU33u_luv9E8KjuQSZ35M' })
     useEffect(() => {
       console.log("poo", times);
-      
+    
     }, [times]);
 
     const HandleDisplay = () => {
+
+      const userOrderIds = productMatch.map((product) => product._id);
+
+      const relevantOrders = orders.filter((order) =>
+        userOrderIds.includes(order._id)
+      );
        
         return (
           <>
             <>
               {page === "poop" ? setPage(1) : <></>}
-              {orders.length === 0 && loading === true ?  (<>
+              {filteredOrders.length === 0 && loading === true ?  (<>
               loading....
                 </>
               ) : (
                 ""
               )}
-               {orders.length === 0 ?  (<>
+               {filteredOrders.length === 0 ?  (<>
                 
                 <h1 className="pusher"> No Listings Matching Search</h1>
                 </>
               ) : (
                 ""
               )}
-              {orders.slice(firstIndex, lastIndex).map((order, index) => {
+
+
               
+              {filteredOrders.slice(firstIndex, lastIndex).map((order, index) => {
+             // Assuming 'orders' is an array of objects
+
+
               return (
-                
+             
               <tr>
                  <td>{order._id}</td>
                  <td>
@@ -322,11 +394,11 @@ console.log("uuu", time, dateSubmit, timeSubmit)
                  <td>${order.total}</td>
           
                  <td> {!order.hide &&   <div onClick={() => handleLabel(order.address, index)} className="print"> {labelloading === true ? <>Loading... </> : <>Print Label </>  }</div>} {order.hide &&<a href={`${url}`}>   <div onClick={() => handleLabel(order.address,  index)} className="print-g">View Label </div></a> }</td>
-                 <td onClick={handlePickup}  >Schedule Pickup</td>
+             {/* <td onClick={handlePickup}  >Schedule Pickup</td> */}    
                  <td>See Order</td>
              </tr>)
               })}{" "}
-              {orders.length - firstIndex === 2 ? (
+              {filteredOrders.length - firstIndex === 2 ? (
                 <span className="insert">insert</span>
               ) : (
                 <></>
@@ -334,16 +406,36 @@ console.log("uuu", time, dateSubmit, timeSubmit)
             </>
     
             <div className="num__container">
-              {orders.length > 8 ? <Pagination /> : <></>}
+              {filteredOrders.length > 8 ? <Pagination /> : <></>}
             </div>
+  
+           
+
+<div>
+
+      </div>
           </>
         );
       };
     
 
-    if (orders.length === 0) {
-        return <h1 className="text-center pt-3">No orders yet</h1>;
-    }
+    if (filteredOrders.length === 0) {
+
+
+        return (
+          <>
+          <>
+          
+          <Navbar />
+  
+        <SubNav/>
+            </>
+        
+            <div className="center-div">
+              <br/>
+              <br/>
+            <h1 className="text-center pt-3">No orders yet</h1> 
+            </div> </>)}
 
     const Pagination = () => {
         return (
@@ -381,44 +473,55 @@ console.log("uuu", time, dateSubmit, timeSubmit)
 
       <>
   <Navbar />
-  
+  <SubNav/>
   <div className="dashboard">
-  <a href={`/listings/${user._id}`}>
-      <div className="dash-options">
-        Products
-      </div>
-      </a>
-     <a href="/orders"> <div className="dash-options"> 
-        Orders
-      </div> </a>
-      <a href="/accountc"> <div className="dash-options"> 
-        Account
-      </div> </a>
-      <a href="/payout">   <div className="dash-options">
-        Payments
-      </div>
-   
-      
-      </a>
+    
+  
 
       </div>
 
 
         <div className="center-div">
-          
-          
+     
+       
+        
             <div className="center-div">
-                <thead className="m-5">
-                    <tr>
-                        <th className="id-1">Order ID</th>
-                        <th className="id-2">Status</th>
-                        <th className="id-3">Date</th>
-                        <th className="id-4">Total</th>
-                        <th className="id-5"></th>
-                    </tr>
-                </thead>
-                <tbody className="m-5">
-                  <HandleDisplay/>
+            <div className="start-move">
+            
+            <ul className="table-select">
+           <li className="tab">All</li> 
+           <li className="tab">Unfulfilled</li> 
+           <li className="tab">Processing</li> 
+           <li className="tab">Fulfilled</li> 
+            </ul>
+
+
+
+          </div>
+            <table className="m-5">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <HandleDisplay />
+
+
+
+          
+        </tbody>
+      </table>
+
+
+  <div className="flex-row-end">Revenue To Date: ${totalOrderAmount}</div>
+ 
+
 {pickupCode?.length > 0 ?
 <>
 your code: {pickupCode}
@@ -516,8 +619,8 @@ your code: {pickupCode}
  <div className="box-time">
   
  <div>Location</div>  
-  {user.address[0].street}, {user.address[0].street2} <br/>
- {user.address[0].city}  {user.address[0].state}  {user.address[0].country}
+  {user.address[0]?.street}, {user.address[0]?.street2} <br/>
+ {user.address[0]?.city}  {user.address[0]?.state}  {user.address[0]?.country}
  
  </div>
  </>
@@ -528,7 +631,7 @@ your code: {pickupCode}
                 <div className="flex-col-a">
         
                     <button className="fed" onClick={handleSubmitPickup}>
-                        Submit
+                      Submit
                     </button><img className="fed-logo" src={Fed} />
                 </div>
                 </div>
@@ -560,11 +663,11 @@ your code: {pickupCode}
                     <button className="not-green" onClick={handleClose}>
                         Close
                     </button>
-                </div>
+                </div> 
                 </div>
             </div>
 }     
-                </tbody>
+         
             </div>
         </div>
         </>

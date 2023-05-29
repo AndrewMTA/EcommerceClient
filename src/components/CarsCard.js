@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 
 
-const CarsCard = ({ pic , price, _id,}) => {
+const CarsCard = ({ pic , price, _id, title, seller, quantity, category}) => {
 
 
 
@@ -13,12 +13,12 @@ return (
        
       <img   className="CardPic" src={pic[0].url }/>
       <div className="Textbox">
-      <div>Sci pie</div>
+      <div>{seller}</div>
       <h3 className="h3">
    ${price.toLocaleString('en-US')}
         </h3>  
        <p className="p">
-       <div> 4 Pepporni Thin Crust</div>
+      {quantity} {title} {category}{quantity > 1 && <>s</>}
        </p>
 
        <p className="lp"> </p>

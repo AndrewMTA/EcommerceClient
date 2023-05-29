@@ -34,6 +34,7 @@ function HomePage() {
   } = car;
 
   const axiosPrivate = useAxiosPrivate();
+  const [ingredients, setIngredients] = useState()
   const [descriptions, setDescription] = useState(car.description);
   const [phones, setPhone] = useState(car.phone);
   const [years, setYear] = useState(car.year);
@@ -57,6 +58,11 @@ function HomePage() {
   const [extColor, setExtColor] = useState(car.ext_color);
   const [drivetrain, setDrivetrain] = useState(car.drive_train);
   const [intColor, setIntColor] = useState(car.int_color);
+  const [title, setTitle] = useState()
+  const [category, setCategory] = useState()
+  const [quantity, setQuantity] = useState()
+  
+  
   const navigate = useNavigate();
 
   const listUser = useSelector((state) => state.user._id);
@@ -202,32 +208,17 @@ function HomePage() {
 
                 <div className="inputWrap">
                   <label className="label">
-                    Makse <span className="required">*</span>
+                    Title <span className="required">*</span>
                   </label>
-                  <select
-                    className="inputOnboard"
-                    id="carMake"
-                    name="carMake"
-                    value={select}
-                    onChange={(e) => {
-                      setSelect(e.target.value);
-                    }}
-                  >
-                    <option>-Select Make-</option>
-                    {makes.map((makes) => {
-                      return (
-                        <>
-                          <option key={makes.id} value={makes.maker}>
-                            {makes.maker}
-                          </option>
-                        </>
-                      );
-                    })}
-                  </select>
+               <input onChange={(e) => setTitle(e.target.value)}className="inputOnboard"/>
                   <label className="label">
-                    Model <span className="required">*</span>
+                    Quantity <span className="required">*</span>
                   </label>
-                  <HandleSelect />
+               <input onChange={(e) => setQuantity(e.target.value)}className="inputOnboard"/>
+                  <label className="label">
+                    Category <span className="required">*</span>
+                  </label>
+                  <input  onChange={(e) => setCategory(e.target.value)}className="inputOnboard"/>
                 </div>
                 <div className="inputWrap"></div>
 
@@ -252,18 +243,7 @@ function HomePage() {
                 </div>
 
                 <div className="inputWrap">
-                  <label className="label">
-                    Year of manufacture <span className="required">*</span>
-                  </label>
-                  <input
-                    id="carYear"
-                    name="carYear"
-                    onChange={(e) => {
-                      setYear(e.target.value);
-                    }}
-                    value={years}
-                    className="inputOnboard"
-                  />
+               
                 </div>
 
                 <label className="label">
@@ -292,7 +272,7 @@ function HomePage() {
                 </div>
 
                 <div className="inputWrap">
-                  <label className="radioLabel">Description (recomended)</label>
+                  <label className="radioLabel">Description </label>
                   <textarea
                     id="carDescription"
                     name="carDescription"
@@ -302,178 +282,23 @@ function HomePage() {
                     value={descriptions}
                     className="radioarea"
                   />
-                </div>
 
-                <label className="radioLabel">
-                  Phone <span className="required">*</span>
-                </label>
-                <div className="flex-row">
-                  <select className="inputOnboard1">
-                    <option>United States (+1)</option>
-                  </select>
-                  <input
-                    value={phones}
+<label className="radioLabel">Ingredients</label>
+                  <textarea
+                    id="carDescription"
+                    name="carDescription"
                     onChange={(e) => {
-                      setPhone(e.target.value);
+                      setIngredients(e.target.value);
                     }}
-                    className="inputOnboard3"
-                  ></input>
-                  <br />
-                </div>
-                <div className="rapper">
-                  {" "}
-                  <h2>Specifications</h2>
-                </div>
-
-                <div className="inputWrap">
-                  <label className="label">
-                    Cylinders
-                  </label>
-
-                  <input
-                    value={cylinders}
-                    onChange={(e) => {
-                      setCylinders(e.target.value);
-                    }}
-                    className="inputOnboard"
+                    value={descriptions}
+                    className="radioarea"
                   />
-
-                  <div className="rapper">
-                    <label className="label">
-                      VIN #
-                    </label>
-
-                    <input
-                      value={vinNum}
-                      onChange={(e) => {
-                        setVinNum(e.target.value);
-                      }}
-                      className="inputOnboard"
-                    />
-                  </div>
-
-                  <div className="rapper">
-                    <label className="label">
-                      Stock #
-                    </label>
-
-                    <input
-                      value={stockNum}
-                      onChange={(e) => {
-                        setStockNum(e.target.value);
-                      }}
-                      className="inputOnboard"
-                    />
-                  </div>
-
-                  <div className="rapper">
-                    <label className="label">
-                      Transmission
-                    </label>
-
-                    <input
-                      value={trans}
-                      onChange={(e) => {
-                        setTransmission(e.target.value);
-                      }}
-                      className="inputOnboard"
-                    />
-                  </div>
-
-                  <div className="rapper">
-                    <label className="label">
-                      Drive train
-                    </label>
-
-                    <input
-                      value={drivetrain}
-                      onChange={(e) => {
-                        setDrivetrain(e.target.value);
-                      }}
-                      className="inputOnboard"
-                    />
-                  </div>
-
-                  <div className="rapper">
-                    <label className="label">
-                      Mileage
-                    </label>
-
-                    <input
-                      value={miles}
-                      onChange={(e) => {
-                        setMiles(e.target.value);
-                      }}
-                      className="inputOnboard"
-                    />
-                  </div>
-                  <div className="rapper">
-                    <label className="label">
-                      Body style
-                    </label>
-
-                    <input
-                      value={body_style}
-                      onChange={(e) => {
-                        setBody(e.target.value);
-                      }}
-                      className="inputOnboard"
-                    />
-                  </div>
-                  <div className="rapper">
-                    <label className="label">
-                      Exterior color
-                    </label>
-                    <div>
-                      <select
-                        value={extColor}
-                        onChange={(e) => {
-                          setExtColor(e.target.value);
-                        }}
-                        className="inputOnboard"
-                      >
-                        <option>Beige</option>
-                        <option>Yellow</option>
-                        <option>Black</option>
-                        <option>Orange</option>
-                        <option>Blue</option>
-                        <option>Purple</option>
-                        <option> Brown</option>
-                        <option>Red</option>
-                        <option>Green</option>
-                        <option>Silver</option>
-                        <option>Red</option>
-                        <option>White</option>
-                      </select>
-                    </div>
-                    <div className="inputWrap">
-                      <div className="inputWrap">
-                        <label className="label">Interior color</label>
-                        <select
-                          value={intColor}
-                          onChange={(e) => {
-                            setIntColor(e.target.value);
-                          }}
-                          className="inputOnboard"
-                        >
-                          <option>Beige</option>
-                          <option>Yellow</option>
-                          <option>Black</option>
-                          <option>Orange</option>
-                          <option>Blue</option>
-                          <option>Purple</option>
-                          <option> Brown</option>
-                          <option>Red</option>
-                          <option>Green</option>
-                          <option>Silver</option>
-                          <option>Red</option>
-                          <option>White</option>
-                        </select>
-                      </div>
-                      <button type="submit">Save Changes</button>
-                    </div>
-                  </div>
                 </div>
+
+            
+                
+                      <button type="submit">Save Changes</button>
+                  
               </>
             )}
           </div>

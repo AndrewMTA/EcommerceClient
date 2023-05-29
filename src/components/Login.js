@@ -12,7 +12,7 @@ const Login = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/cars";
+    const from = location.state?.from?.pathname || "/pizza";
     const [email, setEmail] = useState("");
     const userRef = useRef();
     const errRef = useRef();
@@ -48,7 +48,15 @@ const Login = () => {
             login({ email, pwd });
             setUser('');
             setPwd('');
-            navigate(from, { replace: true });
+       
+console.log(response?.data?.user?.sellerMembership)
+
+if (response?.data?.user?.sellerMembership === true) {
+    navigate("/orders"); 
+} else {
+    navigate(from, { replace: true });
+}
+ 
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');

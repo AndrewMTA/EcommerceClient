@@ -4,13 +4,14 @@ import axios from "../../api/axios"
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useCreateOrderMutation } from "../../services/appApi";
+import {   useRemoveFromCartMutation} from "../../services/appApi";
 import CardInput from "./CardInput";
 function CheckoutForm() {
     const stripe = useStripe();
     const elements = useElements();
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
-
+      const [removeFromCart, {loading}] = useRemoveFromCartMutation()
     const [alertMessage, setAlertMessage] = useState("");
     const [createOrder, { isLoading, isError, isSuccess }] = useCreateOrderMutation();
     const [country, setCountry] = useState("");
@@ -30,7 +31,7 @@ function CheckoutForm() {
 
         });
 
-console.log(user.address[0].street)
+
 
         const handleAddress = (e) => {
             setNextPage(true)
@@ -50,8 +51,6 @@ console.log( "hh", user.address.length)
 
     const saveAddress = async (e) => {
         e.preventDefault();
-   
-      
        const post = axios.post(`http://localhost:3500/user/address/${user._id}`, details)
        console.log(post)
        setNextPage(true)
@@ -79,7 +78,7 @@ console.log( "hh", user.address.length)
         console.log(response.data.access_token)
     }
 
-
+console.log(user.address[0].street)
    const handlePay = async (e) => {
 
     e.preventDefault()
@@ -101,8 +100,8 @@ console.log( "hh", user.address.length)
     
     const res = await axios.post("/process-payment", {
       email: user.email,
-      amount: user.cart.total,
-      accountId: user.accountId
+      amount: user.cart.total * 100,
+      accountId: "acct_1NBayLR3TKOw16t6"
     });
 
     
@@ -125,7 +124,10 @@ console.log( "hh", user.address.length)
     } else {
       // The payment has been processed!
       if (result.paymentIntent.status === "succeeded") {
-        createOrder(orderData)
+        console.log(orderData)
+        createOrder(orderData);
+
+        removeFromCart(orderData)
         console.log("Money baby");
         navigate("/success");
       
@@ -172,13 +174,13 @@ console.log( "hh", user.address.length)
             <form className="formCheck" onSubmit={handlePay}>
 {!nextPage && 
 <>
-           {user.address.length < 0 ? <>
+           {user.address.length < 1 ? <>
            
            
            <div>
-                 
+                 <br/>
 
-                    <h3> ship to:</h3>
+                    <h3>Ship to:</h3>
                     <div md={6}>
                         <div className="mb-3">
                             <label>Full Name</label>
@@ -191,6 +193,8 @@ console.log( "hh", user.address.length)
                 <div>
                     <div md={7}>
                         <div className="mb-3">
+                        <label>Address</label>
+                            <input className="inputOnboard" type="text" placeholder="Address" name="street" onChange={handleChange} required />
                             <label>Address</label>
                             <input className="inputOnboard" type="text" placeholder="Address" name="street" onChange={handleChange} required />
                             <label>Address (Apt #, PO BOX)</label>
@@ -260,13 +264,20 @@ console.log( "hh", user.address.length)
           </div>
           <br/>
           <div className="wrap">
-        <div className="min"> Ship to:</div> {user.address.map((info, index) => {
-                    return (
+        <div className="min">Ship to:</div> 
+                 
                         <div className="smaller">
-                           <b> Bob Dylan</b> {info.street} {info.street2} {info.city} {info.state} {info.country} {info.zip}
+                           <b>Bob Dylan</b>   
+                            {user.address[0].street}
+                            {user.address[0].street2}
+                            {user.address[0].city}
+                            {user.address[0].state}
+                            {user.address[0].country}
+                            {user.address[0].zip}
+                       {details.street} {details.street2} {details.city} {details.state} {details.country} {details.zip}
                         </div>
-                    )
-                })} </div>
+                    
+                 </div>
           <br/>
           <h3>Add Payment</h3>
           <br/>

@@ -1,4 +1,4 @@
-import Register from './components/Register';
+import Register from './components/pages/StripeWrap';
 import Login from './components/Login';
 import Home from './components/pages/Home';
 import Layout from './components/Layout';
@@ -19,6 +19,8 @@ import ForgotPassword from "./components/pages/ForgotPassword"
 import Delete from "./components/pages/Delete"
 import SetPrivate from "./components/pages/SetPrivate"
 import Seller from "./components/pages/Seller"
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import {loadStripe} from '@stripe/stripe-js';
 import Edit from './components/pages/Edit'
 import Info from './components/pages/CarInfo'
 import Success from "./components/pages/Success"
@@ -34,6 +36,11 @@ import Status from './components/pages/Status';
 import Footer from './components/Footer';
 import Product from './components/pages/checkout';
 import Cart from './components/pages/CartPage'
+
+
+import CardInput from "./components/pages/CardInput";
+import {Elements} from '@stripe/react-stripe-js';
+
 const ROLES = {
   'User': 2001,
   'Editor': 1984,
@@ -41,8 +48,12 @@ const ROLES = {
 }
 
 function App() {
+  const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
 
   return (
+
+            
+
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
@@ -58,12 +69,13 @@ function App() {
         <Route path="/listing/:carID" element={<Info/>} />
         <Route path="/application" element={<Sellzza />} />
         <Route path="/cart" element={<Cart />} />
-
+        <Route path="/verify/:randomNum" element={<Verify/>} />
         <Route path="/" element={<Hero/>} />
         <Route path="/orders" element={<Orders/>} />
         <Route path="/add-product" element={<Product/>} />
         <Route path="/orders/status/:id" element={<Status/>} />
-       
+        
+        <Route path="/success" element={<Success />} />
 
      
 
@@ -119,6 +131,7 @@ function App() {
 
       </Route>
     </Routes>
+ 
   );
 }
 

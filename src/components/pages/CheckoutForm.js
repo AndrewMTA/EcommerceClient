@@ -31,6 +31,7 @@ function HomePage() {
   const [maker, setMaker] = useState("");
   const [models, setModel] = useState("");
   const [disable, setDisable] = useState(true);
+  const [ingredients, setIngredients] = useState("");
   const [description, setDescription] = useState("");
   const [phone, setPhone] = useState("");
   const [year, setYear] = useState("");
@@ -62,7 +63,9 @@ function HomePage() {
   const [intColor, setIntColor] = useState("");
   const [value, setValue] = useState(1);
   const navigate = useNavigate();
-
+const [title, setTitle] = useState("")
+const [weight, setWeight] = useState("")
+const [quantity, setQuantity] = useState("")
 
   console.log("huh", year.length)
 
@@ -205,29 +208,13 @@ e.preventDefault()
 
     else axiosPrivate.post("/cars/new", {
       description: description,
-      make: select,
-      model: carModel,
       images: images,
       price: price.slice(0,9),
-      year: year.slice(0,4),
       listUser: listUser,
-      phone: phone,
-      VIN: vinNum,
-      stockNum: stockNum,
-      trans: transmission,
-      drive_train: drivetrain,
-      body_style: body,
-      ext_color: extColor,
-      int_color: intColor,
-      city: city,
-      state: state,
-      country: country,
-      miles: miles,
-      cylinders: cylinders,
-      listEmail: listEmail
-    
-    
-    
+      title: title,
+      ingredients: ingredients,
+      quantity: quantity,
+      weight: weight
     });   navigate("/success");
   }
 
@@ -356,7 +343,19 @@ function deletePic(imgObj) {
                 <h2 className="basic">Basic Information</h2>
 
                 <div className="inputWrap">
-                  <label className="label">Style <span className="required">*</span></label>
+                <label className="label">Product Title*</label>
+<input onChange={(e) => setTitle(e.target.value)} className="inputOnboard"/>
+
+<label className="label">Quantity Per Order*</label>
+<p>Selling your products in bundles can be cost effective when it comes to shipping</p>
+<input onChange={(e) => setQuantity(e.target.value)} className="inputOnboard"/>
+
+
+<label className="label">Total weight</label>
+<p>in pounds (lb)</p>
+<input onChange={(e) => setWeight(e.target.value)}className="inputOnboard"/>
+              
+                  <label className="label">Category<span className="required">*</span></label>
                   <select
                     className="inputOnboard"
                     id="carMake"
@@ -366,6 +365,7 @@ function deletePic(imgObj) {
                       setSelect(e.target.value);
                     }}
                   >
+
 
 <option>-Select Style-</option>
                     {pizza.map((makes) => {
@@ -439,14 +439,30 @@ function deletePic(imgObj) {
  
  
                 </div>
+                <div className="inputWrap">
 
+
+<label className="radioLabel">Shipping * </label>
+
+<div>
+
+  <div>
+    Fedex 2 day $30 - $55
+  </div>
+  
+</div>
+
+
+
+
+</div>
                 
 
                 
                 <div className="inputWrap">
 
 
-                  <label className="radioLabel">Description  </label> <p>{description.length}/425 max.</p>
+                  <label className="radioLabel">Description * </label> <p>{description.length}/425 max.</p>
                   <textarea
                     id="carDescription"
                     name="carDescription"
@@ -462,34 +478,8 @@ function deletePic(imgObj) {
                
 
 
-                  <label hidden className="label">Country <span className="required">*</span></label>
-                  <div className="inputWrap">
-                 
-                 <select hidden onChange={(e) => {setCountry(e.target.value)}}className="inputOnboard">
-                 <option>- Select a Country - </option>
-                   <option>United States </option>
-                 </select>
-
-
-                 {
-                 
-                 country === "United States" ? 
-                 
-                 <> 
-                 <label className="label">State<span className="required">*</span></label>
-                
-                 <div className="inputWrap">
-                 <select className="inputOnboard6">
-                 <option>- Select a State - </option>
-                    <option>United States </option>
-                  </select>
-                  </div>
-
-                  </>
-                  : <></>
-}
                  </div>
-                 </div>
+     
                  
              
                  
@@ -500,11 +490,8 @@ function deletePic(imgObj) {
 
 
                   <>
-           
     
-            
-          
-       <h2>Instructions</h2>
+                  <label > <h3>Ingredients</h3></label> <p>{description.length}/425 max.</p>
 
 
 
@@ -513,13 +500,13 @@ function deletePic(imgObj) {
             <div hidden className="inputWrap">
             <div hidden className="rapper">
             <textarea
+onChange={(e) => setIngredients(e.target.value)}
+
                     id="carDescription"
                     name="carDescription"
                     maxlength="425"
-                    onChange={(e) => {
-                      setDescription(e.target.value);
-                    }}
-                    value={description}
+     
+             
                     className="radioarea"
                   />
 
@@ -527,16 +514,12 @@ function deletePic(imgObj) {
 
            
 
-          
-<div className="border-box">
-            
-            </div>
            
 
         
             
 
-
+<br/>
          
               <button onClick={handleAddPost} className="button1">Post For Free</button>
             </div>

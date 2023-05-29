@@ -4,6 +4,32 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+  
+}
+
+
+.start-move {
+  background-color: rgba(0, 255, 255, 0);
+  display: flex;
+  justify-content: left;
+ 
+  width: 100%;
+}
+
+.table-select {
+  display: flex;
+
+  width: 100%;
+  justify-content: start;
+ 
+  margin: 0px 0px;
+  
+}
+
+.tab{
+  border: 1px solid black;
+  padding: 10px;
+  width: 100px;
 }
 
 .list {
@@ -11,6 +37,38 @@
 
 }
 
+.text-wrapping {
+  width: 60%;
+}
+.listingBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;height: 300px;
+  border: 4px black dashed;
+  font-size: larger;
+  color: blue;
+  margin: 15px;
+  cursor: pointer
+  ;
+
+  width: 300px;
+}
+
+.hu {
+  font-size: 18px;
+}
+
+.load-center {
+  justify-content: center;
+  display: flex;
+  padding: 150px;
+}
+
+
+.listingBox:hover {
+  background-color: rgba(55, 0, 255, 0.116);
+  transition: .2s ease-in-out;
+}
 .settings {
   margin: 10px;
   display: flex;
@@ -691,9 +749,24 @@ li {
   padding-bottom: 15px;
 }
 
+.map-con {
+  width: 500px;
+  height: 200px;
+} 
+
+.flex-row-end {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: end;
+  text-align: end;
+  width: 100%;
+
+
+}
 
    .id-1 {
-width: 267px;
+width: 270px;
 
 
    }
@@ -701,13 +774,13 @@ width: 267px;
     width: 143px;
    }
    .id-3 {
-    width:142px
+    width:144px
    }
    .id-4 {
-    width: 105px;
+    width: 88px;
    }
    .id-5 {
-    width: 457px;
+    width: 265px;
    }
 
 
@@ -1268,6 +1341,7 @@ width: 267px;
     
     color: rgb(0, 0, 0);
     padding: 20px;
+    padding-bottom: 0px;
     width: 100%;
     margin-top: -54px;
     position:fixed;
