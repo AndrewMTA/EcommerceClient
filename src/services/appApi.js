@@ -22,13 +22,15 @@ export const appApi = createApi({
             }),
         }),
 
-        addAddress: builder.mutation({
+        highlight: builder.mutation({
             query: (body) => ({
-              url: `/user/address/`,
-              method: "POST",
-              body
+                url: "/orders/highlight",
+                method: "POST",
+                body
             }),
-          }),
+        }),
+
+      
           
 
         getDealer: builder.mutation({
@@ -121,7 +123,7 @@ export const appApi = createApi({
 });
 
 export const {
-    useAddAddressMutation,
+    useHighlightMutation,
     useSignupMutation,
     useLoginMutation,
     useGetDealerMutation,

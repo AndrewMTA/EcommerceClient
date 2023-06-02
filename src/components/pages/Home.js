@@ -315,7 +315,7 @@ console.log("country", country)
                   </select>{" "}
                 </form>
               </div>
-
+{/*
           
               <div className="selectz">
                 <h4>Min Price</h4>
@@ -350,7 +350,7 @@ console.log("country", country)
                   onChange={updateFilterValue}
                 />
               </div>
-
+*/}
               
               <div className="selectz">
                 <h4>State</h4>

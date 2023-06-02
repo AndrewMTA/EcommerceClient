@@ -36,6 +36,7 @@ import Status from './components/pages/Status';
 import Footer from './components/Footer';
 import Product from './components/pages/checkout';
 import Cart from './components/pages/CartPage'
+import Account from './components/pages/Account'
 
 
 import CardInput from "./components/pages/CardInput";
@@ -76,6 +77,7 @@ function App() {
         <Route path="/orders/status/:id" element={<Status/>} />
         
         <Route path="/success" element={<Success />} />
+        <Route path="/account-settings" element={<Success />} />
 
      
 

@@ -12,7 +12,9 @@
            <a href="/orders"> <div className="dash-options"> 
               Orders
             </div> </a>
-
+            <a href="/account-settings"> <div className="dash-options"> 
+              Account
+            </div> </a>
             
             
             </div>

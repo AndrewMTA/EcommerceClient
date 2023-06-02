@@ -5,7 +5,8 @@ import axios from '../api/axios';
 import { Link } from "react-router-dom";
 import { Elements } from '@stripe/react-stripe-js';
 import logo from "./pages/Frame 9.png"
-
+import lock from "./pages/lock.png"
+import card from "./card.png"
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from '@stripe/stripe-js';
 import CardInput from "./pages/CardInput";
@@ -29,10 +30,12 @@ const Register = () => {
     const [success2, setSuccess2] = useState(false)
     const [seller, setSeller] = useState(false)
     const [pwd, setPwd] = useState('');
+    const [same, setSame] = useState(false)
     const [butter, setButter] = useState("potato");
     const [validPwd, setValidPwd] = useState(false);
     const [pwdFocus, setPwdFocus] = useState(false);
     const [checkout, setCheckout] = useState(false);
+    const [document, setDocument] = useState(false);
     const [website, setWebsite] = useState(null)
     const [matchPwd, setMatchPwd] = useState('');
     const [validMatch, setValidMatch] = useState(false);
@@ -40,10 +43,53 @@ const Register = () => {
     const [buisnessName, setBuisnessName] = useState()
     const [memberAdded, setMemberAdded] = useState(null)
     const [errMsg, setErrMsg] = useState('');
+    const [accountNum, setAccountNum] = useState('');
     const [success, setSuccess] = useState(false);
-
+    const [bankToken, setBankToken] = useState("")
     const stripe = useStripe();
     const elements = useElements();
+    const [bankInfo, setBankInfo] = useState(false)
+    const [person, setPerson] = useState(false)
+    const [addAddress, setAddAddress] = useState(false)
+    const [data, setData] = useState({
+        email:"",
+        businessName: "",
+        phone: "",
+        tax_id: "",
+        website:"",
+        routing:"",
+        account:"",
+        nameOnAccount:"",
+        address: {
+            line1:"",
+            city:"",
+            state:"",
+            zip:"",
+            contactLine1:"",
+            contactCity:"",
+            contactState:"",
+            contactZip:"",
+        },
+    })
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleFileChange = (event) => {
+      setSelectedFile(event.target.files[0]);
+    };
+    const handleAddDoc = (e) => {
+        e.preventDefault()
+        setPerson(false)
+        setDocument(true)
+    }
+  
+    console.log(data)
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setData((prev) => {
+            return { ...prev, [name]: value}
+        })
+    }
 
     useEffect(() => {
 
@@ -56,8 +102,43 @@ const Register = () => {
 
 
 
-
-
+    const [piiData, setPiiData ]= useState({
+        pii: {
+          ssn_last_4: '' // Example SSN, replace with actual values
+        },
+        first_name: '',
+        last_name: '',
+        address: {
+          line1: '',
+          city: '',
+          state: '',
+          postal_code: '',
+          country: 'US'
+        },
+        companyAddress: {
+            line1: '',
+            city: '',
+            state: '',
+            postal_code: '',
+            country: 'US'
+          },
+        // Add other required PII fields here
+      });
+      
+     {/*
+      stripe.createToken('pii', piiData)
+        .then(function(result) {
+          if (result.error) {
+            // Handle error
+            console.error(result.error);
+          } else {
+            // PII token created successfully
+            const piiToken = result.token;
+            // Use the piiToken for further processing or sending to the server
+            console.log(piiToken);
+          }
+        });
+*/}
     function getRandomArbitrary(min, max) {
         return Math.random() * (max - min) + min;
     }
@@ -87,7 +168,7 @@ const Register = () => {
         try {
 
             const response = await axios.put("http://localhost:3500/register/resend",
-                JSON.stringify({ email, randomNum }),
+                JSON.stringify({ email: data.email, randomNum }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -121,7 +202,7 @@ const Register = () => {
         }
     }
 
-    const handlePayment = async () => {
+    const handlePayment = async (bankToken) => {
 
                             if (!stripe || !elements) {
                                 // Stripe.js has not yet loaded.
@@ -132,7 +213,7 @@ const Register = () => {
                           
                               
                               const res = await axios.post("/create-payments", {
-                                email: email,
+                                email: data.email,
                                 amount: 2000
                               });
                           
@@ -142,7 +223,7 @@ const Register = () => {
                                 payment_method: {
                                   card: elements.getElement(CardElement),
                                   billing_details: {
-                                    email: email,
+                                    email: data.email,
                                   },
                                 },
                               });
@@ -154,7 +235,7 @@ const Register = () => {
                                 // The payment has been processed!
                                 if (result.paymentIntent.status === "succeeded") {
                                   console.log("Money baby");
-                                  console.log(email)
+                                
                               axios.put("http://localhost:3500/user/add-membership",  JSON.stringify({ email}),
                               {
                                   headers: { 'Content-Type': 'application/json' },
@@ -168,6 +249,122 @@ const Register = () => {
                         }
     }
 
+    const handleAddPerson = (e) => {
+e.preventDefault()
+setPerson(true)
+setBankInfo(false)
+createBankAccount()
+    }
+
+
+    async function createBankAccount() {
+        const stripe = await stripePromise;
+      
+      {/** function createAccount() {
+          axios.post("http://localhost:3500/create-account", { bankToken, data })
+            .then(function(response) {
+              console.log(response.data);
+              setAccountNum(response.data);
+            })
+            .catch(function(error) {
+              console.error('Error creating account:', error);
+            });
+        }
+      */}  
+        stripe.createToken('bank_account', {
+          country: 'us',
+          currency: 'USD',
+          account_number: data.account,
+          routing_number: data.routing,
+          account_holder_type: 'company',
+          account_holder_name: data.nameOnAccount
+        })
+          .then(function(response) {
+            console.log(response.token.id);
+            setBankToken(response.token.id);
+            return response.token.id;
+          })
+          .then(function(tokenId) {
+            console.log("next fun")
+          })
+          .catch(function(error) {
+            console.error('Error creating bank account token:', error);
+          });
+      }
+      
+
+      
+        function createPerson() {
+            const data = {
+                accountNum: accountNum
+            }
+            console.log(data)
+            axios.post("http://localhost:3500/create-person", {data})
+        }
+
+        const handleSubmitDoc = async (event) => {
+            event.preventDefault();
+            setPerson(false)
+            setCheckout(true)
+            setDocument(false)
+            console.log("doc", document)
+            const file = event.target.file.files[0];
+          
+            if (file) {
+              const fileId = await uploadDocument(file);
+              const person = event.target.person.value;
+              const account = event.target.account.value;
+        
+              updatePerson(person, account, fileId);
+              setDocument(false)
+            }
+
+           
+          };
+        
+          const uploadDocument = async (file) => {
+            const formData = new FormData();
+            formData.set('purpose', 'identity_document');
+            formData.set('file', file);
+        
+            try {
+              const response = await fetch('https://files.stripe.com/v1/files', {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${stripePromise}`,
+                },
+                body: formData,
+              });
+        
+              const data = await response.json();
+              console.log(data);
+              return data.id;
+            } catch (error) {
+              console.error(error);
+            }
+          };
+        
+          const updatePerson = async (person, account, fileId) => {
+            try {
+              const response = await fetch('/update-person-file', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  person,
+                  account,
+                  file: fileId,
+                }),
+              });
+        
+              const data = await response.json();
+              console.log(data);
+            } catch (error) {
+              console.error(error);
+            }
+          };
+        
 
     const processPayment = async () => {
         try {
@@ -177,17 +374,19 @@ const Register = () => {
             console.error(error);
         }
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("pot")
         if (selectedOption === 'no') {
 
 
-
+console.log("Nah")
 
             try {
 
                 const response = await axios.post(REGISTER_URL,
-                    JSON.stringify({ email, pwd, randomNum }),
+                    JSON.stringify({ email: data.email, pwd, randomNum }),
                     {
                         headers: { 'Content-Type': 'application/json' },
                         withCredentials: true
@@ -225,7 +424,8 @@ const Register = () => {
 
         else if (selectedOption === 'yes') {
             setSeller(true)
-            if (website !== null) {
+            console.log("Yeah")
+            if (data.website !== '') {
                 setSelectedOption('')
                
 
@@ -233,15 +433,12 @@ const Register = () => {
                 try {
 
                     const response = await axios.post('http://localhost:3500/register/seller',
-                        JSON.stringify({ email, pwd, randomNum, contactName, buisnessName, phone, location, website }),
+                        JSON.stringify({ email: data.email, pwd, randomNum, buisnessName: data.buisnessName, phone: data.phone, website: data.website }),
                         {
                             headers: { 'Content-Type': 'application/json' },
                             withCredentials: true   
                         },
-    
-    
-    
-    
+
                     );
    
     
@@ -250,8 +447,9 @@ const Register = () => {
     
                     setPwd('');
                     setMatchPwd('');
-    
-    setCheckout(true)
+ 
+    setBankInfo(true)
+
                     setSeller(null)
 
                 
@@ -314,12 +512,17 @@ const Register = () => {
 
 
 
-                    <form className="form" onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} className="form" >
                         <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                        <a className='navA' href="/cars"><img src={logo} className="loge" /> </a>
-                        {seller === false && <>
-                            <h1>Register</h1>
+                        <a className='navA' href="/"><img src={logo} className="loge" /> </a>
+            
 
+
+
+                        {seller === false && <>
+                          <h1>Register</h1>
+
+                            
                             <label htmlFor="email">
                                 Email:
 
@@ -328,10 +531,11 @@ const Register = () => {
                                 className="inputOnboard"
                                 type="text"
                                 id="email"
+                                name="email"
                                 ref={userRef}
                                 autoComplete="off"
-                                onChange={(e) => setEmail(e.target.value)}
-                                value={email}
+                                onChange={handleChange}
+                             
                                 required
 
                                 aria-describedby="uidnote" />
@@ -387,7 +591,7 @@ const Register = () => {
 
                             <br />
                             <div>
-                                Looking to sell pizza??
+                                Looking to sell pizza?
                                 <label>
                                     <input
                                         type="radio"
@@ -421,7 +625,7 @@ const Register = () => {
                                 <span className="line">
                                     <Link to="/">Sign In</Link>
                                 </span>
-                            </p> </>}{seller === true &&
+                            </p> </>  }{seller === true &&
                                 <>
                                     <h1>Apply to sell</h1>
 
@@ -434,23 +638,23 @@ const Register = () => {
                                     <input
                                         className="inputOnboard"
                                         type="text"
-                                        value={email}
+                                  
                                         autoComplete="off"
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={handleChange}
                                         required
                                  
                                     /> </>
 }
                                     <label >
-                                        Buisness Name
+                                        Business Name
 
                                     </label>
                                     <input
                                         className="inputOnboard"
                                         type="text"
-                                    
-                                        autoComplete="off"
-                                        onChange={(e) => setBuisnessName(e.target.value)}
+                                        name="businessName"
+                                        
+                                        onChange={handleChange}
                                         required
                                  
                                     />
@@ -462,26 +666,14 @@ const Register = () => {
                                     </label>
                                     <input
                                         className="inputOnboard"
-                               
                                         required
                                         onChange={(e) => setLocation(e.target.value)}
-                                    
+                
                                     />
                                    
 
 
-                                    <label htmlFor="confirm_pwd">
-                                        Contact Name
-                                    </label>
-                                    <input
-                                        className="inputOnboard"
-                         
-                                        id="confirm_pwd"
-                                        onChange={(e) => setContactName(e.target.value)}
-                                      
-                                      
-                                    />
-
+                                  
                                     <label htmlFor="confirm_pwd">
                                         Website
 
@@ -490,19 +682,36 @@ const Register = () => {
                                         className="inputOnboard"
                                         type="text"
                                         id="website"
-                                        onChange={(e) => setWebsite(e.target.value)}
+                                        name="website"
+                                        onChange={handleChange}
                                      required
 
                                     />
+
+
+<label htmlFor="confirm_pwd">
+                                        Tax ID
+
+                                    </label>
+                                    <input
+                                        className="inputOnboard"
+                                        type="text"
+                                        id="website"
+                                        name="tax_id"
+                                        onChange={handleChange}
+                                     required
+
+                                    />
+
 
                                     <label htmlFor="confirm_pwd">
                                         Phone Number
                                     </label>
                                     <input
                                         className="inputOnboard"
-                                    
+                                        name="phone"
                           
-                                        onChange={(e) => setPhone(e.target.value)}
+                                        onChange={handleChange}
                                         required
                                     />
                            
@@ -513,7 +722,7 @@ const Register = () => {
 
                                     </div>
 
-                                    <button onClick={handleSubmit}type="submit">Nextt</button>
+                                    <button onClick={handleSubmit}type="submit">Next</button>
 
                                     <p>
                                         Have and access code?   <br />
@@ -525,20 +734,132 @@ const Register = () => {
 
                         }
 
+                        {addAddress && <>
+                        <>line1</>
+                        <>City</>
+                        <>State</>
+                        <>Zip</>
+                        </>  
+
+                        }
+
+{bankInfo && <>
+  
+<h1>Get paid</h1>
+<p>Link a banking institution to your account.</p>
+<label>Name</label>
+<input className="inputOnboard" onChange={handleChange} name="nameOnAccount"  placeholder="Account Holder Name"/>
+<label>Account Type</label>
+<select className="inputOnboard"  placeholder="Buisness Account"> 
+<option>
+    - Account Type -
+</option>
+<option>
+   Buisness
+</option>
+<option>
+   Individual
+</option>
+</select>
+<label>Routing Number</label>
+<input className="inputOnboard" name="routing" onChange={handleChange} placeholder="Routing Number"/>
+<label>Account Number</label>
+<input className="inputOnboard" name="account" onChange={handleChange} placeholder="Account Number"/>
+<p className="tiny">Personal data is handled with industry standard encryption to keep information secure. Shipslices uses a PCI complaint payment provider for all transactions.<img className="lock"src={lock}/></p>
+<button onClick={handleAddPerson}>Next</button>
+
+</>}
+
+{person && <>
+
+<h4>Main Contact</h4>
+   <div> 
+                                Are you the business owner?
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name="pizzaOption"
+                                        style={{ marginLeft: '8px', marginRight: '3px' }}
+
+                                        value="yes"
+                                        checked={selectedOption === 'yes'}
+                                        onChange={handleOptionChange}
+                                    />
+                                    Yes
+                                </label>
+
+                                <label>
+                                    <input
+                                        type="radio"
+                                        name="pizzaOption"
+                                        value="no"
+                                        style={{ marginLeft: '8px', marginRight: '3px' }}
+                                        checked={selectedOption === 'no'}
+                                        onChange={handleOptionChange}
+                                    />
+                                    No
+                                </label>
+                            </div>
+
+                      
+<label>Contact Name</label>
+<input className="inputOnboard" onChange={handleChange} name="title" placeholder="Your Title"/>
+<label>Title</label>
+<input className="inputOnboard" onChange={handleChange} name="contactPhone" placeholder="Phone"/>
+<label>Email</label>
+<input className="inputOnboard" onChange={handleChange} name="contactEmail" placeholder="Email"/>
+<label>Last 4 SSN</label>
+<input className="inputOnboard" type="password" onChange={handleChange} name="last4" placeholder="Last 4 SSN"/>
+<br/>
+<h4>Address</h4> <div className="row-wrap"><p>Same as business address</p><input className="vert" type="checkbox" checked/></div>
+{same && <>
+
+<label>Street Name</label>
+<input className="inputOnboard" onChange={handleChange} name="contactLine1" placeholder="Address Line 1"/>
+<label>City</label>
+<input className="inputOnboard" onChange={handleChange} name="contactCity" placeholder="City"/>
+<label>State</label>
+<input className="inputOnboard" onChange={handleChange} name="contactState" placeholder="State"/>
+<label>Zip</label>
+<input className="inputOnboard" onChange={handleChange} name="contactZip" placeholder="Zip"/>
+</>
+
+            
+}
+      
+<button onClick={handleAddDoc}>Next</button>
+
+</>}
+
+{document && <>
+    <label>Upload ID</label>
+{document === true ? <>Hi</> : <> Nh</>}
+<p className="tiny">ShipSlices requires an image of a State issued I.D or Drivers License of the account representitive.</p>
+<fieldset className="inputOnboard">
+   
+              <input type="file" id="file" className="field" onChange={handleFileChange} />
+               
+            </fieldset>
+            <button onClick={handleSubmitDoc}>Next</button>
+
+</>}
 
                         {checkout && <>
-                            <h1>Start Selling </h1>
-                            <h1 className="big">$12<span className="lill">per month</span></h1>
-                            <h1>✔ Unlimited Product posts</h1>
-                            <h1>✔ Fedex Shipping solutions</h1>
-                            <h1>✔ Accept Online Payments</h1>
-                            <h1>✔ Ship Nationwide</h1>
-                            <h1>✔ 24/7 email support</h1>
+                            <h1>Start Selling Nationally</h1>
+                
+                            <h1 className="big">$16<span className="lill">per month</span></h1>
+                            <h2>✔ Unlimited Product posts</h2>
+                            <h2>✔ Fedex Shipping solutions</h2>
+                            <h2>✔ Accept Online Payments</h2>
+                            <h2>✔ Ship Nationwide</h2>
+                            <h2>✔ 24/7 email support</h2>
+
+                           
                             <input hidden value={butter} />
                             <br />
                             <input className="inputOnboard" onChange={(e) => setCardName(e.target.value)} placeholder="Name on card" />
                             <br />
-
+                             
                             <CardInput />
 
 

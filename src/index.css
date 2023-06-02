@@ -103,9 +103,7 @@ column-gap: 100px;
   justify-content: center;
 }
 
-input[type="text"],
-input[type="password"],
-button,
+
 
 label,
 button {
@@ -413,7 +411,7 @@ li {
 .log2 {
   width: 60px;
   margin-top: -15px;
-  margin-left: 40px;
+  margin-left: 3px;
 
 }
 
