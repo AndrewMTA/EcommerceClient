@@ -424,7 +424,7 @@ margin-top: -20px;
 
 .footer {
   display: flex;
-  margin-top: 35px;
+  margin-top: 50px;
 flex-direction: row;
 
   padding: 40px 20px;
@@ -667,15 +667,21 @@ margin-top: 10px;
   flex-direction: column;
 }
 
+
+
 .select-wrappingz{
 display: flex;
-width: 100%;
+width: 50%;
 margin-right: 15px;
 margin-left: 15px;
+margin-top: 5px;
 row-gap: 8px;
 }
 
+.button-space {
+  width: 100%;
 
+}
 .rangei{
   width: 100%;
 }

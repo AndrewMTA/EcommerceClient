@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useRef } from 'react';
 import Register from './components/pages/StripeWrap';
 import Login from './components/Login';
 import Home from './components/pages/Home';
@@ -38,10 +39,11 @@ import Product from './components/pages/checkout';
 import Cart from './components/pages/CartPage'
 import Account from './components/pages/Account'
 
-
+import { Link, useLocation, useParams } from 'react-router-dom';
 import CardInput from "./components/pages/CardInput";
 import {Elements} from '@stripe/react-stripe-js';
-
+import alertSound from './Alert.wav';
+import { useDispatch, useSelector } from "react-redux";
 const ROLES = {
   'User': 2001,
   'Editor': 1984,
@@ -49,12 +51,68 @@ const ROLES = {
 }
 
 function App() {
-  const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
 
+  const [audio, setAudio] = useState(null);
+
+  const [show, setShow] = useState(false)
+  const user = useSelector((state) => state.user);
+  const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
+  const { page } = useParams();
+  const location = useLocation();
+  console.log(location.pathname)
+ console.log(page)
+  useEffect(() => {
+    if (user?.newOrder) {
+      setShow(true)
+      playSound();
+    }
+  }, [user]);
+  const stopSound = () => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+      setAudio(null);
+    }
+  }
+  const playSound = () => {
+    const audio = new Audio(alertSound);
+    audio.loop = true;
+    audio.play()
+      .catch(error => {
+        // Handle any playback errors
+        console.error('Failed to play audio:', error);
+      });
+
+    setTimeout(() => {
+      audio.pause();
+      audio.currentTime = 0;
+    }, 10000); 
+  };
+
+
+  const handleClose = () => {
+    setShow(false);
+    stopSound();
+  }
+  
   return (
 
-            
-
+    <>      
+{location.pathname !== '/orders' &&
+<>
+{show &&  <>
+   
+{user?.newOrder && <div className='OverLay'>
+  
+  <div className="Modal-small">New Order
+  <Link to="/orders">
+        <button onClick={handleClose}className= 'pulse' >
+          Go to Orders
+        </button>  </Link>
+  </div></div>}
+  </>}
+  
+  </> }
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
@@ -133,7 +191,7 @@ function App() {
 
       </Route>
     </Routes>
- 
+    </> 
   );
 }
 

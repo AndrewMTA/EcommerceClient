@@ -18,7 +18,7 @@ const [showing, setShowing] = useState(false)
 const car = cars.find((car) => car._id === carID)
 useEffect(() => {
   axios
-    .get("https://backend-6olc.onrender.com/cars")
+    .get("http://localhost:3500/cars")
 
 }, []);
 
@@ -39,7 +39,7 @@ e.preventDefault()
 axiosPrivate.delete(
       
       
-    `https://backend-6olc.onrender.com/cars/delete/${carID}`).then((res) => {
+    `http://localhost:3500/cars/delete/${carID}`).then((res) => {
 
         if (res.status === 200) {
           console.log("succexs")
@@ -146,13 +146,13 @@ axiosPrivate.delete(
   <p>Deletion is permanant and cannot be undone</p>
   <br/>
 { !showing && <>
-  <button onClick={handleOpen}>Yes I'm sure</button>  <a  href={`/listings/${user._id}`}><span  className='back' >No I'm not</span>  </a>
+  <button onClick={handleOpen}>Yes I'm sure</button><a  href={`/listings/${user._id}`}><span  className='back' >No I'm not</span>  </a>
   </>
 }
   {showing && <>
 
     <a  href={`/listings/${user._id}`}><span className='back'  > Back</span> </a>
-  <span     className='Deletebtn'     onClick={deletePost} >Delete</span> </> }
+  <span className='Deletebtn' onClick={deletePost} >Delete</span> </> }
   </div>
   </form>
 

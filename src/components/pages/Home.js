@@ -32,7 +32,12 @@ const Home = () => {
   const cars = useSelector((state) => state.products);
   const [high, setHigh] = useState("i");
   const [style, setStyle] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audio = new Audio('/Alert.wav');
 
+  const handlePlayPause = () => {
+    setIsPlaying((prevIsPlaying) => !prevIsPlaying);
+  };
   const {
     filter_products,
     grid_view,
@@ -64,6 +69,8 @@ const Home = () => {
 
   console.log("te", make);
 
+
+
   console.log("res", resetPage);
 
   const [page, setPage] = useState(1);
@@ -74,7 +81,7 @@ const Home = () => {
   const [selectNum, setSelectNum] = useState(1);
   const [loading, setLoading] = useState(false)
   console.log("ugug", page + 1);
-
+ 
 
   const Select = cars.filter((cars) => cars.make === makes);
   const SelectModel = cars.filter((cars) => cars.model === selectModel);
@@ -292,6 +299,7 @@ console.log("country", country)
         <div className="selectors">
           <Navbar />
           <>
+         
             <div className="select-wrappingz">
               <div className="selectz">
                 <h4>Style</h4>
@@ -389,13 +397,7 @@ console.log("country", country)
                     <option value="lowest">Price: Lowest First</option>
 
                     <option value="highest">Price: Highest First</option>
-                    <option value="lowestmiles">Miles: Lowest First </option>
-
-<option value="highestmiles">Miles: Highest First</option>
-
-<option value="lowestyear">Year: Oldest First</option>
-
-<option value="highestyear">Year: Newest First</option>
+               
                   </select>
                 </form>
               </div>

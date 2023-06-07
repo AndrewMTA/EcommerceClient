@@ -66,7 +66,7 @@ console.log("user", user)
 
 if (car) {
 
-  const { pic, make, model, year, description, price, phone } = car; } 
+  const { pic, make, model, year, description, price, phone, quant} = car; } 
   return (
     <>
       <Navbar />
@@ -77,8 +77,8 @@ if (car) {
       <div className='seller-profile-1'>
 <h2>{user.sellerName}</h2> 
   <div className="wrap-about">
-  
-<img className='img-pro' src={Profile || null}/> <div>{user.address[0]?.city || "Chicago"}, {user.address[0]?.state || "Illinois"}</div>
+  {/**
+<img className='img-pro' src={Profile || null}/>  */}<div>{user.address[0]?.city || "Chicago"}, {user.address[0]?.state || "Illinois"}</div>
 </div>
  {/** <div className="text-wrapping">
   We're a family-owned and operated pizzeria that has been serving delicious pizzas since 1959. Founded by Joe Aurelio in Homewood, Illinois, Aurelio’s Pizza has grown to over 40 locations across the US, offering a variety of pizzas, salads, sandwiches, and desserts. Aurelio’s Pizza is known for its Super Six "The Works"® pizza, which features sausage, ham, pepperoni, green peppers, mushrooms, and cheese, as well as its Calabrese™
@@ -126,7 +126,7 @@ if (car) {
                       </h3>{" "}
                       {/*<img className="ana"src={ana}/> */}
                     </div>
-                    {carz.quantity || "Nohing yet"} {carz.title || "Nothing yet"} {carz.category || "Nothing yet"}{carz.quantity > 1 && <>s</>}
+                    {carz.quant|| "Nohing yet"} {carz.category || "Nothing yet"} {carz.title || "Nothing yet"}{carz.quant > 1 && <>s</>}
                  
                     <div className="displayEdit">
                       

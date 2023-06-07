@@ -32,7 +32,7 @@ const CarInfo = () => {
   const {carID} = useParams()
   const car = cars.find((car) => car._id === carID)
   const user = useSelector((state) => state.user);
-  const {  listUser, pic, description, price, title, ingredients, seller, quantity, category } = car;
+  const {  listUser, pic, description, quant, price, title, ingredients, seller, quantity, category } = car;
   const dotsContainerStyles = {
     display: "flex",
     justifyContent: "center",
@@ -297,7 +297,7 @@ const goToSlide = (slideIndex) => {
 
  <>
     <div className='ContactForm'>
-<h1 className='header' >{quantity} {title} {category}{quantity > 1 && <>s</>}</h1> <h2>from {seller}</h2>
+<h1 className='header' >{quant}  {category} {title}{quant > 1 && <>s</>}</h1> <h2>from {seller}</h2>
 <br/>
 <h2>Get it by: May 22nd</h2>
 <br/>
@@ -339,8 +339,8 @@ const goToSlide = (slideIndex) => {
 <div className='seller-profile'>
 <h2>{seller}</h2> 
   <div className="wrap-about">
-  
-<img className='img-pro' src={Profile}/> <div>Chicago, Illinois</div>
+  {/**
+<img className='img-pro' src={Profile}/>  */}<div>Chicago, Illinois</div>
 </div>
   <div>
  

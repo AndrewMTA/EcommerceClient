@@ -15,7 +15,7 @@ import CardInput from "./CardInput";
 import {useParams} from 'react-router-dom'
 import { models, makes, listings, logos } from "../../catagories";
 
-
+import DefaultImg from "./Default.png"
 
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
@@ -61,11 +61,13 @@ function HomePage() {
   const [extColor, setExtColor] = useState("");
   const [drivetrain, setDrivetrain] = useState("");
   const [intColor, setIntColor] = useState("");
+  const [weightWarning, setWeightWarning] = useState(false);
   const [value, setValue] = useState(1);
   const navigate = useNavigate();
 const [title, setTitle] = useState("")
 const [weight, setWeight] = useState("")
 const [quantity, setQuantity] = useState("")
+
 
   console.log("huh", year.length)
 
@@ -81,6 +83,7 @@ const max = 2025;
 const pizza = logos
 
 console.log(logos)
+
 
 
 
@@ -114,7 +117,22 @@ function formatPhoneNumber(value) {
 }
 
 
+const basePrice = 25;
+const maxBasePrice = 40;
+const additionalPricePerPound = 6;
+const minShippingPrice = basePrice + (additionalPricePerPound * (weight - 1));
+const maxShippingPrice = maxBasePrice + (additionalPricePerPound * weight);
+const shippingRange = `$${minShippingPrice} - $${maxShippingPrice}`;
 
+
+let total = "";
+if (!isNaN(price) && !isNaN(weight)) {
+  const parsedPrice = parseFloat(price.replace(/[^0-9.-]+/g, ""));
+  const parsedWeight = parseFloat(weight.replace(/[^0-9.-]+/g, ""));
+  const shippingCost = 46 + (6 * (parsedWeight - 1));
+  const maxShippingPrice = parsedPrice + shippingCost;
+  total = maxShippingPrice
+}
 
 
 const handleChange = event => {
@@ -211,10 +229,12 @@ e.preventDefault()
       images: images,
       price: price.slice(0,9),
       listUser: listUser,
-      title: title,
+      title: "Pizza",
       ingredients: ingredients,
-      quantity: quantity,
-      weight: weight
+      quant: quantity,
+      category: select,
+      weight: weight,
+      seller: user.sellerName
     });   navigate("/success");
   }
 
@@ -280,49 +300,38 @@ const minMax =( e) => {
 
 
 
+const handleFileUpload = async (event) => {
+  const files = Array.from(event.target.files);
 
-  function showWidget() {
-    const widget = window.cloudinary.createUploadWidget({
-
-      
-      maxFiles: 10,
-     
-     styles:{
-      palette: {
-        window: "#FFF",
-        windowBorder: "#000000",
-        tabIcon: "#0E2F5A",
-        menuIcons: "#5A616A",
-        textDark: "#000",
-        textLight: "#000",
-        link:  "#0078FF",
-        action:  "#666666",
-        inactiveTabIcon: "#0E2F5A",
-        error: "#F44235",
-        inProgress: "#0078FF",
-        complete: "#20B832",
-        sourceBg: "#FFF"
-      },
-      frame: {
-        background: "#FFF"
-      }
-    },
-
-        cloudName: "dojwag3u1",
-        uploadPreset: "qmakq1p3",
-      },
-      (error, result) => {
-        if (!error && result.event === "success") {
-          setImages((prev) => [
-            ...prev,
-            { url: result.info.url, public_id: result.info.public_id },
-          ]);
-        }
-      }
-    );
-    widget.open();
+  if (images.length + files.length > 4) {
+    // If the total number of images exceeds 4, do not proceed with the upload
+    return;
   }
-  
+
+  const formDataArray = files.map((file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'qmakq1p3'); // Replace with your Cloudinary upload preset
+    return formData;
+  });
+
+  try {
+    const uploadResponses = await Promise.all(
+      formDataArray.map((formData) =>
+        axios.post('https://api.cloudinary.com/v1_1/dojwag3u1/image/upload', formData)
+      )
+    );
+
+    const uploadedImages = uploadResponses.map((response) => ({
+      url: response.data.secure_url,
+      public_id: response.data.public_id
+    }));
+
+    setImages((prevImages) => [...prevImages, ...uploadedImages]);
+  } catch (error) {
+    console.error('Error uploading images:', error);
+  }
+};
   
 function deletePic(imgObj) {
   setImgToRemove(imgObj.public_id)
@@ -335,27 +344,33 @@ function deletePic(imgObj) {
 
   return (
     <div className="outerWrap">
+   
+   
+     
+
       <form onSubmit={handleAddListing} className="form">
         <div className="background">
+        <div className="row-form">
+      
           <div className="flex-col">
 
               <>
                 <h2 className="basic">Basic Information</h2>
 
                 <div className="inputWrap">
-                <label className="label">Product Title*</label>
-<input onChange={(e) => setTitle(e.target.value)} className="inputOnboard"/>
-
-<label className="label">Quantity Per Order*</label>
-<p>Selling your products in bundles can be cost effective when it comes to shipping</p>
-<input onChange={(e) => setQuantity(e.target.value)} className="inputOnboard"/>
+                <label className="label">Quantity Per Order*</label>
+<p className="tiny">Selling your products in bundles can be cost effective when it comes to shipping</p>
+<input maxLength={2} onChange={(e) => setQuantity(e.target.value)} className="inputOnboard8"/>
 
 
-<label className="label">Total weight</label>
-<p>in pounds (lb)</p>
-<input onChange={(e) => setWeight(e.target.value)}className="inputOnboard"/>
-              
-                  <label className="label">Category<span className="required">*</span></label>
+                <label className="label">Product Type*</label>
+
+<select  onChange={(e) => setTitle(e.target.value)} >
+  <option>Pizza</option>
+  </select>
+{/** 
+<input onChange={(e) => setTitle(e.target.value)} className="inputOnboard"/>*/}
+      <label className="label">Category<span className="required">*</span></label>
                   <select
                     className="inputOnboard"
                     id="carMake"
@@ -366,6 +381,10 @@ function deletePic(imgObj) {
                     }}
                   >
 
+
+
+              
+            
 
 <option>-Select Style-</option>
                     {pizza.map((makes) => {
@@ -379,31 +398,59 @@ function deletePic(imgObj) {
                     })}
                   </select>
              
-       
-                </div>
-              
+                  <label className="label">Total weight <span className="tiny">pounds (lb)</span> </label>
+<p className="tiny">Include weight of packing material</p>
+{weightWarning && <p className="warning2">Weight should be under 15 pounds.</p>}
+<input
+  maxLength={2}
+  onChange={(e) => {
+    const newWeight = parseFloat(e.target.value.replace(/[^0-9.-]+/g, ""));
+    if (newWeight <= 15 || e.target.value === "") {
+      setWeight(newWeight.toLocaleString('en-US'));
+      setWeightWarning(false);
+    } else {
+      setWeightWarning(true);
+    }
+  }}
+  className={`inputOnboard8 ${weightWarning && weight !== "" ? "inputOnboard9" : ""}`}
+/>
+
 
           
-             
-                  <b     onClick={showWidget}
-                  htmlFor="pic-upload"
-                 className="ptag">
-                    <img className="iconImg" src={Img} />
-                 
-                   Upload Images  <span className="required">*</span></b>
-      
-                  
-
-                <div className="images-preview-container">
-                  {images.map((image) => (
-                    <div className="pics-preview">  <img onClick={() => deletePic(image)} src={Close} className="deletePic"/>
-                      <img className="CardPic22" draggable src={image.url} />
-                    </div>
-                  ))}
                 </div>
+ 
+                <div>
+  <input hidden type="file" multiple onChange={handleFileUpload} accept="image/*" id="pic-upload" />
+
+  <label htmlFor="pic-upload" className="ptag">
+    <img className="iconImg" src={Img} />
+    Upload Images <span className="required">*</span>
+  </label>
+
+  <div className="images-preview-container">
+    {images.map((image, index) => (
+      <div className="pics-preview" key={index}>
+        <img onClick={() => deletePic(image)} src={Close} className="deletePic" />
+        <img className="CardPic22" draggable src={image.url} />
+      </div>
+    ))}
+  </div>
+</div>
+
            
+
+<label className="radioLabel">Shipping * </label>
+
+<div>
+
+  <div>
+    Fedex 2 day A.M {weight > 0 && <>{shippingRange}</>}
+  </div>
+  
+</div>
+
             
-                <label className="label">Price<span className="required">*</span> { price !== "" ? <span>$</span> : <></> }{ price}</label>
+                <label className="label">Price<span className="required">*</span></label>
                 <div className="flex-row">
                   <select className="inputOnboard1">
                     <option>USD</option>
@@ -420,8 +467,11 @@ function deletePic(imgObj) {
                     placeholder="Price"
                     value={price.slice(0,4)}
                     onChange={(e) => {
-                      setPrice(e.target.value.toLocaleString('en-US')).toLocaleString('en-US');
+                      const newPrice = parseFloat(e.target.value.replace(/[^0-9.-]+/g, ""));
+                      setPrice(newPrice.toLocaleString('en-US'));
+                     
                     }}
+                    
                  
                   />
 
@@ -435,22 +485,23 @@ function deletePic(imgObj) {
  
                 </>
  }
-            
+        
  
  
                 </div>
+
+                {!isNaN(total) && total !== "" && (
+  <div>
+    <label className="radioLabel">Total with shipping</label>
+    <div>{total !== "" ? <span>$</span> : <></>}{total}</div>
+  </div>
+)}
+
+<p className="tiny">Any difference left over after shipping cost is sent to you.</p>
+                 
+                
                 <div className="inputWrap">
 
-
-<label className="radioLabel">Shipping * </label>
-
-<div>
-
-  <div>
-    Fedex 2 day $30 - $55
-  </div>
-  
-</div>
 
 
 
@@ -531,12 +582,37 @@ onChange={(e) => setIngredients(e.target.value)}
      
               </>
 
+              
+
           </div>
-          
+          <div className="card-sample">
+          <img   className="CardPic-sample" src={images[0]?.url || DefaultImg }/>
+   
+    <div className="Textbox">
+ 
+    <h3 className="h3">
+    {!isNaN(total) && total !== "" && (
+
+    <div>{total !== "" ? <span>$</span> : <></>}{total}</div>
+
+)}
+
+
+      </h3>  
+     <p className="p">
+     {quantity} {select} { quantity !== "" && <>Pizza</>}{quantity > 1 &&  select !== "" && <>s</>} 
+     </p>
+
+     <p className="lp"> </p>
+     </div>
+     </div>
+       </div>
         </div>
 
       
       </form>
+
+     
     </div>
   );
 }

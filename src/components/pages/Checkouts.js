@@ -78,7 +78,7 @@ console.log( "hh", user.address.length)
         console.log(response.data.access_token)
     }
 
-console.log(user.address[0].street)
+
    const handlePay = async (e) => {
 
     e.preventDefault()
@@ -93,7 +93,6 @@ console.log(user.address[0].street)
         userId: user._id,
         cart: user.cart,
         address: user.address,
-      
        
       };
   
@@ -128,6 +127,11 @@ console.log(user.address[0].street)
         createOrder(orderData);
 
         removeFromCart(orderData)
+        .unwrap()
+        .then((data) => {
+          console.log('Items removed from cart:', data);
+          navigate('/success');
+        })
         console.log("Money baby");
         navigate("/success");
       
@@ -268,13 +272,13 @@ console.log(user.address[0].street)
                  
                         <div className="smaller">
                            <b>Bob Dylan</b>   
-                            {user.address[0].street}
-                            {user.address[0].street2}
-                            {user.address[0].city}
-                            {user.address[0].state}
-                            {user.address[0].country}
-                            {user.address[0].zip}
-                       {details.street} {details.street2} {details.city} {details.state} {details.country} {details.zip}
+                            {user.address[0]?.street}
+                            {user.address[0]?.street2}
+                            {user.address[0]?.city}
+                            {user.address[0]?.state}
+                            {user.address[0]?.country}
+                            {user.address[0]?.zip}
+                       {details?.street} {details?.street2} {details?.city} {details?.state} {details?.country} {details?.zip}
                         </div>
                     
                  </div>

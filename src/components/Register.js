@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from '../api/axios';
+
 import { Link } from "react-router-dom";
 import { Elements } from '@stripe/react-stripe-js';
 import logo from "./pages/Frame 9.png"
@@ -13,6 +14,7 @@ import CardInput from "./pages/CardInput";
 // const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
 const REGISTER_URL = 'http://localhost:3500/register';
 const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
+
 const Register = () => {
     const userRef = useRef();
     const errRef = useRef();
@@ -46,31 +48,42 @@ const Register = () => {
     const [accountNum, setAccountNum] = useState('');
     const [success, setSuccess] = useState(false);
     const [bankToken, setBankToken] = useState("")
+    const [personNum, setPersonNum] = useState("")
     const stripe = useStripe();
     const elements = useElements();
     const [bankInfo, setBankInfo] = useState(false)
     const [person, setPerson] = useState(false)
     const [addAddress, setAddAddress] = useState(false)
     const [data, setData] = useState({
-        email:"",
-        businessName: "",
+        email: "",
+        companyName: "",
         phone: "",
-        tax_id: "",
-        website:"",
-        routing:"",
-        account:"",
-        nameOnAccount:"",
-        address: {
-            line1:"",
-            city:"",
-            state:"",
-            zip:"",
-            contactLine1:"",
-            contactCity:"",
-            contactState:"",
-            contactZip:"",
-        },
-    })
+        taxid: "",
+        website: "",
+        routing: "",
+        account: "",
+        nameOnAccount: "",
+        firstName:"",
+        lastName:"",
+          line1: "",
+          city: "",
+          state: "",
+          zip: "",
+          contactLine1: "",
+          contactCity: "",
+          contactState: "",
+          contactZip: "",
+        contactEmail: "",
+        firstName: "",
+        lastName: "",
+        contactPhone: "",
+        title: "",
+        last4: "",
+
+    
+      });
+      
+      
     const [selectedFile, setSelectedFile] = useState(null);
 
     const handleFileChange = (event) => {
@@ -84,12 +97,6 @@ const Register = () => {
   
     console.log(data)
 
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-        setData((prev) => {
-            return { ...prev, [name]: value}
-        })
-    }
 
     useEffect(() => {
 
@@ -160,7 +167,27 @@ const Register = () => {
 
     const randomNum = Math.random().toString(36).substr(2) + Math.floor(1000000 + Math.random() * 95400678567440890) + Math.random().toString(36).substr(2) + Math.floor(1000 + Math.random() * 954004890) + Math.random().toString(36).substr(2)
 
+    const fileInputRef = useRef(null);
 
+    const handleSubmitDoc = async (event) => {
+      event.preventDefault();
+      setPerson(false);
+      setCheckout(true);
+      setDocument(false);
+     
+      const file = fileInputRef.current.files[0];
+      console.log(file);
+      
+      if (file) {
+        const fileId = await uploadDocument(file);
+        const person = personNum;
+        const account = accountNum;
+        updatePerson(person, account, fileId);
+        setDocument(false);
+      } else {
+        console.log("No file selected");
+      }
+    };
     const handleResend = async (e) => {
         e.preventDefault();
 
@@ -194,13 +221,53 @@ const Register = () => {
             if (!err?.response) {
                 setErrMsg('No Server Response');
             } else if (err.response?.status === 409) {
-                setErrMsg('Username Taken');
+                setErrMsg('Email Taken');
             } else {
-                setErrMsg('Registration Failed')
+             console.log("")
             }
             errRef.current.focus();
         }
     }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+      
+        if (name === "phone") {
+          const formattedNumber = value.replace(/\D/g, ""); // Remove non-digit characters
+      
+          let formattedPhoneNumber = "";
+      
+          for (let i = 0; i < formattedNumber.length; i++) {
+            if (i > 0 && i % 3 === 0 && i < 7) {
+              formattedPhoneNumber += " ";
+            }
+            formattedPhoneNumber += formattedNumber.charAt(i);
+          }
+      
+          if (formattedPhoneNumber.length <= 12) {
+            setData((prev) => ({ ...prev, [name]: formattedPhoneNumber }));
+          } else {
+            setData((prev) => ({ ...prev, [name]: formattedPhoneNumber.slice(0, 12) }));
+          }
+        }else if (name === "taxid") {
+            const formattedTaxId = value.replace(/\D/g, "").slice(0, 9); // Remove non-digit characters and limit to 12 characters
+        
+            let formattedTaxIdNumber = "";
+        
+            for (let i = 0; i < formattedTaxId.length; i++) {
+              if (i === 2) {
+                formattedTaxIdNumber += "-";
+              }
+              formattedTaxIdNumber += formattedTaxId.charAt(i);
+            }
+        
+            setData((prev) => ({ ...prev, [name]: formattedTaxIdNumber }));
+          } else {
+            setData((prev) => ({ ...prev, [name]: value }));
+          }
+        };
+      
+      
+      
 
     const handlePayment = async (bankToken) => {
 
@@ -235,8 +302,8 @@ const Register = () => {
                                 // The payment has been processed!
                                 if (result.paymentIntent.status === "succeeded") {
                                   console.log("Money baby");
-                                
-                              axios.put("http://localhost:3500/user/add-membership",  JSON.stringify({ email}),
+                                const email = data.email
+                              axios.put("http://localhost:3500/user/add-membership",  JSON.stringify({email}),
                               {
                                   headers: { 'Content-Type': 'application/json' },
                                   withCredentials: true
@@ -260,84 +327,64 @@ createBankAccount()
     async function createBankAccount() {
         const stripe = await stripePromise;
       
-      {/** function createAccount() {
-          axios.post("http://localhost:3500/create-account", { bankToken, data })
-            .then(function(response) {
-              console.log(response.data);
-              setAccountNum(response.data);
-            })
-            .catch(function(error) {
-              console.error('Error creating account:', error);
-            });
-        }
-      */}  
-        stripe.createToken('bank_account', {
+        const tokenResponse = await stripe.createToken('bank_account', {
           country: 'us',
           currency: 'USD',
           account_number: data.account,
           routing_number: data.routing,
           account_holder_type: 'company',
           account_holder_name: data.nameOnAccount
-        })
-          .then(function(response) {
-            console.log(response.token.id);
-            setBankToken(response.token.id);
-            return response.token.id;
-          })
-          .then(function(tokenId) {
-            console.log("next fun")
-          })
-          .catch(function(error) {
-            console.error('Error creating bank account token:', error);
-          });
+        });
+      
+        const tokenId = tokenResponse.token.id;
+        setBankToken(tokenId);
+      
+        try {
+          const response = await axios.post("http://localhost:3500/create-account", { bankToken: tokenId, data });
+          console.log(response.data);
+          setAccountNum(response.data);
+
+        } catch (error) {
+          console.error('Error creating account:', error);
+        }
       }
       
-
+console.log(accountNum)
       
-        function createPerson() {
-            const data = {
-                accountNum: accountNum
-            }
-            console.log(data)
-            axios.post("http://localhost:3500/create-person", {data})
-        }
+const createPerson = async (e) => {
+  e.preventDefault()
+  try {
+    const res = await axios.post("http://localhost:3500/create-person", { data, accountNum });
+    setPersonNum(res.data);
+    console.log("person", res.data);
+    setPerson(false);
+    setDocument(true);
+  } catch (error) {
+    console.log("Error creating person:", error);
+  }
+};
 
-        const handleSubmitDoc = async (event) => {
-            event.preventDefault();
-            setPerson(false)
-            setCheckout(true)
-            setDocument(false)
-            console.log("doc", document)
-            const file = event.target.file.files[0];
-          
-            if (file) {
-              const fileId = await uploadDocument(file);
-              const person = event.target.person.value;
-              const account = event.target.account.value;
-        
-              updatePerson(person, account, fileId);
-              setDocument(false)
-            }
 
-           
-          };
-        
+     
           const uploadDocument = async (file) => {
             const formData = new FormData();
             formData.set('purpose', 'identity_document');
             formData.set('file', file);
         
             try {
+                console.log("Sending file")
               const response = await fetch('https://files.stripe.com/v1/files', {
                 method: 'POST',
                 headers: {
-                  Authorization: `Bearer ${stripePromise}`,
+                  Authorization: `Bearer pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI`,
                 },
+                 
                 body: formData,
               });
         
               const data = await response.json();
               console.log(data);
+              console.log(data.id);
               return data.id;
             } catch (error) {
               console.error(error);
@@ -346,7 +393,7 @@ createBankAccount()
         
           const updatePerson = async (person, account, fileId) => {
             try {
-              const response = await fetch('/update-person-file', {
+              const response = await fetch('http://localhost:3500/update-person-file', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -413,9 +460,7 @@ console.log("Nah")
                 if (!err?.response) {
                     setErrMsg('No Server Response');
                 } else if (err.response?.status === 409) {
-                    setErrMsg('Username Taken');
-                } else {
-                    setErrMsg('Registration Failed')
+                    setErrMsg('Email Taken');
                 }
                 errRef.current.focus();
             }
@@ -461,10 +506,8 @@ console.log("Nah")
                     if (!err?.response) {
                         setErrMsg('No Server Response');
                     } else if (err.response?.status === 409) {
-                        setErrMsg('Username Taken');
-                    } else {
-                        setErrMsg('Registration Failed')
-                    }
+                        setErrMsg('Email Taken');
+                    } 
                     errRef.current.focus();
                 }
 
@@ -492,13 +535,9 @@ console.log("Nah")
             {success === true ? (
                 <section className="form">
 
-                    {memberAdded & <>
-                      Payment Succesful!
-                    
-                    </>}                   
+                          
                     <>
-
-                        <h3>An email verification has been sent to  {email}. </h3> <br /> <> Double check your spam folder if you don't see it in your inbox. <br />
+                        <h3>An email verification has been sent to  {data.email}. </h3> <br /> <> Double check your spam folder if you don't see it in your inbox. <br />
 
                             {/**   Didn't see it?  <div  className="resend" onClick={handleResend}>Resend verification</div> */}</>
 
@@ -540,55 +579,46 @@ console.log("Nah")
 
                                 aria-describedby="uidnote" />
 
+<label htmlFor="_pwd">
+    Password:           
+</label>
+<input
+    className="inputOnboard"
+    type="password"
+    id="password"
+    onChange={(e) => setPwd(e.target.value)}
+    value={pwd}
+    required
+    minLength={8}
+    maxLength={28}
+    pattern="^(?=.*\d).{8,28}$"
+    onFocus={() => setPwdFocus(true)}
+    onBlur={() => setPwdFocus(false)}
+/>
+<p className={pwdFocus && (!pwd || pwd.length < 8 || pwd.length > 28 || !/\d/.test(pwd)) ? "instructions" : "offscreen"}>
 
+    Password must be between 8 and 28 characters and contain at least one number.     <FontAwesomeIcon icon={faInfoCircle} />
+</p>
 
-                            <label htmlFor="password">
-                                Password:
-                                <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
-                                <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
-                            </label>
-                            <input
-                                className="inputOnboard"
-                                type="password"
-                                id="password"
-                                onChange={(e) => setPwd(e.target.value)}
-                                value={pwd}
-                                required
-                                aria-invalid={validPwd ? "false" : "true"}
-                                aria-describedby="pwdnote"
-                                onFocus={() => setPwdFocus(true)}
-                                onBlur={() => setPwdFocus(false)}
-                            />
-                            <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                8 to 24 characters.<br />
-                                Must include uppercase and lowercase letters, a number and a special character.<br />
-                                Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
-                            </p>
-
-
-                            <label htmlFor="confirm_pwd">
-                                Confirm Password:
-                                <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
-                                <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
-                            </label>
-                            <input
-                                className="inputOnboard"
-                                type="password"
-                                id="confirm_pwd"
-                                onChange={(e) => setMatchPwd(e.target.value)}
-                                value={matchPwd}
-                                required
-                                aria-invalid={validMatch ? "false" : "true"}
-                                aria-describedby="confirmnote"
-                                onFocus={() => setMatchFocus(true)}
-                                onBlur={() => setMatchFocus(false)}
-                            />
-                            <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                Must match the first password input field.
-                            </p>
-
+<label htmlFor="confirm_pwd">
+    Confirm Password             
+</label>
+<input
+    className="inputOnboard"
+    type="password"
+    id="confirm_pwd"
+    onChange={(e) => setMatchPwd(e.target.value)}
+    value={matchPwd}
+    required
+    aria-invalid={validMatch ? "false" : "true"}
+    aria-describedby="confirmnote"
+    onFocus={() => setMatchFocus(true)}
+    onBlur={() => setMatchFocus(false)}
+/>
+<p id="confirmnote" className={matchFocus && (!validMatch || matchPwd !== pwd) ? "instructions" : "offscreen"}>
+    <FontAwesomeIcon icon={faInfoCircle} />
+    Must match the first password input field.
+</p>
                             <br />
                             <div>
                                 Looking to sell pizza?
@@ -652,28 +682,12 @@ console.log("Nah")
                                     <input
                                         className="inputOnboard"
                                         type="text"
-                                        name="businessName"
+                                        name="companyName"
                                         
                                         onChange={handleChange}
                                         required
                                  
                                     />
-
-
-
-                                    <label >
-                                        Location
-                                    </label>
-                                    <input
-                                        className="inputOnboard"
-                                        required
-                                        onChange={(e) => setLocation(e.target.value)}
-                
-                                    />
-                                   
-
-
-                                  
                                     <label htmlFor="confirm_pwd">
                                         Website
 
@@ -697,7 +711,8 @@ console.log("Nah")
                                         className="inputOnboard"
                                         type="text"
                                         id="website"
-                                        name="tax_id"
+                                        value={data.taxid}
+                                        name="taxid"
                                         onChange={handleChange}
                                      required
 
@@ -705,16 +720,29 @@ console.log("Nah")
 
 
                                     <label htmlFor="confirm_pwd">
-                                        Phone Number
+                                        Phone Numberr
                                     </label>
                                     <input
                                         className="inputOnboard"
                                         name="phone"
-                          
+                                        value={data.phone}
                                         onChange={handleChange}
                                         required
                                     />
-                           
+                           <br/>
+                           <h4>Address</h4><input className="vert" type="checkbox" hidden checked/>
+
+
+<label>Street Name</label>
+<input className="inputOnboard" onChange={handleChange} name="line1" placeholder="Address Line 1"/>
+<label>City</label>
+<input className="inputOnboard" onChange={handleChange} name="city" placeholder="City"/>
+<label>State</label>
+<input className="inputOnboard" onChange={handleChange} name="state" placeholder="State"/>
+<label>Zip</label>
+<input className="inputOnboard" onChange={handleChange} name="zip" placeholder="Zip"/>
+
+ 
                                     <br />
                                     <div>
                                  
@@ -772,7 +800,7 @@ console.log("Nah")
 
 {person && <>
 
-<h4>Main Contact</h4>
+<h4>Main Contact</h4> 
    <div> 
                                 Are you the business owner?
                                 <label>
@@ -802,44 +830,34 @@ console.log("Nah")
                             </div>
 
                       
-<label>Contact Name</label>
-<input className="inputOnboard" onChange={handleChange} name="title" placeholder="Your Title"/>
+<label>First Name</label>
+<input className="inputOnboard" onChange={handleChange} name="firstName" placeholder="First Name"/>
+                     
+<label>Last Name</label>
+<input className="inputOnboard" onChange={handleChange} name="lastName" placeholder="Last Name"/>
+
+
 <label>Title</label>
-<input className="inputOnboard" onChange={handleChange} name="contactPhone" placeholder="Phone"/>
+<input className="inputOnboard" onChange={handleChange} name="title" placeholder="Your title"/>
+<label>Phone</label>
+<input className="inputOnboard" onChange={handleChange} name="phone" placeholder="Phone"/>
 <label>Email</label>
-<input className="inputOnboard" onChange={handleChange} name="contactEmail" placeholder="Email"/>
+<input className="inputOnboard" onChange={handleChange} name="email" placeholder="Email"/>
 <label>Last 4 SSN</label>
 <input className="inputOnboard" type="password" onChange={handleChange} name="last4" placeholder="Last 4 SSN"/>
 <br/>
-<h4>Address</h4> <div className="row-wrap"><p>Same as business address</p><input className="vert" type="checkbox" checked/></div>
-{same && <>
-
-<label>Street Name</label>
-<input className="inputOnboard" onChange={handleChange} name="contactLine1" placeholder="Address Line 1"/>
-<label>City</label>
-<input className="inputOnboard" onChange={handleChange} name="contactCity" placeholder="City"/>
-<label>State</label>
-<input className="inputOnboard" onChange={handleChange} name="contactState" placeholder="State"/>
-<label>Zip</label>
-<input className="inputOnboard" onChange={handleChange} name="contactZip" placeholder="Zip"/>
-</>
-
-            
-}
-      
-<button onClick={handleAddDoc}>Next</button>
+     
+<button onClick={createPerson}>Next</button>
 
 </>}
 
-{document && <>
+{ document && <>
     <label>Upload ID</label>
-{document === true ? <>Hi</> : <> Nh</>}
+
 <p className="tiny">ShipSlices requires an image of a State issued I.D or Drivers License of the account representitive.</p>
 <fieldset className="inputOnboard">
-   
-              <input type="file" id="file" className="field" onChange={handleFileChange} />
-               
-            </fieldset>
+      <input type="file" id="file" ref={fileInputRef} name="file" className="field" onChange={handleFileChange} />
+    </fieldset>
             <button onClick={handleSubmitDoc}>Next</button>
 
 </>}
@@ -847,7 +865,7 @@ console.log("Nah")
                         {checkout && <>
                             <h1>Start Selling Nationally</h1>
                 
-                            <h1 className="big">$16<span className="lill">per month</span></h1>
+                            <h1 className="big">$19<span className="lill">per month</span></h1>
                             <h2>✔ Unlimited Product posts</h2>
                             <h2>✔ Fedex Shipping solutions</h2>
                             <h2>✔ Accept Online Payments</h2>

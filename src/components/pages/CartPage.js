@@ -70,7 +70,7 @@ function CartPage() {
                                 }
                               ></i>
                             )}
-                            <img
+               <img
                               src={item.pic[0].url}
                               style={{ width: 160, height: 160, objectFit: "cover" }}
                             />

@@ -40,7 +40,14 @@ function OrdersPage() {
   const numbers = [...Array(pageCount + 1).keys()].slice(1);
   const productState = useSelector((state) => state.products);
   const [highlight, { isHighlighted }] = useHighlightMutation();
+  
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      axios.patch(`/user/${user._id}`);
+    });
+
+  }, []);
 
 
 
@@ -389,6 +396,11 @@ function OrdersPage() {
         }
         return order;
       });
+  
+      // Calculate the highlighted state based on the updated orders
+      const newHighlighted = updatedOrders.some((order) => order.highlighted);
+      setHighlighted(newHighlighted);
+  
       return updatedOrders;
     });
   };
@@ -425,10 +437,17 @@ function OrdersPage() {
             // Assuming 'orders' is an array of objects
 
 
+            console.log("highlighted", order.highlighted )
+            if (order.highlighted) {
+              setHighlighted(true);
+            } else if (!highlighted) {
+              setHighlighted(false);
+            }
+
             return (
 
               <tr className={order.isChecked ? "highlighted" : ""}>
-                <td className={!order.highlighted ? "" : "highlighted"}>{order._id}</td>
+                <td className={!order.highlighted ? "" : "highlighted"}><div className="row">{order._id}</div></td>
                 <td className={!order.highlighted ? "" : "highlighted"}>
                   <a onClick={() => showOrder(order.products, order._id)}>
                     <div className={`${order.status === "fulfilled" ? "warning" : "success"}`} text="white">
@@ -567,8 +586,9 @@ function OrdersPage() {
 
           </div>
 
-          <div className="button" onClick={handleFulfillMany}>Fulfill</div>
-          <table className="m-5">
+         { highlighted &&
+         <div className="button-space"> <div className="button2" onClick={handleFulfillMany}>Fulfill</div></div>
+           }  <table className="m-5">
             <thead>
               <tr>
 
