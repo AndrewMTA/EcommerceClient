@@ -30,9 +30,21 @@ export const appApi = createApi({
             }),
         }),
 
-      
+        setNewOrderFalse: builder.mutation({
+            query: (body) => ({
+                url: `/user/updateOrder`,
+                method: "PATCH",
+                body
+            }),
+        }),
           
-
+        findNewOrder: builder.mutation({
+            query: (user) => ({
+                url: "/user/orderStatus",
+                method: "POST",
+                body: user,
+            }),
+        }),
         getDealer: builder.mutation({
             query: (user) => ({
                 url: "/all",
@@ -123,6 +135,8 @@ export const appApi = createApi({
 });
 
 export const {
+    useSetNewOrderFalseMutation,
+    useFindNewOrderMutation,
     useHighlightMutation,
     useSignupMutation,
     useLoginMutation,

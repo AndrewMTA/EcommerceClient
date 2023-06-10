@@ -6,7 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { useCreateOrderMutation } from "../../services/appApi";
 import {   useRemoveFromCartMutation} from "../../services/appApi";
 import CardInput from "./CardInput";
-function CheckoutForm() {
+import  NotificationContext from "../../context/NotificationContext";
+import { useContext } from "react";
+function CheckoutForm({ socket }) {
+   
+ 
+    
     const stripe = useStripe();
     const elements = useElements();
     const user = useSelector((state) => state.user);
@@ -32,7 +37,7 @@ function CheckoutForm() {
         });
 
 
-
+        const { clearNotification, setSeller } = useContext(NotificationContext);
         const handleAddress = (e) => {
             setNextPage(true)
            
@@ -78,66 +83,80 @@ console.log( "hh", user.address.length)
         console.log(response.data.access_token)
     }
 
-
-   const handlePay = async (e) => {
-
-    e.preventDefault()
-    if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
-      return;
-    }
-
-
-    const orderData = {
-        userId: user._id,
-        cart: user.cart,
-        address: user.address,
-       
-      };
-  
     
-    const res = await axios.post("/process-payment", {
-      email: user.email,
-      amount: user.cart.total * 100,
-      accountId: "acct_1NBayLR3TKOw16t6"
-    });
 
     
 
-
-    const clientSecret = res.data["client_secret"];
-
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
-        billing_details: {
-          email: user.email,
-        },
-      },
-    });
-
-    if (result.error) {
-      // Show error to your customer (e.g., insufficient funds)
-      console.log(result.error.message);
-    } else {
-      // The payment has been processed!
-      if (result.paymentIntent.status === "succeeded") {
-        console.log(orderData)
-        createOrder(orderData);
-
-        removeFromCart(orderData)
-        .unwrap()
-        .then((data) => {
-          console.log('Items removed from cart:', data);
-          navigate('/success');
-        })
-        console.log("Money baby");
-        navigate("/success");
+    const handlePay = async (e) => {
+        e.preventDefault();
+        if (!stripe || !elements) {
+          // Stripe.js has not yet loaded.
+          // Make sure to disable form submission until Stripe.js has loaded.
+          return;
+        }
       
-      }
-    }
-  };
+        const orderData = {
+          userId: user._id,
+          cart: user.cart,
+          address: user.address,
+        };
+      
+        const res = await axios.post("/process-payment", {
+          email: user.email,
+          amount: user.cart.total * 100,
+          accountId: "acct_1NBayLR3TKOw16t6",
+        });
+      
+        console.log("seller", res.data);
+        const clientSecret = res.data["client_secret"];
+      
+        const result = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: elements.getElement(CardElement),
+            billing_details: {
+              email: user.email,
+            },
+          },
+        });
+      
+        if (result.error) {
+          // Show error to your customer (e.g., insufficient funds)
+          console.log(result.error.message);
+        } else {
+          // The payment has been processed!
+          if (result.paymentIntent.status === "succeeded") {
+            try {
+                const res = await axios.post('http://localhost:3500/orders/sellerId', orderData);
+                console.log(res.data);
+                setSeller(res.data)
+              } catch (error) {
+                console.log(error.message);
+              }
+              
+
+
+            createOrder(orderData)
+.then((data) => {
+                // Clear existing notification
+                console.log("res");
+      
+                // Access the sellerId from the response data
+    
+      
+                // Perform further actions with the sellerId if needed
+              })
+              .catch((error) => {
+                console.log("Error:", error);
+              });
+      
+        
+          }
+        }
+      };
+      
+  
+  
+  
 
 {/*
     async function handlePay(e) {
@@ -285,7 +304,7 @@ console.log( "hh", user.address.length)
           <br/>
           <h3>Add Payment</h3>
           <br/>
-                <label htmlFor="card-element">Card Info</label>
+                <label htmlFor="card-element">Card Infoo</label>
                 <div className="border-box">
               <CardInput />
             </div>

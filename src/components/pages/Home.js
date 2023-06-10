@@ -250,6 +250,8 @@ console.log("country", country)
     );
   };
   console.log(user);
+  console.log(display);
+  console.log(display - firstIndex)
   const HandleDisplay = () => {
     setDisplay(Display.length);
     return (
@@ -276,7 +278,12 @@ console.log("country", country)
           {Display.slice(firstIndex, lastIndex).map((curElem) => {
             return <CarsCard key={curElem.id} {...curElem} />;
           })}{" "}
-          {display - firstIndex === 2 ? (
+          {display - firstIndex < 2 ? (
+            <span className="insert">insert</span>
+          ) : (
+            <></>
+          )}
+           {display - firstIndex < 3 ? (
             <span className="insert">insert</span>
           ) : (
             <></>

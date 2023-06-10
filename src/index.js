@@ -10,9 +10,18 @@ import { AppProvider } from "./context/productcontex";
 import { FilterContextProvider } from "./context/filter_context";
 import { AuthProvider } from './context/AuthProvider';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { NotificationProvider } from "./context/NotificationContext";
+
+import { io } from "socket.io-client";
+
+// Create a socket instance and connect to the server
+const socket = io("http://localhost:3500");
+socket.emit("notification", "Test notification");
+
 const persistedStore = persistStore(store);
 ReactDOM.render(
   <React.StrictMode>
+     <NotificationProvider socket={socket}>
    <BrowserRouter>
     <Provider store={store}>
      
@@ -33,7 +42,7 @@ ReactDOM.render(
       </PersistGate>
           </Provider>
           </BrowserRouter>
-
+          </NotificationProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

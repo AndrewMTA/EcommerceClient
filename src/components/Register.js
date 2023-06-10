@@ -54,6 +54,7 @@ const Register = () => {
     const [bankInfo, setBankInfo] = useState(false)
     const [person, setPerson] = useState(false)
     const [addAddress, setAddAddress] = useState(false)
+    
     const [data, setData] = useState({
         email: "",
         companyName: "",
@@ -426,9 +427,6 @@ const createPerson = async (e) => {
         e.preventDefault();
         console.log("pot")
         if (selectedOption === 'no') {
-
-
-console.log("Nah")
 
             try {
 

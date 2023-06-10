@@ -667,6 +667,36 @@ margin-top: 10px;
   flex-direction: column;
 }
 
+.icon-on {
+  width: 40px;
+  cursor: pointer
+}
+
+.close-modal {
+  font-size: larger;
+cursor: pointer;
+background-color: rgba(255, 0, 0, 0.086);
+height: 30px;
+padding: 0px 11px;
+color: #696969;
+border-radius: 80px;
+}
+
+
+.close-modal:hover {
+  font-size: larger;
+cursor: pointer;
+background-color: rgba(255, 0, 0, 0.239);
+height: 30px;
+padding: 0px 11px;
+color: #494949;
+border-radius: 80px;
+}
+
+.modal-flex {
+  display: flex;
+justify-content: space-between;
+}
 
 
 .select-wrappingz{

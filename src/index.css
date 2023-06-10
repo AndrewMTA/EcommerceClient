@@ -591,7 +591,20 @@ li {
 
       border: 1px solid rgba(128, 128, 128, 0.249);
     }
-    
+    .card-lil{
+      background-color: rgb(231, 231, 231);
+      
+        overflow: hidden;
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
+        position: relative;
+        max-width: 400px;
+        min-width: 30px;
+        min-height: 100px;
+  
+        border: 1px solid rgba(128, 128, 128, 0.249);
+      }
+      
 
     .card2{
       background-color: rgb(227, 227, 227);
@@ -899,6 +912,15 @@ width: 270px;
     .CardPic{
       width: 100%;
      height: 320px;
+      cursor: pointer;
+      object-fit: cover;
+    
+    }
+
+      
+    .CardPic-lil{
+      width: 100%;
+     height: 220px;
       cursor: pointer;
       object-fit: cover;
     
@@ -1495,7 +1517,11 @@ font-weight: 700;
   font-size: 12px;
 }
 
-
+.notifications-container {
+  background-color: #ff9b9b;
+  position: absolute;
+  z-index: 99999999;
+}
 .inputOnboard8{
   padding: 12px;
   width: 55px;

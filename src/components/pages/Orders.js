@@ -42,12 +42,7 @@ function OrdersPage() {
   const [highlight, { isHighlighted }] = useHighlightMutation();
   
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      axios.patch(`/user/${user._id}`);
-    });
 
-  }, []);
 
 
 
@@ -73,21 +68,22 @@ function OrdersPage() {
     axios.put('http://localhost:3500/orders/set-fulfill/', { orderId })
       .then(response => {
         console.log(response.data);
+        window.location.reload(); // Refresh the page
       })
       .catch(error => {
         console.error(error);
       });
     console.log(orderId);
   };
-
+  
   const handleFulfillMany = () => {
     const highlightedOrders = orders.filter((order) => order.highlighted);
-
+  
     if (highlightedOrders.length === 0) {
       console.log("No highlighted orders to fulfill.");
       return;
     }
-
+  
     const orderIds = highlightedOrders.map((order) => order._id);
     console.log(orderIds)
     axios
@@ -95,12 +91,13 @@ function OrdersPage() {
       .then(response => {
         console.log(response.data);
         // Perform any necessary actions after fulfillment
+        window.location.reload(); // Refresh the page
       })
       .catch(error => {
         console.error(error);
       });
   };
-
+  
 
 
   const handleLabel = (addressObj, index) => {
@@ -113,68 +110,68 @@ function OrdersPage() {
 
 
       const shipmentData = {
-        labelResponseOptions: "URL_ONLY",
-        requestedShipment: {
-          shipper: {
-            contact: {
-              personName: user?.sellerName,
-              phoneNumber: 3317774958,
-              companyName: user?.sellerName
-            },
-            address: {
-              streetLines: [
-                user?.address[0].street
-              ],
-              city: user?.address[0].city,
-              stateOrProvinceCode: "AR",
-              postalCode: 72601,
-              countryCode: "US"
-            }
-          },
-          recipients: [
-            {
+        
+          labelResponseOptions: "URL_ONLY",
+          requestedShipment: {
+            shipper: {
               contact: {
-                personName: "RECIPIENT NAME",
+                personName: user?.sellerName || "",
                 phoneNumber: 1234567890,
-                companyName: "Recipient Company Name"
+                companyName: user?.sellerName || ","
               },
               address: {
                 streetLines: [
-                  addressObj[0].street,
-
+                  user?.address[0].street
                 ],
-                city: addressObj[0].city,
-                stateOrProvinceCode: "IL",
-                postalCode: 60516,
+                city: user?.address[0].city,
+                stateOrProvinceCode: "AR",
+                postalCode: 72601,
                 countryCode: "US"
               }
-            }
-          ],
-          shipDatestamp: "2020-07-03",
-          serviceType: "FEDEX_GROUND",
-          packagingType: "FEDEX_PAK",
-          pickupType: "USE_SCHEDULED_PICKUP",
-          blockInsightVisibility: false,
-          shippingChargesPayment: {
-            paymentType: "SENDER"
-          },
-          labelSpecification: {
-            imageType: "PDF",
-            labelStockType: "PAPER_85X11_TOP_HALF_LABEL"
-          },
-          requestedPackageLineItems: [
-            {
-              weight: {
-                value: 10,
-                units: "LB"
+            },
+            recipients: [
+              {
+                contact: {
+                  personName: "RECIPIENT NAME",
+                  phoneNumber: 1234567890,
+                  companyName: "Recipient Company Name"
+                },
+                address: {
+                  streetLines: [
+                    addressObj[0]?.street
+                  ],
+                city: "Collierville",
+                  stateOrProvinceCode: "TN",
+                  postalCode: 38017,
+                  countryCode: "US"
+                }
               }
-            }
-          ]
-        },
-        accountNumber: {
-          value: "740561073"
+            ],
+            shipDatestamp: "2020-07-03",
+            serviceType: "FEDEX_GROUND",
+            packagingType: "YOUR_PACKAGING",
+            pickupType: "USE_SCHEDULED_PICKUP",
+            blockInsightVisibility: false,
+            shippingChargesPayment: {
+              paymentType: "SENDER"
+            },
+            labelSpecification: {
+              imageType: "PDF",
+              labelStockType: "PAPER_85X11_TOP_HALF_LABEL"
+            },
+            requestedPackageLineItems: [
+              {
+                weight: {
+                  value: 10,
+                  units: "LB"
+                }
+              }
+            ]
+          },
+          accountNumber: {
+            value: "740561073"
+          }
         }
-      };
 
 
       console.log(shipmentData)
@@ -201,7 +198,7 @@ function OrdersPage() {
   };
 
 
-
+console.log(user.sellerName)
   const orderProductIds = orders.map((order, index) => {
     const productId = Object.keys(order.products)[2];
     return `${productId}`;
@@ -245,7 +242,7 @@ function OrdersPage() {
     setOrderToShow(productsToShow);
   }
 
-
+console.log("street", user?.address[0]?.street)
 
   const changeCPage = (id) => {
     setPage(id);
