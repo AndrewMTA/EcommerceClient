@@ -11,6 +11,8 @@ import card from "./card.png"
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from '@stripe/stripe-js';
 import CardInput from "./pages/CardInput";
+import GooglePlacesAutocomplete from 'react-google-autocomplete';
+
 // const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
 const REGISTER_URL = 'http://localhost:3500/register';
 const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
@@ -26,7 +28,7 @@ const Register = () => {
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
     };
-
+    const [errState, setErrState] = useState(false);
     const [emailTaken, setEmailTaken] = useState(false);
     const [email, setEmail] = useState('');
     const [success2, setSuccess2] = useState(false)
@@ -53,8 +55,14 @@ const Register = () => {
     const elements = useElements();
     const [bankInfo, setBankInfo] = useState(false)
     const [person, setPerson] = useState(false)
+    const [addressError, setAddressError] = useState(false)
+    const [validAddress, setValidAddress] = useState({
+      streetLine1: "",
+      city:"",
+    state: "", 
+  zip : ""   })
     const [addAddress, setAddAddress] = useState(false)
-    
+
     const [data, setData] = useState({
         email: "",
         companyName: "",
@@ -83,6 +91,8 @@ const Register = () => {
 
     
       });
+
+      console.log("s", data.state)
       
       
     const [selectedFile, setSelectedFile] = useState(null);
@@ -231,7 +241,7 @@ const Register = () => {
     }
     const handleChange = (e) => {
         const { name, value } = e.target;
-      
+        setAddressError(false)
         if (name === "phone") {
           const formattedNumber = value.replace(/\D/g, ""); // Remove non-digit characters
       
@@ -422,6 +432,117 @@ const createPerson = async (e) => {
             console.error(error);
         }
     };
+    const stateOptions = [
+      { value: 'AL', label: 'Alabama' },
+      { value: 'AK', label: 'Alaska' },
+      { value: 'AZ', label: 'Arizona' },
+      { value: 'AR', label: 'Arkansas' },
+      { value: 'CA', label: 'California' },
+      { value: 'CO', label: 'Colorado' },
+      { value: 'CT', label: 'Connecticut' },
+      { value: 'DE', label: 'Delaware' },
+      { value: 'FL', label: 'Florida' },
+      { value: 'GA', label: 'Georgia' },
+      { value: 'HI', label: 'Hawaii' },
+      { value: 'ID', label: 'Idaho' },
+      { value: 'IL', label: 'Illinois' },
+      { value: 'IN', label: 'Indiana' },
+      { value: 'IA', label: 'Iowa' },
+      { value: 'KS', label: 'Kansas' },
+      { value: 'KY', label: 'Kentucky' },
+      { value: 'LA', label: 'Louisiana' },
+      { value: 'ME', label: 'Maine' },
+      { value: 'MD', label: 'Maryland' },
+      { value: 'MA', label: 'Massachusetts' },
+      { value: 'MI', label: 'Michigan' },
+      { value: 'MN', label: 'Minnesota' },
+      { value: 'MS', label: 'Mississippi' },
+      { value: 'MO', label: 'Missouri' },
+      { value: 'MT', label: 'Montana' },
+      { value: 'NE', label: 'Nebraska' },
+      { value: 'NV', label: 'Nevada' },
+      { value: 'NH', label: 'New Hampshire' },
+      { value: 'NJ', label: 'New Jersey' },
+      { value: 'NM', label: 'New Mexico' },
+      { value: 'NY', label: 'New York' },
+      { value: 'NC', label: 'North Carolina' },
+      { value: 'ND', label: 'North Dakota' },
+      { value: 'OH', label: 'Ohio' },
+      { value: 'OK', label: 'Oklahoma' },
+      { value: 'OR', label: 'Oregon' },
+      { value: 'PA', label: 'Pennsylvania' },
+      { value: 'RI', label: 'Rhode Island' },
+      { value: 'SC', label: 'South Carolina' },
+      { value: 'SD', label: 'South Dakota' },
+      { value: 'TN', label: 'Tennessee' },
+      { value: 'TX', label: 'Texas' },
+      { value: 'UT', label: 'Utah' },
+      { value: 'VT', label: 'Vermont' },
+      { value: 'VA', label: 'Virginia' },
+      { value: 'WA', label: 'Washington' },
+      { value: 'WV', label: 'West Virginia' },
+      { value: 'WI', label: 'Wisconsin' },
+      { value: 'WY', label: 'Wyoming' },
+    ];
+    
+    const validateAddress = async () => {
+      const checkAddress = {
+        addressesToValidate: [
+          {
+            address: {
+              streetLines: [data.line1],
+              city: data.city,
+              stateOrProvinceCode: data.state,
+              postalCode: data.zip,
+              countryCode: "US"
+            }
+          }
+        ]
+      };
+    
+      try {
+        const response = await axios.post('http://localhost:3500/verify-address', checkAddress);
+        console.log(response.data);
+    
+        if (response.data.customerMessages && response.data.customerMessages.length > 0) {
+          setErrState(true);
+          setAddressError(true)
+        } else {
+          const resolvedAddress = response.data;
+          const { streetLinesToken, city, stateOrProvinceCode, postalCode } = resolvedAddress;
+    
+          setValidAddress({
+            streetLine1: streetLinesToken[0],
+            city: city,
+            state: stateOrProvinceCode,
+            zip: postalCode
+          });
+          setAddressError(false)
+          setErrState(false);
+          setBankInfo(true)
+
+                    setSeller(null)
+console.log(validAddress.streetLine1)
+          if (validAddress.streetLine1 == "") {
+        setAddressError(true)
+      } 
+         
+        }
+      } catch (error) {
+        setAddressError(true);
+        console.log(error);
+      }
+    };
+    console.log(validAddress.streetLine1)
+
+    const handleError = () => {
+      if (validAddress.streetLine1 == "") {
+        setAddressError(true)
+      } else {
+        setAddressError(true)
+      }
+    }
+    console.log(validAddress.streetLine1)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -491,10 +612,8 @@ const createPerson = async (e) => {
                     setPwd('');
                     setMatchPwd('');
  
-    setBankInfo(true)
-
-                    setSeller(null)
-
+    
+validateAddress()
                 
                         
               
@@ -528,7 +647,7 @@ const createPerson = async (e) => {
     return (
         <>
 
-
+{errState && <p style={{ color: 'red' }}>Double check address</p>}
 
             {success === true ? (
                 <section className="form">
@@ -593,7 +712,7 @@ const createPerson = async (e) => {
     onFocus={() => setPwdFocus(true)}
     onBlur={() => setPwdFocus(false)}
 />
-<p className={pwdFocus && (!pwd || pwd.length < 8 || pwd.length > 28 || !/\d/.test(pwd)) ? "instructions" : "offscreen"}>
+<p className={pwdFocus && (!pwd || pwd.length < 8 || pwd.length > 28 || !/\d/.test(pwd)) ? "instruction" : "offscreen"}>
 
     Password must be between 8 and 28 characters and contain at least one number.     <FontAwesomeIcon icon={faInfoCircle} />
 </p>
@@ -613,7 +732,7 @@ const createPerson = async (e) => {
     onFocus={() => setMatchFocus(true)}
     onBlur={() => setMatchFocus(false)}
 />
-<p id="confirmnote" className={matchFocus && (!validMatch || matchPwd !== pwd) ? "instructions" : "offscreen"}>
+<p id="confirmnote" className={matchFocus && (!validMatch || matchPwd !== pwd) ? "instruction" : "offscreen"}>
     <FontAwesomeIcon icon={faInfoCircle} />
     Must match the first password input field.
 </p>
@@ -718,7 +837,7 @@ const createPerson = async (e) => {
 
 
                                     <label htmlFor="confirm_pwd">
-                                        Phone Numberr
+                                        Phone Number
                                     </label>
                                     <input
                                         className="inputOnboard"
@@ -732,23 +851,32 @@ const createPerson = async (e) => {
 
 
 <label>Street Name</label>
-<input className="inputOnboard" onChange={handleChange} name="line1" placeholder="Address Line 1"/>
+<input   className={`inputOnboard ${addressError ? 'error-input' : ''}`} onChange={handleChange} name="line1" placeholder="Address Line 1"/>
 <label>City</label>
-<input className="inputOnboard" onChange={handleChange} name="city" placeholder="City"/>
+<input   className={`inputOnboard ${addressError ? 'error-input' : ''}`} onChange={handleChange} name="city" placeholder="City"/>
 <label>State</label>
-<input className="inputOnboard" onChange={handleChange} name="state" placeholder="State"/>
+<select   className={`inputOnboard ${addressError ? 'error-input' : ''}`} name="state" onChange={handleChange}>
+      {stateOptions.map((state) => (
+        <option key={state.value} value={state.value}>
+          {state.label}
+        </option>
+      ))}
+    </select>
 <label>Zip</label>
-<input className="inputOnboard" onChange={handleChange} name="zip" placeholder="Zip"/>
-
+<input
+  className={`inputOnboard ${addressError ? 'error-input' : ''}`}
+  onChange={handleChange}
+  name="zip"
+  placeholder="Zip"
+/>
  
                                     <br />
                                     <div>
                                  
-
-
+ {addressError && <p style={{ color: 'red' }}>Error occurred while validating address</p>}
                                     </div>
-
-                                    <button onClick={handleSubmit}type="submit">Next</button>
+{validAddress?.streetLine1} {validAddress?.city} {validAddress?.state} {validAddress?.zip}
+                                    <div className="button" onClick={validateAddress}>Next</div>
 
                                     <p>
                                         Have and access code?   <br />
@@ -837,8 +965,16 @@ const createPerson = async (e) => {
 
 <label>Title</label>
 <input className="inputOnboard" onChange={handleChange} name="title" placeholder="Your title"/>
-<label>Phone</label>
-<input className="inputOnboard" onChange={handleChange} name="phone" placeholder="Phone"/>
+<label htmlFor="confirm_pwd">
+                                        Phone Numberr
+                                    </label>
+                                    <input
+                                        className="inputOnboard"
+                                        name="phone"
+                                        value={data.phone}
+                                        onChange={handleChange}
+                                        required
+                                    />
 <label>Email</label>
 <input className="inputOnboard" onChange={handleChange} name="email" placeholder="Email"/>
 <label>Last 4 SSN</label>

@@ -95,12 +95,35 @@ margin-bottom: 20px;
   justify-content: center;
 }
 
+.account-settings {
+ 
+  margin-bottom: -250px;
+  height: 93vh;
+  
+  padding: 100px;
+  padding-top: 80px;
+  padding-left: 50px;
+  padding-right: 50px;
+  font-size: xx-large;
+position: absolute;
+  border-right: 1px solid black
+}
+
+.notifications-box  {
+ font-size: larger;
+  padding: 100px;
+  margin-left: 300px;
+}
+
+
+
 
 
   .pusher2 {
-    margin-top: 142px;
+    margin-top: 152px;
     margin-left: 30px;
-    font-family: 'EB Garamond', serif;
+  font-weight: 600;
+  font-size: large;
     margin-bottom: 0px;
   }
 
@@ -139,6 +162,7 @@ margin-bottom: 20px;
 
   .num__container {
     margin: 35px;
+    margin-left: 5px;
   }
   .paginationDisabled  {
  display: none;
@@ -709,8 +733,7 @@ row-gap: 8px;
 }
 
 .button-space {
-  width: 100%;
-
+  width: 100%;margin-top: -35px;
 }
 .rangei{
   width: 100%;
@@ -830,7 +853,9 @@ text-align: end;
   padding: 5px;
 }
 
-
+table{
+  min-width: 894px;
+}
 
 
   .PrivateList {
@@ -843,7 +868,13 @@ text-align: end;
     background-color: rgba(0, 96, 108, 0.822);
   }
 
+  
 
+  .bottom-wrapping {
+    display: flex;
+    margin-left: -600px;
+  
+  }
   @media (max-width: 1300px) {
     .hero { 
       height: 65%;
@@ -858,6 +889,22 @@ text-align: end;
     }
 
 
+    .paginationBttns a{
+      padding: 6px;
+      margin: 3px;
+      border-radius: 5px;
+      border: 1px solid #2e2f95;
+      color: #0b29c1;
+      cursor: pointer;
+    }
+    .btn a{
+      padding: 6px;
+      margin: 3px;
+      border-radius: 5px;
+      border: 1px solid #343434;
+      color: #020202;
+      cursor: pointer;
+    }
     
 .resend {
   cursor: pointer; 
@@ -1150,6 +1197,28 @@ background-color: #0b29c1;
     .select-wrappingz{
       display: none;
     } 
+.pagination{
+  font-size: small;
+}
+    .bottom-wrapping {
+      display: flex;
+      margin-left: -192px;
+      font-size: small;
+    
+    }
+    .num__container {
+      margin-top: 10px;
+    }
+
+    .flex-row-end {
+      margin-left: 227px;
+        position: absolute;
+        margin-top: 257px;
+        font-size: small;
+       
+     
+     }
+     
     .Image-text {font-size: larger;}
 
     .brand__wrap {
@@ -1167,7 +1236,13 @@ background-color: #0b29c1;
     
     
     }
-    
+    table {
+      min-width: 400px;
+      font-size: 12px;
+    }
+    td {
+      padding: 7px;
+    }
     
     .NavTitle1{
       font-size: 25px;
@@ -1195,6 +1270,14 @@ background-color: #0b29c1;
 
     
   @media (max-width: 550px) {
+    table {
+      min-width: 280px;
+      font-size: 9px;
+      font-weight: 600;
+    }
+    td {
+      padding: 2px;
+    }
     
     .Image-text {font-size: large;}
     .btn__wrapper {
@@ -1308,13 +1391,13 @@ width: 400px;
       padding-bottom: 45px;
  
     }
-
+  
     
     }  
 
     @media (max-width: 500px) {
 
-      
+   
 .NoY {
   overflow-y: hidden;
   max-width: 480px;

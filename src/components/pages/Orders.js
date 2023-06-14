@@ -121,9 +121,9 @@ function OrdersPage() {
               },
               address: {
                 streetLines: [
-                  user?.address[0].street
+                  user?.address[0]?.street || "123 w west street"
                 ],
-                city: user?.address[0].city,
+                city: user?.address[0]?.city || "Springfield",
                 stateOrProvinceCode: "AR",
                 postalCode: 72601,
                 countryCode: "US"
@@ -138,7 +138,7 @@ function OrdersPage() {
                 },
                 address: {
                   streetLines: [
-                    addressObj[0]?.street
+                    addressObj[0]?.street || "111 didnt ave"
                   ],
                 city: "Collierville",
                   stateOrProvinceCode: "TN",
@@ -198,7 +198,7 @@ function OrdersPage() {
   };
 
 
-console.log(user.sellerName)
+
   const orderProductIds = orders.map((order, index) => {
     const productId = Object.keys(order.products)[2];
     return `${productId}`;
@@ -332,7 +332,8 @@ console.log("street", user?.address[0]?.street)
   }
 
 
-  const filteredOrders = orders.filter((order) => {
+  const filteredOrders = orders
+  .filter((order) => {
     const productKeys = Object.keys(order.products);
 
     for (let j = 0; j < productKeys.length; j++) {
@@ -345,7 +346,9 @@ console.log("street", user?.address[0]?.street)
     }
 
     return false;
-  });
+  })
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
+
   console.log("jj", filteredOrders)
 
   const totalOrderAmount = filteredOrders.reduce((total, order) => total + order.total, 0);
@@ -468,6 +471,7 @@ console.log("street", user?.address[0]?.street)
                     </a>
                   )}
                 </td>
+                <td className={!order.highlighted ? "" : "highlighted"}>Schedule Pickup</td>
                 <td onClick={() => handleHighlight(order._id)} className={!order.highlighted ? "" : "highlighted"}>
                   <input type="checkbox" checked={order.highlighted} />
 
@@ -487,9 +491,7 @@ console.log("street", user?.address[0]?.street)
           )}
         </>
 
-        <div className="num__container">
-          {filteredOrders.length > 8 ? <Pagination /> : <></>}
-        </div>
+      
 
 
 
@@ -585,7 +587,7 @@ console.log("street", user?.address[0]?.street)
 
          { highlighted &&
          <div className="button-space"> <div className="button2" onClick={handleFulfillMany}>Fulfill</div></div>
-           }  <table className="m-5">
+           }  <table className="table table-bordered m-5">
             <thead>
               <tr>
 
@@ -607,12 +609,17 @@ console.log("street", user?.address[0]?.street)
 
 
             </tbody>
+          
           </table>
 
+<div className="bottom-wrapping">
+          <div className="num__container">
+          {filteredOrders.length > 8 ? <Pagination /> : <></>}
+          
+        </div>
 
-          <div className="flex-row-end">Revenue To Date: ${totalOrderAmount}</div>
-
-
+        </div>
+        <div className="flex-row-end">Revenue To Date: ${totalOrderAmount}</div>
           {pickupCode?.length > 0 ?
             <>
               your code: {pickupCode}

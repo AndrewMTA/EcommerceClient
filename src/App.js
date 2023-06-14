@@ -51,6 +51,7 @@ import { addNotification } from "./features/userSlice";
 import NotificationContext from "./context/NotificationContext";
 import Off from "./on.png"
 import On from "./off.png"
+import Navbar from './components/Navbar';
 const ROLES = {
   'User': 2001,
   'Editor': 1984,
@@ -171,7 +172,7 @@ const markAllNotificationsAsRead = async () => {
 
 
 <>
-
+<Navbar />
 {/** 
 {updatedOrder !== false && <>
 {show &&  <>
@@ -209,7 +210,7 @@ const markAllNotificationsAsRead = async () => {
         <Route path="/orders/status/:id" element={<Status/>} />
         
         <Route path="/success" element={<Success />} />
-        <Route path="/account-settings" element={<Success />} />
+        <Route path="/account-settings" element={<Account />} />
 
      
 

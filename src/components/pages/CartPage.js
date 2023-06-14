@@ -20,9 +20,10 @@ function CartPage() {
   const socket = io("http://localhost:3500");
   const user = useSelector((state) => state.user);
   const products = useSelector((state) => state.products);
-  const userCartObj = user.cart;
+  const userCartObj = user?.cart;
   console.log("cart",user?.cart)
-  let cart = products.filter((product) => userCartObj[product._id] != null);
+  let cart = userCartObj ? products.filter((product) => userCartObj[product._id] != null) : [];
+
 
   const [increaseCart] = useIncreaseCartProductMutation();
   const [decreaseCart] = useDecreaseCartProductMutation();
@@ -34,7 +35,7 @@ function CartPage() {
   };
 
   function handleDecrease(product) {
-    const quantity = user.cart.count;
+    const quantity = user?.cart.count;
     if (quantity <= 0) return alert("Can't proceed");
     decreaseCart(product);
   }
@@ -50,14 +51,14 @@ function CartPage() {
             <br />
           </div>
 
-          {user.cart.total > 0 && !show && (
+          {user?.cart?.total > 0 && !show && (
             <div md={5}>
               <>
-                <h3 className="h4 pt-4">Sub total: ${user.cart.total}</h3>
+                <h3 className="h4 pt-4">Sub total: ${user?.cart?.total}</h3>
                 <div responsive="sm" className="cart-div">
                   <thead></thead>
                   <tbody>
-                    {cart.map((item) => (
+                    {cart?.map((item) => (
                       <tr key={item._id}>
                         <div className="sha_boing">
                           <div className="imgWrap">
@@ -69,7 +70,7 @@ function CartPage() {
                                   removeFromCart({
                                     productId: item._id,
                                     price: item.price,
-                                    userId: user._id,
+                                    userId: user?._id,
                                   })
                                 }
                               ></i>
@@ -100,7 +101,7 @@ function CartPage() {
                             >
                               -
                             </i>
-                            <span>{user.cart[item._id].count}</span>
+                            <span>{user?.cart[item._id]?.count}</span>
                             <i
                               className="circle"
                               onClick={() =>
@@ -133,7 +134,7 @@ function CartPage() {
             </div>
           )}
 
-          {user.cart.total === 0 ? (
+          {user?.cart?.total === 0 ? (
             <>
               <br />
               <div variant="info">Shopping cart is empty. Add products to your cart</div>

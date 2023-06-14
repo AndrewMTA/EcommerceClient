@@ -23,7 +23,13 @@ function CheckoutForm({ socket }) {
     const [address, setAddress] = useState("");
     const [nextPage, setNextPage] = useState("");
     const [show, setshow] = useState("");
-  
+    const [addressError, setAddressError] = useState(false)
+    const [errState, setErrState] = useState(false);
+    const [validAddress, setValidAddress] = useState({
+      streetLine1: "",
+      city:"",
+    state: "", 
+  zip : ""   })
     const [paying, setPaying] = useState(false);
     const [details, setDetails] = useState({
             
@@ -36,7 +42,108 @@ function CheckoutForm({ socket }) {
 
         });
 
+        const stateOptions = [
+            { value: 'AL', label: 'Alabama' },
+            { value: 'AK', label: 'Alaska' },
+            { value: 'AZ', label: 'Arizona' },
+            { value: 'AR', label: 'Arkansas' },
+            { value: 'CA', label: 'California' },
+            { value: 'CO', label: 'Colorado' },
+            { value: 'CT', label: 'Connecticut' },
+            { value: 'DE', label: 'Delaware' },
+            { value: 'FL', label: 'Florida' },
+            { value: 'GA', label: 'Georgia' },
+            { value: 'HI', label: 'Hawaii' },
+            { value: 'ID', label: 'Idaho' },
+            { value: 'IL', label: 'Illinois' },
+            { value: 'IN', label: 'Indiana' },
+            { value: 'IA', label: 'Iowa' },
+            { value: 'KS', label: 'Kansas' },
+            { value: 'KY', label: 'Kentucky' },
+            { value: 'LA', label: 'Louisiana' },
+            { value: 'ME', label: 'Maine' },
+            { value: 'MD', label: 'Maryland' },
+            { value: 'MA', label: 'Massachusetts' },
+            { value: 'MI', label: 'Michigan' },
+            { value: 'MN', label: 'Minnesota' },
+            { value: 'MS', label: 'Mississippi' },
+            { value: 'MO', label: 'Missouri' },
+            { value: 'MT', label: 'Montana' },
+            { value: 'NE', label: 'Nebraska' },
+            { value: 'NV', label: 'Nevada' },
+            { value: 'NH', label: 'New Hampshire' },
+            { value: 'NJ', label: 'New Jersey' },
+            { value: 'NM', label: 'New Mexico' },
+            { value: 'NY', label: 'New York' },
+            { value: 'NC', label: 'North Carolina' },
+            { value: 'ND', label: 'North Dakota' },
+            { value: 'OH', label: 'Ohio' },
+            { value: 'OK', label: 'Oklahoma' },
+            { value: 'OR', label: 'Oregon' },
+            { value: 'PA', label: 'Pennsylvania' },
+            { value: 'RI', label: 'Rhode Island' },
+            { value: 'SC', label: 'South Carolina' },
+            { value: 'SD', label: 'South Dakota' },
+            { value: 'TN', label: 'Tennessee' },
+            { value: 'TX', label: 'Texas' },
+            { value: 'UT', label: 'Utah' },
+            { value: 'VT', label: 'Vermont' },
+            { value: 'VA', label: 'Virginia' },
+            { value: 'WA', label: 'Washington' },
+            { value: 'WV', label: 'West Virginia' },
+            { value: 'WI', label: 'Wisconsin' },
+            { value: 'WY', label: 'Wyoming' },
+          ];
+          
 
+
+          const validateAddress = async () => {
+            const checkAddress = {
+              addressesToValidate: [
+                {
+                  address: {
+                    streetLines: [details.street],
+                    city: details.city,
+                    stateOrProvinceCode: details.state,
+                    postalCode: details.zip,
+                    countryCode: "US"
+                  }
+                }
+              ]
+            };
+          
+            try {
+              const response = await axios.post('http://localhost:3500/verify-address', checkAddress);
+              console.log(response.data);
+          
+              if (response.data.customerMessages && response.data.customerMessages.length > 0) {
+                setErrState(true);
+                setAddressError(true)
+              } else {
+                const resolvedAddress = response.data;
+                const { streetLinesToken, city, stateOrProvinceCode, postalCode } = resolvedAddress;
+                setAddressError(false)
+                setValidAddress({
+                  streetLine1: streetLinesToken[0],
+                  city: city,
+                  state: stateOrProvinceCode,
+                  zip: postalCode
+                });
+             
+              
+      
+                        
+      console.log(validAddress.streetLine1)
+                if (validAddress.streetLine1 == "") {
+              setAddressError(true)
+            } 
+               
+              }
+            } catch (error) {
+              setAddressError(true);
+              console.log(error);
+            }
+          };
         const { clearNotification, setSeller } = useContext(NotificationContext);
         const handleAddress = (e) => {
             setNextPage(true)
@@ -45,6 +152,7 @@ function CheckoutForm({ socket }) {
 
         const handleChange = (e) => {
            const {name, value} = e.target
+           setAddressError(false)
             setDetails((prev) => {
                 return { ...prev, [name]: value}
             })
@@ -55,6 +163,7 @@ console.log( "hh", user.address.length)
 
 
     const saveAddress = async (e) => {
+      validateAddress();
         e.preventDefault();
        const post = axios.post(`http://localhost:3500/user/address/${user._id}`, details)
        console.log(post)
@@ -127,7 +236,10 @@ console.log( "hh", user.address.length)
           if (result.paymentIntent.status === "succeeded") {
             try {
                 const res = await axios.post('http://localhost:3500/orders/sellerId', orderData);
+                const confirmation = await axios.post('http://localhost:3500/confirm-order', { email: user.email})
                 console.log(res.data);
+                console.log(confirmation.data);
+                navigate("/success")
                 setSeller(res.data)
               } catch (error) {
                 console.log(error.message);
@@ -217,39 +329,44 @@ console.log( "hh", user.address.length)
                     <div md={7}>
                         <div className="mb-3">
                         <label>Address</label>
-                            <input className="inputOnboard" type="text" placeholder="Address" name="street" onChange={handleChange} required />
-                            <label>Address</label>
-                            <input className="inputOnboard" type="text" placeholder="Address" name="street" onChange={handleChange} required />
+                            <input className={`inputOnboard ${addressError ? 'error-input' : ''}`} type="text" placeholder="Address" name="street" onChange={handleChange} required />
                             <label>Address (Apt #, PO BOX)</label>
-                            <input className="inputOnboard" type="text" placeholder="Address" name="street2" onChange={handleChange} required />
+                            <input className={`inputOnboard ${addressError ? 'error-input' : ''}`} type="text" placeholder="Address" name="street2" onChange={handleChange} required />
                         </div>
                         
                     </div>
                     <div md={5}>
                         <div className="mb-3">
                             <label>City</label>
-                            <input  className="inputOnboard" type="text" placeholder="City" name="city" onChange={handleChange} required />
+                            <input  className={`inputOnboard ${addressError ? 'error-input' : ''}`} type="text" placeholder="City" name="city" onChange={handleChange} required />
                         </div>
                     </div>
                     <div md={5}>
                         <div className="mb-3">
+                        
                             <label>State</label>
-                            <input  className="inputOnboard" type="text" placeholder="State" name="state" onChange={handleChange} required />
+<select className={`inputOnboard ${addressError ? 'error-input' : ''}`} name="state" onChange={handleChange}>
+      {stateOptions.map((state) => (
+        <option key={state.value} value={state.value}>
+          {state.label}
+        </option>
+      ))}
+    </select>
                         </div>
                     </div>
                     <div md={5}>
                         <div className="mb-3">
                             <label>Country</label>
-                            <input  className="inputOnboard" type="text" placeholder="Country" name="country" onChange={handleChange} required />
+                            <input  className={`inputOnboard ${addressError ? 'error-input' : ''}`} type="text" placeholder="Country" name="country" onChange={handleChange} required />
                         </div>
                     </div>
                     <div md={5}>
                         <div className="mb-3">
                             <label>Zip</label>
-                            <input  className="inputOnboard" type="text" placeholder="Zip" name="zip" onChange={handleChange} required />
+                            <input  className={`inputOnboard ${addressError ? 'error-input' : ''}`} type="text" placeholder="Zip" name="zip" onChange={handleChange} required />
                         </div>
                     </div>
-
+                    {validAddress?.streetLine1} {validAddress?.city} {validAddress?.state} {validAddress?.zip}
                     <div onClick={saveAddress} className="Save">Save</div>
 
                 </div></>

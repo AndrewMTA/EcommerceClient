@@ -468,6 +468,9 @@ position: absolute;
   .CarMain8 {
     max-width: 100% ;
     max-height: 370px;
+   
+  height: auto;
+  aspect-ratio: 1/1;
     min-width: 0px;
     min-height: 270px;
   }

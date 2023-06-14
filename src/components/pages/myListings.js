@@ -140,9 +140,9 @@ if (car) {
                         Set to Public
                       </div>
                       </a> : <></>}  { carz.private !== true ?   <a href={`/private/${carz._id}`}>
-                      <div className="manage">
+                     {/** <div className="manage">
                         Set to Private
-                      </div>
+                      </div> */} 
                       </a> : <></>} 
             
                       <a href={`/delete/${carz._id}`}>

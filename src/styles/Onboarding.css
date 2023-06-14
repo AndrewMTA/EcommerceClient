@@ -438,12 +438,12 @@ background-color: rgba(0, 0, 0, 0.622);
 
 
 .carTitle{
-    font-family: 'EB Garamond', serif;
+
     font-weight: 500;
 }
 
 .pusher {
-    font-family: 'EB Garamond', serif;
+    
     font-weight: 500;
   }
  .spec{
@@ -494,13 +494,7 @@ min-height: 600px;
   margin-bottom: -150px;
   width: 100%;
 }
-    .bottom-section {
-      display: flex;
-      justify-content: space-between;
-      margin: 35px;
-      margin-top: -200px;
 
-    }
 
 .ContactForm {
     color: rgb(0, 0, 0);
@@ -718,6 +712,28 @@ padding-top: 15px;
 
 }
 
+.instructions {
+  width: 100%;
+  margin-top: -50px;
+
+}
+
+.inst {
+  width: 90%;
+  margin-top: 10px;
+  position: absolute;
+}
+
+.bottom-section {
+  display: flex;
+  justify-content: space-between;
+  margin: 35px;
+  margin-top: 0px;
+  column-gap: 90px;
+  margin-top: -201px;
+
+}
+
 .inputOnboard4 {
       
   padding: 12px 10px;
@@ -732,20 +748,69 @@ padding-top: 15px;
 
 }
 
+.raiser {
+  margin-top: -50px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 
+}
 
+.col-sec {
+  display: flex;
+  width: 200%;
+  flex-direction: column;
+}
 
+.instruct {
+  width: 50%;
+
+  font-size:small;
+  margin-bottom: 10px;
+}
+
+.instruct5 {
+  width: 50%;
+max-width:500px;
+  font-size:small;
+
+  margin-bottom: 10px;
+}
+
+.instruct2 {
+  min-width: 200px;
+  font-size:small;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 1200px) {
+  .instructions {
+    width: 100%;
+    margin-top: -5px;
+  
+  }
+
+}
 @media (min-width: 1074px) {
   .listingsz {
   display: none;
   }
-
+  .hider1 {
+    display: none;
+  }
+  
+  
+  .hider {
+    display: none;
+  }
   
   .dealerInfo2 {
   display: none;
   }
   
-
+.small-add {
+  display: none;
+}
 
 }
 
@@ -759,6 +824,49 @@ padding-top: 15px;
     grid-column: auto/span 3;
     margin-top: -50px;
 
+  }
+
+  .ppp {
+    color: black;
+  }
+
+  .inst {
+    display: none;
+  }
+
+  .shower {
+    display: none;
+  }
+  .hider {
+    display: none;
+  }
+
+  .row-title {
+    display: flex;
+  }
+.bottom-section {
+  margin-top: -425px;
+}
+  .subb {
+    margin-top: 9px;
+    margin-left: 15px;
+  }
+
+  .right-side {
+    display: none
+  }
+
+  .ContactForm {
+    margin-top: -240px;
+  }
+
+  .instructions {
+    margin-top: -100px;
+
+  }
+
+  .seller-profile {
+    margin-top: 0px;
   }
 
 
@@ -781,8 +889,9 @@ cursor: pointer;
     border: 1px solid rgba(105, 105, 105, 0.637);
   }
   
-
-
+  .bottom-section {
+    margin-top: -640px;
+  }
 
  
 .simList {
@@ -798,12 +907,22 @@ cursor: pointer;
     display: none;
     
   }
+ 
+  .fff {
+    display: none;
+  }
  }
 @media (max-width: 915px) {
    .slider2{
     display: none;
    }
+   .ContactForm {
+    margin-top: -80px;
+  }
 
+  .bottom-section {
+    margin-top: -415px;
+  }
   
 
    .sliderWrap {
@@ -833,6 +952,9 @@ cursor: pointer;
     grid-column: auto/span 4;
     margin-top: 110px;
 
+  } .instructions {
+    margin-top: 65px;
+
   }
     .flex5{
         grid-gap: 0rem;     
@@ -843,6 +965,7 @@ cursor: pointer;
   @media (max-width: 720px) {
     
 
+    
     .CarMain6 {
       border: 3px solid white;
       width: 100%;
@@ -851,6 +974,11 @@ cursor: pointer;
       max-height: 75% ;
       max-height: 318px;
       object-fit: cover;
+    }
+
+    .instructions {
+      margin-top: 65px;
+  
     }
 
     .carousel-item {

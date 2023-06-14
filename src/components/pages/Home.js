@@ -367,10 +367,11 @@ console.log("country", country)
               </div>
 */}
               
-              <div className="selectz">
-                <h4>State</h4>
+              {/**    <div className="selectz">
+                  <h4>State</h4>
 
                 <form action="#">
+            
                   <select
                     name="country"
                     id="country"
@@ -385,9 +386,9 @@ console.log("country", country)
                         </option>
                       );
                     })}
-                  </select>
+                  </select>  
                 </form>
-              </div>
+              </div>*/}
               <div className="selectz">
                 <h4>Sort by</h4>
 
@@ -416,7 +417,7 @@ console.log("country", country)
               <>
                 <div className="OverLay1">
                   <form className="Modal1">
-                  <h4>Make</h4>
+                {/**  <h4>Make</h4>
                 <form action="#">
                   <select
                     name="make"
@@ -516,7 +517,7 @@ console.log("country", country)
                       );
                     })}
                   </select>
-                </form>
+                </form>  */}
                 <h4>Sort by</h4>
 
 <form action="#">
@@ -532,13 +533,7 @@ console.log("country", country)
     <option value="lowest">Price: Lowest First</option>
 
     <option value="highest">Price: Highest First</option>
-    <option value="lowestmiles">Miles: Lowest First </option>
-
-<option value="highestmiles">Miles: Highest First</option>
-
-<option value="lowestyear">Year: Oldest First</option>
-
-<option value="highestyear">Year: Newest First</option>
+   
   </select>
 </form>
 
