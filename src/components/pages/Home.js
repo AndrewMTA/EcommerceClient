@@ -67,11 +67,7 @@ const Home = () => {
     (filter_products) => filter_products.private !== true
   );
 
-  console.log("te", make);
 
-
-
-  console.log("res", resetPage);
 
   const [page, setPage] = useState(1);
   const [maker, setMaker] = useState("all");
@@ -80,7 +76,7 @@ const Home = () => {
   const [selectModel, setSelectModel] = useState("");
   const [selectNum, setSelectNum] = useState(1);
   const [loading, setLoading] = useState(false)
-  console.log("ugug", page + 1);
+ 
  
 
   const Select = cars.filter((cars) => cars.make === makes);
@@ -146,8 +142,6 @@ const Home = () => {
     return (newVal = ["All", ...new Set(newVal)]);
   };
 
-
-console.log("country", country)
 
 
   // we need to have the individual data of each in an array format
@@ -249,9 +243,7 @@ console.log("country", country)
       </>
     );
   };
-  console.log(user);
-  console.log(display);
-  console.log(display - firstIndex)
+
   const HandleDisplay = () => {
     setDisplay(Display.length);
     return (

@@ -788,7 +788,7 @@ li {
 .flex-row-end {
  margin-left: 712px;
    position: absolute;
-   margin-top: 390px;
+   margin-top: 430px;
    font-size: larger;
   
 
@@ -1815,6 +1815,17 @@ margin-left: 20px;
  
     }
 
+    @media (max-width: 1060px) {
+      .flex-row-end {
+        margin-left: 712px;
+          position: absolute;
+          margin-top: 615px;
+          font-size: larger;
+         
+       
+       }
+    }
+
        @media (min-width: 800px) {
       .burger{
         display: none;
@@ -1824,6 +1835,8 @@ margin-left: 20px;
       .Filter_btn{
         display: none;
       }
+
+   
       
       
       }  
@@ -1844,10 +1857,21 @@ margin-left: 20px;
         width: 100%;
         z-index: 90;
       }
-      
-      
+     
       
       }  
+
+      @media (max-width: 550px) {
+        .flex-row-end {
+          margin-left: 712px;
+            position: absolute;
+            margin-top: 705px;
+            font-size: larger;
+           
+         
+         }
+      }
+
 
       @media (max-width: 400px) {
         .optionWrap{

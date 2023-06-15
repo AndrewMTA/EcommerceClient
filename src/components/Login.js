@@ -49,7 +49,7 @@ const Login = () => {
             setUser('');
             setPwd('');
        
-console.log(response?.data?.user?.sellerMembership)
+
 
 if (response?.data?.user?.sellerMembership === true) {
     navigate("/orders"); 

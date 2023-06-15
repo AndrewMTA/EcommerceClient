@@ -76,7 +76,7 @@ const userId = user?._id;
         const res = await axios.post(`orders/notifications/`, {userId});
         setNotifications(res.data);
       } catch (error) {
-        console.error(error);
+        
       }}
     };
 console.log("dd", notifications)
@@ -94,15 +94,11 @@ console.log("dd", notifications)
  
 
 
-  console.log("bob", bob)
 
   const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
   const { page } = useParams();
   const location = useLocation();
-  console.log(location.pathname)
-  console.log("User",user)
- console.log(page)
-console.log("aoo", seller)
+
 
 
 const [close, setclose] = useState(false);
@@ -133,10 +129,6 @@ const [close, setclose] = useState(false);
   const playSound = (audio) => {
     audio.loop = true;
     audio.play()
-      .catch(error => {
-        // Handle any playback errors
-        console.error('Failed to play audio:', error);
-      });
 
     setTimeout(() => {
       stopSound();
@@ -172,7 +164,7 @@ const markAllNotificationsAsRead = async () => {
 
 
 <>
-<Navbar />
+
 {/** 
 {updatedOrder !== false && <>
 {show &&  <>

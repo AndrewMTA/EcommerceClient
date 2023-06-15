@@ -323,7 +323,7 @@ console.log("street", user?.address[0]?.street)
       .then((response) => {
 
         setpickupCode(response.data.output.pickupConfirmationCode)
-        console.log(response)
+ 
 
       })
 
@@ -349,7 +349,7 @@ console.log("street", user?.address[0]?.street)
   })
   .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  console.log("jj", filteredOrders)
+
 
   const totalOrderAmount = filteredOrders.reduce((total, order) => total + order.total, 0);
 
@@ -373,11 +373,11 @@ console.log("street", user?.address[0]?.street)
       .then((response) => {
 
         setTimes(response.data.output.options)
-        console.log(response)
+  
 
       })
       .catch((error) => {
-        console.error(error);
+  
       });
     setOpen(true);
 
@@ -471,7 +471,7 @@ console.log("street", user?.address[0]?.street)
                     </a>
                   )}
                 </td>
-                <td className={!order.highlighted ? "" : "highlighted"}>Schedule Pickup</td>
+                <td onClick={handlePickup} className={!order.highlighted ? "pickup" : "highlighted"}>Schedule Pickup</td>
                 <td onClick={() => handleHighlight(order._id)} className={!order.highlighted ? "" : "highlighted"}>
                   <input type="checkbox" checked={order.highlighted} />
 
@@ -597,7 +597,7 @@ console.log("street", user?.address[0]?.street)
                 <th>Total</th>
                 <th></th>
                 <th></th>
-
+                <th></th>
               </tr>
 
 
@@ -629,7 +629,7 @@ console.log("street", user?.address[0]?.street)
           }
           {open &&
             <div className="Overlay3">
-              <div id="Mo-7" className="Modal9">
+              <div id="Mo-7" className="Modal-smaller">
                 <div closeButton>
                   <div> <h4>Schedule Pickup</h4></div>
                 </div>
@@ -667,7 +667,7 @@ console.log("street", user?.address[0]?.street)
                   )}
 
                 </div>
-                {times !== "" && (
+                {pickupDay.length > 0 && (
                   <div className="row-flex">
 
                     <div className="date-choice">

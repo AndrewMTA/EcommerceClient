@@ -733,7 +733,7 @@ row-gap: 8px;
 }
 
 .button-space {
-  width: 100%;margin-top: -35px;
+  width: 100%;margin-top: -21px;
 }
 .rangei{
   width: 100%;
@@ -811,6 +811,10 @@ text-align: end;
     object-fit: cover;
   }
 
+  .pickup {
+    cursor: pointer;
+  }
+
   .insert {
     color: white;
     -webkit-touch-callout: none; /* iOS Safari */
@@ -874,6 +878,13 @@ table{
     display: flex;
     margin-left: -600px;
   
+  }
+
+  @media (max-width: 1000px) {
+    table {
+      min-width: 500px;
+      font-size: 12px;
+    }
   }
   @media (max-width: 1300px) {
     .hero { 
@@ -1213,7 +1224,7 @@ background-color: #0b29c1;
     .flex-row-end {
       margin-left: 227px;
         position: absolute;
-        margin-top: 257px;
+        margin-top: 367px;
         font-size: small;
        
      
@@ -1267,7 +1278,16 @@ background-color: #0b29c1;
     
     
     }  
-
+@media (max-width: 604px) {
+  .flex-row-end {
+    margin-left: 227px;
+      position: absolute;
+      margin-top: 467px;
+      font-size: small;
+     
+   
+   }
+}
     
   @media (max-width: 550px) {
     table {
@@ -1275,8 +1295,16 @@ background-color: #0b29c1;
       font-size: 9px;
       font-weight: 600;
     }
+    .flex-row-end {
+      margin-left: 227px;
+        position: absolute;
+        margin-top: 267px;
+        font-size: small;
+       
+     
+     }
     td {
-      padding: 2px;
+      padding: 1px;
     }
     
     .Image-text {font-size: large;}
@@ -1576,6 +1604,12 @@ width: 400px;
              max-width: 300px;
             column-gap: 60px;
               
+            }
+
+            table {
+              min-width: 250px;
+              font-size: 9px;
+              font-weight: 600;
             }
         
             .footer {
