@@ -13,7 +13,7 @@ import useAuth from '../../components/hooks/useAuth';
         const { setAuth, persist, setPersist } = useAuth();
 
     const navigate = useNavigate();
-   const LOGIN_URL="http://localhost:3500/auth/"
+   const LOGIN_URL=`/auth/`
     const userRef = useRef();
     const errRef = useRef();
     const [login, { isError, isLoading, error }] = useLoginMutation();

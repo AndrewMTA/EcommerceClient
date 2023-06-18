@@ -18,7 +18,7 @@ const [showing, setShowing] = useState(false)
 const car = cars.find((car) => car._id === carID)
 useEffect(() => {
   axios
-    .get("http://localhost:3500/cars")
+    .get("/cars")
 
 }, []);
 
@@ -39,7 +39,7 @@ e.preventDefault()
 axiosPrivate.delete(
       
       
-    `http://localhost:3500/cars/delete/${carID}`).then((res) => {
+    `/cars/delete/${carID}`).then((res) => {
 
         if (res.status === 200) {
           setTrue(true)

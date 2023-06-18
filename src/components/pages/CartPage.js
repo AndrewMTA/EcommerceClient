@@ -10,14 +10,14 @@ import {
   useRemoveFromCartMutation,
 } from "../../services/appApi";
 import Navbar from "../Navbar";
-import { io } from "socket.io-client";
+
 // ...
 
 
 const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
 
 function CartPage() {
-  const socket = io("http://localhost:3500");
+
   const user = useSelector((state) => state.user);
   const products = useSelector((state) => state.products);
   const userCartObj = user?.cart;
@@ -143,7 +143,7 @@ function CartPage() {
             <div className="cart-payment-container">
               {show && (
                 <Elements stripe={stripePromise}>
-                  <CheckoutForm socket={socket}/>
+                  <CheckoutForm />
                 </Elements>
               )}
             </div>

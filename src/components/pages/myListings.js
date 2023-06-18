@@ -18,7 +18,7 @@ const MyListings = () => {
   
   useEffect(() => {
     axios
-      .get("http://localhost:3500/cars")
+      .get("/cars")
       .then(({ data }) => dispatch(updateProducts(data)));
   }, []);
 

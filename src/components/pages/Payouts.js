@@ -12,7 +12,7 @@ const OrdersComponent = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:3500/api/payouts', {
+      const response = await fetch(`/api/payouts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

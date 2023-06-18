@@ -33,7 +33,6 @@ const Home = () => {
   const [high, setHigh] = useState("i");
   const [style, setStyle] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const audio = new Audio('/Alert.wav');
 
   const handlePlayPause = () => {
     setIsPlaying((prevIsPlaying) => !prevIsPlaying);
@@ -98,7 +97,7 @@ const Home = () => {
 
   
     axios
-      .get("http://localhost:3500/cars")
+      .get("/cars")
       .then(({ data }) => dispatch(updateProducts(data)));
 
     

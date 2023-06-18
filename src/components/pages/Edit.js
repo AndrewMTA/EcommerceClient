@@ -82,7 +82,7 @@ function HomePage() {
 
 
     const res = await axiosPrivate.put(
-      `http://localhost:3500/cars/update/${carID}`,
+      `/cars/update/${carID}`,
       {
         images: images || car.pic,
         price: prices || price,

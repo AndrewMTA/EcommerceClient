@@ -35,7 +35,7 @@ const unique = Array.from[new Set(cars)]
 console.log(unique)
 
 useEffect(() => {
-  axios.get("http://localhost:3500/cars").then(({ data }) => dispatch(updateProducts(data)));
+  axios.get("/cars").then(({ data }) => dispatch(updateProducts(data)));
 }, []);
 
 

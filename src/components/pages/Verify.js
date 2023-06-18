@@ -9,7 +9,7 @@ const Verify = () => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const response = await axios.put(`http://localhost:3500/register/verify/${randomNum}`);
+        const response = await axios.put(`/register/verify/${randomNum}`);
 
           setSuccess(true);
     

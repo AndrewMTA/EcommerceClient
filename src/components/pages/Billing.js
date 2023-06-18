@@ -55,7 +55,7 @@ setMatch(index)
   console.log(time)
 
   const handleFulfill = () => {
-    axios.put('http://localhost:3500/orders/set-fulfill/', { orderId })
+    axios.put(`/orders/set-fulfill/', { orderId }`)
       .then(response => {
         console.log(response.data);
       })
@@ -140,7 +140,7 @@ setMatch(index)
       };
   console.log(shipmentData)
   axios
-  .post("http://localhost:3500/orders/print-label", shipmentData)
+  .post("/orders/print-label", shipmentData)
   .then((response) => {
     const url =
       response.data.output.transactionShipments[0].pieceResponses[0]
@@ -244,7 +244,7 @@ console.log("uuu", time, dateSubmit, timeSubmit)
         
      }
      axios
-     .post("http://localhost:3500/orders/schedule-pickup", submitData)
+     .post("/orders/schedule-pickup", submitData)
      .then((response) => {
        
       setpickupCode(response.data.output.pickupConfirmationCode)
@@ -271,7 +271,7 @@ console.log("uuu", time, dateSubmit, timeSubmit)
     
    }
    axios
-   .post("http://localhost:3500/orders/check-times", checkData)
+   .post("/orders/check-times", checkData)
    .then((response) => {
      
    setTimes(response.data.output.options)

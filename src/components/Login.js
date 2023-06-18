@@ -5,7 +5,7 @@ import { useLoginMutation } from "../services/appApi";
 import axios from '../api/axios';
 import logo from "./pages/Frame 9.png"
  //const LOGIN_URL = 'https://backend-6olc.onrender.com/auth';
-const LOGIN_URL = 'http://localhost:3500/auth';
+const LOGIN_URL = `/auth`;
 
 const Login = () => {
     const { setAuth, persist, setPersist } = useAuth();

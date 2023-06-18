@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import logo from "./Frame 9.png"
  const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
-//const REGISTER_URL = 'http://localhost:3500/register';
+//const REGISTER_URL = :3500/register';
 
 const Company = () => {
    

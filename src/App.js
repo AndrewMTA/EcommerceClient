@@ -46,7 +46,7 @@ import {Elements} from '@stripe/react-stripe-js';
 import alertSound from './Alert.wav';
 import { useDispatch, useSelector } from "react-redux";
 import { logout, resetNotifications } from "./features/userSlice";
-import io from 'socket.io-client';
+
 import { addNotification } from "./features/userSlice";
 import NotificationContext from "./context/NotificationContext";
 import Off from "./on.png"
@@ -60,7 +60,7 @@ const ROLES = {
 
 function App() {
   const user = useSelector((state) => state.user);
-  const { bob,  clearNotification, seller } = useContext(NotificationContext);
+  const { uri, bob,  clearNotification, seller } = useContext(NotificationContext);
 
   
   const [notifications, setNotifications] = useState([]);

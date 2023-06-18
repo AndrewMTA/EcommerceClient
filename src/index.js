@@ -15,13 +15,13 @@ import { NotificationProvider } from "./context/NotificationContext";
 import { io } from "socket.io-client";
 
 // Create a socket instance and connect to the server
-const socket = io("http://localhost:3500");
-socket.emit("notification", "Test notification");
+const socket = io("");
+
 
 const persistedStore = persistStore(store);
 ReactDOM.render(
   <React.StrictMode>
-     <NotificationProvider socket={socket}>
+     <NotificationProvider >
    <BrowserRouter>
     <Provider store={store}>
      

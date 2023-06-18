@@ -113,7 +113,7 @@ function CheckoutForm({ socket }) {
             };
           
             try {
-              const response = await axios.post('http://localhost:3500/verify-address', checkAddress);
+              const response = await axios.post(`:3500/verify-address`, checkAddress);
               console.log(response.data);
           
               if (response.data.customerMessages && response.data.customerMessages.length > 0) {
@@ -165,7 +165,7 @@ console.log( "hh", user.address.length)
     const saveAddress = async (e) => {
       validateAddress();
         e.preventDefault();
-       const post = axios.post(`http://localhost:3500/user/address/${user._id}`, details)
+       const post = axios.post(`/user/address/${user._id}`, details)
        console.log(post)
        setNextPage(true)
       
@@ -176,7 +176,7 @@ console.log( "hh", user.address.length)
 
     const getToken = (e) => {
         e.preventDefault()
-        const response = axios.post('http://localhost:3500/orders/fedex', {
+        const response = axios.post(`/orders/fedex`, {
 
         grant_type: 'client_credentials',
         client_id: "l788aa739b8bf64ff09ef3ab09514ec0fa",
@@ -234,8 +234,8 @@ console.log( "hh", user.address.length)
           // The payment has been processed!
           if (result.paymentIntent.status === "succeeded") {
             try {
-                const res = await axios.post('http://localhost:3500/orders/sellerId', orderData);
-                const confirmation = await axios.post('http://localhost:3500/confirm-order', { email: user.email})
+                const res = await axios.post(`/orders/sellerId`, orderData);
+                const confirmation = await axios.post(`/confirm-order`, { email: user.email})
                 console.log(res.data);
                 console.log(confirmation.data);
                 navigate("/success")
@@ -274,7 +274,7 @@ console.log( "hh", user.address.length)
         e.preventDefault();
         if (!stripe || !elements || user.cart.count <= 0) return;
         setPaying(true);
-        const { client_secret } = await fetch("http://localhost:3500/create-payment", {
+        const { client_secret } = await fetch("/create-payment", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

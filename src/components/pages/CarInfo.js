@@ -62,7 +62,7 @@ const CarInfo = () => {
     const [dealerz, setDealerz] = useState("");
     const [addToCart, { isSuccess }] = useAddToCartMutation();
    useEffect(() => {
-      axios.get("http://localhost:3500/all")
+      axios.get("/all")
         .then((res) => {
         
           setPosts(res.data);
@@ -126,7 +126,7 @@ const goToSlide = (slideIndex) => {
     
       event.preventDefault();
   
-      const res = await axios.post("http://localhost:3500/cars/inquire", {
+      const res = await axios.post("/cars/inquire", {
         email: email,
         name: name, 
       
@@ -147,7 +147,7 @@ const goToSlide = (slideIndex) => {
       } else {
         // The payment has been processed!
         if (res.status === 200) {
-          await axios.post("http://localhost:3500/cars/inquire-confirmation", {
+          await axios.post("/cars/inquire-confirmation", {
           
             listEmail: listEmail,
             dealer: dealer,

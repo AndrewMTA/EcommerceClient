@@ -101,7 +101,7 @@ import Navbar from '../Navbar';
         
         const updateAddress = async () => {
           try {
-            const response = await axios.put('http://localhost:3500/update-address', {data});
+            const response = await axios.put(`/update-address`, {data});
         
             console.log(response.data); // Address updated successfully!
             // Perform any additional actions after successful address update

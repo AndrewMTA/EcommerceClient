@@ -66,7 +66,7 @@ function OrdersPage() {
 
   console.log("checked", isChecked)
   const handleFulfill = () => {
-    axios.put('http://localhost:3500/orders/set-fulfill/', { orderId })
+    axios.put(`/orders/set-fulfill/`, { orderId })
       .then(response => {
         console.log(response.data);
         window.location.reload(); // Refresh the page
@@ -90,7 +90,7 @@ function OrdersPage() {
     const orderIds = highlightedOrders.map((order) => order._id);
     console.log(orderIds)
     axios
-      .put('http://localhost:3500/orders/set-fulfill-many', { orderIds })
+      .put(`/orders/set-fulfill-many`, { orderIds })
       .then(response => {
         console.log(response.data);
         // Perform any necessary actions after fulfillment
@@ -178,7 +178,7 @@ function OrdersPage() {
 
       console.log(shipmentData)
       axios
-        .post("http://localhost:3500/orders/print-label", shipmentData)
+        .post("/orders/print-label", shipmentData)
         .then((response) => {
           const url =
             response.data.output.transactionShipments[0].pieceResponses[0]
@@ -322,7 +322,7 @@ console.log("street", user?.address[0]?.street)
 
     }
     axios
-      .post("http://localhost:3500/orders/schedule-pickup", submitData)
+      .post("/orders/schedule-pickup", submitData)
       .then((response) => {
 
         setpickupCode(response.data.output.pickupConfirmationCode)
@@ -371,7 +371,7 @@ console.log("street", user?.address[0]?.street)
 
     }
     axios
-      .post("http://localhost:3500/orders/check-times", checkData)
+      .post("/orders/check-times", checkData)
       .then((response) => {
 
         setTimes(response.data.output.options)

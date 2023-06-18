@@ -1,0 +1,80 @@
+# Query: 'http://localhost
+# ContextLines: 1
+
+18 results - 10 files
+
+src\api\axios.js:
+  1  import axios from 'axios';
+  2: const BASE_URL = `${uri}`;
+  3: //const BASE_URL = `${uri}/';
+  4  export default axios.create({
+
+src\components\Login.js:
+  7   //const LOGIN_URL = 'https://backend-6olc.onrender.com/auth';
+  8: const LOGIN_URL = `${uri}/auth`;
+  9  
+
+src\components\Register.js:
+   16  // const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
+   17: const REGISTER_URL = `${uri}/register`;
+   18  const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
+
+  406              try {
+  407:               const response = await fetch(`${uri}/update-person-file`, {
+  408                  method: 'POST',
+
+  503        try {
+  504:         const response = await axios.post(`${uri}/verify-address`, checkAddress);
+  505          console.log(response.data);
+
+  598  
+  599:                     const response = await axios.post(`${uri}/register/seller`,
+  600                          JSON.stringify({ email: data.email, pwd, randomNum, buisnessName: data.buisnessName, phone: data.phone, website: data.website }),
+
+src\components\pages\Account.js:
+  103            try {
+  104:             const response = await axios.put(`${uri}/update-address`, {data});
+  105          
+
+src\components\pages\Billing.js:
+  57    const handleFulfill = () => {
+  58:     axios.put(`${uri}/orders/set-fulfill/`, { orderId })
+  59        .then(response => {
+
+src\components\pages\Checkouts.js:
+  115              try {
+  116:               const response = await axios.post(`${uri}/verify-address`, checkAddress);
+  117                console.log(response.data);
+
+  178          e.preventDefault()
+  179:         const response = axios.post(`${uri}/orders/fedex`, {
+  180  
+
+  236              try {
+  237:                 const res = await axios.post(`${uri}/orders/sellerId`, orderData);
+  238:                 const confirmation = await axios.post(`${uri}/confirm-order`, { email: user.email})
+  239                  console.log(res.data);
+
+src\components\pages\Company.js:
+  8   const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
+  9: //const REGISTER_URL = `${uri}/register';
+  10  
+
+src\components\pages\EmailList.js:
+  8   const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
+  9: //const REGISTER_URL = `${uri}/register';
+  10  
+
+src\components\pages\Orders.js:
+  68    const handleFulfill = () => {
+  69:     axios.put(`${uri}/orders/set-fulfill/`, { orderId })
+  70        .then(response => {
+
+  92      axios
+  93:       .put(`${uri}/orders/set-fulfill-many`, { orderIds })
+  94        .then(response => {
+
+src\components\pages\Payouts.js:
+  14      try {
+  15:       const response = await fetch(`${uri}/api/payouts`, {
+  16          method: 'POST',

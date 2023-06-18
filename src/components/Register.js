@@ -14,7 +14,7 @@ import CardInput from "./pages/CardInput";
 import GooglePlacesAutocomplete from 'react-google-autocomplete';
 
 // const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
-const REGISTER_URL = 'http://localhost:3500/register';
+const REGISTER_URL = `/register`;
 const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
 
 const Register = () => {
@@ -205,7 +205,7 @@ const Register = () => {
 
         try {
 
-            const response = await axios.put("http://localhost:3500/register/resend",
+            const response = await axios.put(`/register/resend`,
                 JSON.stringify({ email: data.email, randomNum }),
                 {
                     headers: { 'Content-Type': 'application/json' },
@@ -314,7 +314,7 @@ const Register = () => {
                                 if (result.paymentIntent.status === "succeeded") {
                                   console.log("Money baby");
                                 const email = data.email
-                              axios.put("http://localhost:3500/user/add-membership",  JSON.stringify({email}),
+                              axios.put(`/user/add-membership`,  JSON.stringify({email}),
                               {
                                   headers: { 'Content-Type': 'application/json' },
                                   withCredentials: true
@@ -351,7 +351,7 @@ createBankAccount()
         setBankToken(tokenId);
       
         try {
-          const response = await axios.post("http://localhost:3500/create-account", { bankToken: tokenId, data });
+          const response = await axios.post(`/create-account`, { bankToken: tokenId, data });
           console.log(response.data);
           setAccountNum(response.data);
 
@@ -365,7 +365,7 @@ console.log(accountNum)
 const createPerson = async (e) => {
   e.preventDefault()
   try {
-    const res = await axios.post("http://localhost:3500/create-person", { data, accountNum });
+    const res = await axios.post(`/create-person`, { data, accountNum });
     setPersonNum(res.data);
     console.log("person", res.data);
     setPerson(false);
@@ -404,7 +404,7 @@ const createPerson = async (e) => {
         
           const updatePerson = async (person, account, fileId) => {
             try {
-              const response = await fetch('http://localhost:3500/update-person-file', {
+              const response = await fetch(`/update-person-file`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -501,7 +501,7 @@ const createPerson = async (e) => {
       };
     
       try {
-        const response = await axios.post('http://localhost:3500/verify-address', checkAddress);
+        const response = await axios.post(`/verify-address`, checkAddress);
         console.log(response.data);
     
         if (response.data.customerMessages && response.data.customerMessages.length > 0) {
@@ -596,7 +596,7 @@ console.log(validAddress.streetLine1)
 
                 try {
 
-                    const response = await axios.post('http://localhost:3500/register/seller',
+                    const response = await axios.post(`/register/seller`,
                         JSON.stringify({ email: data.email, pwd, randomNum, buisnessName: data.buisnessName, phone: data.phone, website: data.website }),
                         {
                             headers: { 'Content-Type': 'application/json' },
