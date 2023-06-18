@@ -72,7 +72,7 @@ const userId = user?._id;
       if (user) {
       try {
         const userId = user?._id;
-        console.log(userId)
+       
         const res = await axios.post(`orders/notifications/`, {userId});
         setNotifications(res.data);
       } catch (error) {
@@ -83,7 +83,7 @@ console.log("dd", notifications)
     fetchNotifications();
 
     // Continuously checkconsole for new notifications every 5 seconds
-    const interval = setInterval(fetchNotifications, 25000);
+    const interval = setInterval(fetchNotifications, 30000);
 
     // Clean up the interval on component unmount
     return () => clearInterval(interval);
@@ -95,7 +95,7 @@ console.log("dd", notifications)
 
 
 
-  const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
+  const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
   const { page } = useParams();
   const location = useLocation();
 

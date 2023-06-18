@@ -11,15 +11,14 @@ const Footer = () => {
     <div className="footer-wrap1">
     <ul>
     <h4>Track & Road</h4>
-    <li>About Us</li>
-    <li>F.A.Q</li>
-    <li>Advertise</li>
+ <li>F.A.Q</li>
+    
     </ul>
     
     
     <ul>
         <h4>Account</h4>
-        <li>support@trackandroad.com</li>
+        <li>support@shipslices.com</li>
     <li>Sign up</li>
    
     </ul>

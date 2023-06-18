@@ -6,35 +6,28 @@ import Img from "../../assets/Img.png";
 import { useParams } from "react-router-dom";
 import { models, makes, listings } from "../../catagories";
 
+import DefaultImg from "./Default.png"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import Close from "../close.png"
+import {  logos } from "../../catagories";
 function HomePage() {
   const cars = useSelector((state) => state.products);
   const { carID } = useParams();
   const car = cars.find((car) => car._id === carID);
   const {
     pic,
-    make,
+    category ,
+    quant,
     model,
     year,
     description,
     price,
-    phone,
-    miles,
-    VIN,
-    stockNum,
-    cylinders,
-    trans,
-    drive_train,
-    body_style,
-    ext_color,
-    int_color,
-    country,
-    listEmail,
+  weight,
+  ingredients
   } = car;
 
   const axiosPrivate = useAxiosPrivate();
-  const [ingredients, setIngredients] = useState()
+  const [ingredient, setIngredients] = useState(ingredients)
   const [descriptions, setDescription] = useState(car.description);
   const [phones, setPhone] = useState(car.phone);
   const [years, setYear] = useState(car.year);
@@ -44,7 +37,7 @@ function HomePage() {
   const [email, setEmail] = useState("");
   const [selected, setSelected] = useState("1 Car Post");
   const [select, setSelect] = useState(car.make);
-  const [prices, setPrice] = useState(car.price);
+  const [prices, setPrice] = useState(price);
   const [show, setShow] = useState(false);
   const [vinNum, setVinNum] = useState(car.VIN);
   const [imgToRemove, setImgToRemove] = useState(null);
@@ -59,41 +52,46 @@ function HomePage() {
   const [drivetrain, setDrivetrain] = useState(car.drive_train);
   const [intColor, setIntColor] = useState(car.int_color);
   const [title, setTitle] = useState()
-  const [category, setCategory] = useState()
-  const [quantity, setQuantity] = useState()
-  
-  
+  const [categorys, setCategory] = useState(category)
+  const [quantity, setQuantity] = useState(quant)
+  const [weights, setWeight] = useState(weight)
+  const [weightWarning, setWeightWarning] = useState(false);
   const navigate = useNavigate();
 
   const listUser = useSelector((state) => state.user._id);
-  console.log(carID);
-
+  const basePrice = 25;
+  const maxBasePrice = 40;
+  const additionalPricePerPound = 6;
+  const minShippingPrice = basePrice + (additionalPricePerPound * (weights - 1));
+  const maxShippingPrice = maxBasePrice + (additionalPricePerPound * weights);
+  const shippingRange = `$${minShippingPrice} - $${maxShippingPrice}`;
+  let total = "";
+  if (!isNaN(prices) && !isNaN(weights)) {
+    const parsedPrice = parseFloat(prices.replace(/[^0-9.-]+/g, ""));
+    const parsedWeight = parseFloat(weights.replace(/[^0-9.-]+/g, ""));
+    const shippingCost = 46 + (6 * (parsedWeight - 1));
+    const maxShippingPrice = parsedPrice + shippingCost;
+    total = maxShippingPrice
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
     const updates = {
-      price: prices || car.price,
+      price: prices || price,
       make: select || car.make,
     };
 
+
     const res = await axiosPrivate.put(
-      `https://backend-6olc.onrender.com/cars/update/${carID}`,
+      `http://localhost:3500/cars/update/${carID}`,
       {
         images: images || car.pic,
-        price: prices || car.price,
-        make: select || car.make,
+        price: prices || price,
+        category: categorys || category,
         descriptions: description || car.description,
-        year: years || car.year,
-        trans: transmission,
-        body_style: body,
-        VIN: vinNum,
-        miles: Miles,
-        cylinders: Cylinders,
-        drive_train: drivetrain,
-        int_color: intColor,
-        ext_color: extColor,
-        listEmail: ListEmail,
-        phone: phones,
-        country: Country,
+        weight: weights || weight,
+        total: total,
+        quant: quantity,
+       ingredients: ingredient || ingredients,
       }
     );
 
@@ -195,7 +193,7 @@ function HomePage() {
       setImages(prev => prev.filter((img) => img.public_id !== imgObj.public_id))
     }).catch((e) => console.log(e))
   }
-  
+  const pizza = logos
 
   return (
     <div>
@@ -207,23 +205,73 @@ function HomePage() {
                 <h2 className="basic">Basic Information</h2>
 
                 <div className="inputWrap">
-                  <label className="label">
-                    Title <span className="required">*</span>
-                  </label>
-               <input onChange={(e) => setTitle(e.target.value)}className="inputOnboard"/>
+                
                   <label className="label">
                     Quantity <span className="required">*</span>
                   </label>
-               <input onChange={(e) => setQuantity(e.target.value)}className="inputOnboard"/>
+               <input value={quantity} onChange={(e) => setQuantity(e.target.value)}className="inputOnboard"/>
                   <label className="label">
                     Category <span className="required">*</span>
                   </label>
-                  <input  onChange={(e) => setCategory(e.target.value)}className="inputOnboard"/>
+                  <select
+                  value={categorys}
+                    className="inputOnboard"
+                    id="carMake"
+                    name="carMake"
+                  
+                    onChange={(e) => {
+                      setCategory(e.target.value);
+                    }}
+                  >
+
+
+
+              
+            
+
+<option>-Select Style-</option>
+                    {pizza.map((makes) => {
+                      return (
+                        <>
+              
+                        <option key={makes.id} value={makes.maker}>
+                          {makes.name}
+                        </option></>
+                      );
+                    })}
+                  </select>
+                
                 </div>
-                <div className="inputWrap"></div>
+                <label className="label">Total weight <span className="tiny">pounds (lb)</span> </label>
+<p className="tiny">Include weight of packing material</p>
+{weightWarning && <p className="warning2">Weight should be under 15 pounds.</p>}
+<input
+      value={weights}
+      maxLength={2}
+      onChange={(e) => {
+        const newWeight = e.target.value.replace(/[^0-9.-]+/g, "");
+        if (newWeight === "") {
+          setWeight(newWeight);
+          setWeightWarning(false);
+          // ... (rest of your code)
+        } else {
+          const parsedWeight = parseFloat(newWeight);
+          if (!isNaN(parsedWeight) && parsedWeight <= 15) {
+            setWeight(parsedWeight.toLocaleString('en-US'));
+            setWeightWarning(false);
+            // ... (rest of your code)
+          } else {
+            setWeightWarning(true);
+          }
+        }
+      }}
+      className={`inputOnboard8 ${weightWarning && weights !== "" ? "inputOnboard9" : ""}`}
+    />
+<br/>
 
             
-                  
+<br/>
+            
                   
                       <b onClick={showWidget}
                   htmlFor="pic-upload"
@@ -245,6 +293,16 @@ function HomePage() {
                 <div className="inputWrap">
                
                 </div>
+                <label className="radioLabel">Shipping * </label>
+
+<div>
+
+  <div>
+    Fedex 2 day A.M {weight > 0 && <>{shippingRange}</>}
+  </div>
+  
+</div>
+
 
                 <label className="label">
                   Price <span className="required">*</span>
@@ -252,12 +310,7 @@ function HomePage() {
                 <div className="flex-row">
                   <select className="inputOnboard1">
                     <option>USD</option>
-                    <option>USD</option>
-                    <option>USD</option>
-                    <option>USD</option>
-                    <option>USD</option>
-                    <option>USD</option>
-                    <option>USD</option>
+                  
                   </select>
                   <input
                     className="inputOnboard3"
@@ -285,12 +338,13 @@ function HomePage() {
 
 <label className="radioLabel">Ingredients</label>
                   <textarea
+                  value={ingredient}
                     id="carDescription"
                     name="carDescription"
                     onChange={(e) => {
                       setIngredients(e.target.value);
                     }}
-                    value={descriptions}
+                   
                     className="radioarea"
                   />
                 </div>
@@ -302,6 +356,27 @@ function HomePage() {
               </>
             )}
           </div>
+          <div className="card-sample">
+          <img   className="CardPic-sample" src={images[0]?.url || DefaultImg }/>
+   
+    <div className="Textbox">
+ 
+    <h3 className="h3">
+    {!isNaN(total) && total !== "" && (
+
+    <div>{total !== "" ? <span>$</span> : <></>}{total}</div>
+
+)}
+
+
+      </h3>  
+     <p className="p">
+     {quantity} {categorys} { quantity !== "" && <>Pizza</>}{quantity > 1 &&  categorys !== "" && <>s</>} 
+     </p>
+
+     <p className="lp"> </p>
+     </div>
+        </div>
         </div>
       </form>
     </div>

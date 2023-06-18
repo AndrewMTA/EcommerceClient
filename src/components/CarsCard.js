@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 
 
-const CarsCard = ({ pic , price, _id, title, seller, quant, category}) => {
+const CarsCard = ({ pic , price, total, _id, title, seller, quant, category}) => {
 
 
 
@@ -21,7 +21,7 @@ return (
       <div className="Textbox">
       <div>{seller}</div>
       <h3 className="h3">
-   ${price.toLocaleString('en-US')}
+   ${total.toLocaleString('en-US')}
         </h3>  
        <p className="p">
        {quant}  {category} {title}{quant > 1 && <>s</>}

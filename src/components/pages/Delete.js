@@ -42,7 +42,6 @@ axiosPrivate.delete(
     `http://localhost:3500/cars/delete/${carID}`).then((res) => {
 
         if (res.status === 200) {
-          console.log("succexs")
           setTrue(true)
           navigate(`/listings/${user._id}`)
         }
@@ -55,9 +54,9 @@ axiosPrivate.delete(
       .catch((err) => {
       
       if (err.response?.status === 403) {
-        console.log('Unauthorized');
+     
     } else {
-      console.log('Unauth');
+
     }
       
       

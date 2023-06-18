@@ -216,7 +216,6 @@ console.log( "hh", user.address.length)
           accountId: "acct_1NBayLR3TKOw16t6",
         });
       
-        console.log("seller", res.data);
         const clientSecret = res.data["client_secret"];
       
         const result = await stripe.confirmCardPayment(clientSecret, {
@@ -229,8 +228,8 @@ console.log( "hh", user.address.length)
         });
       
         if (result.error) {
-          // Show error to your customer (e.g., insufficient funds)
-          console.log(result.error.message);
+        
+ 
         } else {
           // The payment has been processed!
           if (result.paymentIntent.status === "succeeded") {
@@ -377,7 +376,7 @@ console.log( "hh", user.address.length)
                         <div onClick={handleAddress} className="addressBox">
                            <b>Bob Dylan</b> 
                             <br/>
-                            {info.street}
+                             {info.street}
                              <br/>
                             {info.street2}
                             <br/>
@@ -391,7 +390,7 @@ console.log( "hh", user.address.length)
                         </div>
                     )
                 })}
-
+    <div>Shipping: FREE {details?.state == "Hawaii" && <>$30</>}{details?.state == "Alaska" && <>$30</>}</div>
                 <div className="Save">Add a Different Address</div>
                 </>}
                 </>
@@ -407,21 +406,15 @@ console.log( "hh", user.address.length)
         <div className="min">Ship to:</div> 
                  
                         <div className="smaller">
-                           <b>Bob Dylan</b>   
-                            {user.address[0]?.street}
-                            {user.address[0]?.street2}
-                            {user.address[0]?.city}
-                            {user.address[0]?.state}
-                            {user.address[0]?.country}
-                            {user.address[0]?.zip}
+                           <b>Bob Dylan</b> {user.address[0]?.street} {user.address[0]?.street2} {user.address[0]?.city} {user.address[0]?.state} {user.address[0]?.country} {user.address[0]?.zip}
                        {details?.street} {details?.street2} {details?.city} {details?.state} {details?.country} {details?.zip}
                         </div>
-                    
+                
                  </div>
           <br/>
           <h3>Add Payment</h3>
           <br/>
-                <label htmlFor="card-element">Card Infoo</label>
+                <label htmlFor="card-element">Card Info</label>
                 <div className="border-box">
               <CardInput />
             </div>

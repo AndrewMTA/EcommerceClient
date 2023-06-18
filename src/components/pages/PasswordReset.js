@@ -15,7 +15,7 @@ import Navbar from "../Navbar";
       const [error, setError] = useState("");
 
 
-      console.log(resetToken.resetToken)
+     
       const handleSubmit = async (e) => {
         e.preventDefault();
     

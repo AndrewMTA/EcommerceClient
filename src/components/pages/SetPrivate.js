@@ -36,9 +36,9 @@ const deletePost = () => {
       .catch((err) => {
       
       if (err.response?.status === 403) {
-        console.log('Unauthorized');
+       
     } else {
-      console.log('Unauth');
+   
     }
       
       

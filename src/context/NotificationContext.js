@@ -5,7 +5,7 @@ const NotificationContext = createContext();
 export const NotificationProvider = ({ children, socket }) => {
   const [notification, setNotification] = useState(null);
   const [seller, setSeller] = useState([]);
-  console.log("provideSockey", socket)
+ 
   useEffect(() => {
     // Listen for notification events
     socket.on("notification", (message) => {
@@ -19,7 +19,7 @@ export const NotificationProvider = ({ children, socket }) => {
   }, [socket]);
 
   useEffect(() => {
-    console.log("Notification:", notification);
+    
   }, [notification]);
 
   // Function to clear the notification

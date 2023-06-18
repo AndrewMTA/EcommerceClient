@@ -75,7 +75,7 @@ const [quantity, setQuantity] = useState("")
     const stripe = useStripe();
   const elements = useElements();
   const  listUser  = useSelector((state) => state.user._id);
-console.log(carID)
+
 
 const min = 1890;
 const max = 2025;
@@ -108,8 +108,6 @@ function formatPhoneNumber(value) {
     return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
   }
 
-  // finally, if the phoneNumberLength is greater then seven, we add the last
-  // bit of formatting and return it.
   return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
     3,
     6

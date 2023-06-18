@@ -16,7 +16,7 @@ const initialState = {
 };
 
 
- console.log(initialState)
+
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 

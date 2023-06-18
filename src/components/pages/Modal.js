@@ -12,7 +12,7 @@ const Modal = ({ open, onClose,   carMake,
 
 
   const deletePost = () => {
-    console.log(deleteId);
+   
     const deleteId = cars._id;
 
     axios.delete(`/cars/delete/${deleteId}`)

@@ -14,14 +14,14 @@ import { io } from "socket.io-client";
 // ...
 
 
-const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
+const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
 
 function CartPage() {
   const socket = io("http://localhost:3500");
   const user = useSelector((state) => state.user);
   const products = useSelector((state) => state.products);
   const userCartObj = user?.cart;
-  console.log("cart",user?.cart)
+
   let cart = userCartObj ? products.filter((product) => userCartObj[product._id] != null) : [];
 
 
@@ -69,7 +69,7 @@ function CartPage() {
                                 onClick={() =>
                                   removeFromCart({
                                     productId: item._id,
-                                    price: item.price,
+                                    price: item.total,
                                     userId: user?._id,
                                   })
                                 }
@@ -85,7 +85,7 @@ function CartPage() {
                                 {item.quantity} {item.title} {item.category}
                                 {item.quantity > 1 && <>s</>}
                               </div>
-                              <div>${item.price}</div>
+                              <div>${item.total}</div>
                             </div>
                           </div>
                           <span className="quantity-indicator">
@@ -94,7 +94,7 @@ function CartPage() {
                               onClick={() =>
                                 handleDecrease({
                                   productId: item._id,
-                                  price: item.price,
+                                  price: item.total,
                                   userId: user._id,
                                 })
                               }
@@ -107,7 +107,7 @@ function CartPage() {
                               onClick={() =>
                                 increaseCart({
                                   productId: item._id,
-                                  price: item.price,
+                                  price: item.total,
                                   userId: user._id,
                                 })
                               }

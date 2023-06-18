@@ -860,8 +860,12 @@ max-width:500px;
     margin-top: -240px;
   }
 
+  .header {
+    margin-top: 130px;
+  }
+
   .instructions {
-    margin-top: -100px;
+    margin-top: -0px;
 
   }
 
@@ -908,6 +912,8 @@ cursor: pointer;
     
   }
  
+
+
   .fff {
     display: none;
   }
@@ -918,6 +924,15 @@ cursor: pointer;
    }
    .ContactForm {
     margin-top: -80px;
+  }
+.instruct {
+  width: 100%;
+
+  font-size:small;
+  margin-bottom: 10px;
+}
+  .header {
+    margin-top: 0px;
   }
 
   .bottom-section {

@@ -15,7 +15,7 @@ import GooglePlacesAutocomplete from 'react-google-autocomplete';
 
 // const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
 const REGISTER_URL = 'http://localhost:3500/register';
-const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
+const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
 
 const Register = () => {
     const userRef = useRef();
@@ -92,7 +92,7 @@ const Register = () => {
     
       });
 
-      console.log("s", data.state)
+
       
       
     const [selectedFile, setSelectedFile] = useState(null);

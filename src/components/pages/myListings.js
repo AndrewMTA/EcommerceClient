@@ -15,9 +15,7 @@ import SubNav from "./subNav";
 import Profile from "./zza.jpg"
 const MyListings = () => {
   const user = useSelector((state) => state.user);
-  console.log("user1", user);
-  console.log(useParams());
-
+  
   useEffect(() => {
     axios
       .get("http://localhost:3500/cars")
@@ -66,7 +64,7 @@ console.log("user", user)
 
 if (car) {
 
-  const { pic, make, model, year, description, price, phone, quant} = car; } 
+  const { pic, make, model, year, description, price, phone, quant, total} = car; } 
   return (
     <>
       <Navbar />
@@ -122,7 +120,7 @@ if (car) {
                  
                       {" "}
                       <h3 className="h3">
-                        ${carz.price || "Nothing yet"}{" "}
+                        ${carz.total || "Nothing yet"}{" "}
                       </h3>{" "}
                       {/*<img className="ana"src={ana}/> */}
                     </div>

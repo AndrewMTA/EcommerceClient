@@ -9,7 +9,7 @@ import logo from "./logo.png"
 const Navbar = () => {
 
   const user = useSelector((state) => state.user);
-console.log(user?.seller)
+
 
   const [showingNav, setShowingNav] = useState(true)
   const handleOpenNav = () => {

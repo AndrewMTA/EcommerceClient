@@ -6,7 +6,7 @@ const OrdersComponent = () => {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(user.accountId)
+  
     fetchOrders();
   }, []);
 
@@ -24,10 +24,10 @@ const OrdersComponent = () => {
         const data = await response.json();
         setOrders(data.orders);
       } else {
-        console.log('Failed to fetch orders');
+      
       }
     } catch (error) {
-      console.log('Error:', error);
+   
     }
   };
 

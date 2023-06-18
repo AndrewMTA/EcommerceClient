@@ -56,7 +56,7 @@ function Status() {
             })
             .catch((e) => {
                 setLoading(false);
-                console.log(e);
+              
             });
     }, []);
 

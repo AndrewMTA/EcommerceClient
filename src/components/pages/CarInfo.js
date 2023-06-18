@@ -4,6 +4,7 @@ import axios from '../../api/axios'
 import { useDispatch, useSelector } from "react-redux";
 import { updateProducts } from "../../features/productSlice";
 import Check from "./Check.png"
+import Lazy from './Lazy.js';
 import CarsCard from "../CarsCard2"
 import {
    Buggati,
@@ -32,7 +33,7 @@ const CarInfo = () => {
   const {carID} = useParams()
   const car = cars.find((car) => car._id === carID)
   const user = useSelector((state) => state.user);
-  const {  listUser, pic, description, quant, price, title, ingredients, seller, quantity, category } = car;
+  const {  listUser, pic, description, quant, price, total, title, ingredients, seller, quantity, category } = car;
   const dotsContainerStyles = {
     display: "flex",
     justifyContent: "center",
@@ -63,7 +64,7 @@ const CarInfo = () => {
    useEffect(() => {
       axios.get("http://localhost:3500/all")
         .then((res) => {
-          console.log("res", res);
+        
           setPosts(res.data);
 
 
@@ -75,20 +76,18 @@ const CarInfo = () => {
 
     const Selector = posts.filter((post) => post._id === listUser);
 
-    console.log("dealer", posts.find((post) => post._id === listUser) )
+   
     
 
 
     const carx = cars.find((carx) => carx.listUser === carID);
 
-    console.log("dealer", posts.find((post) => post._id === listUser)
+   
     
     
     
     
     
-    
-    )
 
 
 const showArrow = () => {
@@ -251,9 +250,25 @@ const goToSlide = (slideIndex) => {
 
  </div>
  <div className='slider2'>
- <img className="CardPic2"  onClick={() => setIsOpen(true)}  src={pic[1].url}/>
- <img className="CardPic2"  onClick={() => setIsOpen(true)}  src={pic[2 ].url}/>
- <img className="CardPic2"  onClick={() => setIsOpen(true)}  src={pic[2 ].url}/>
+ <Lazy
+  src={pic[1].url}
+  alt="Image"
+  placeholder="placeholder.jpg"
+  className="CardPic2"
+/>
+<Lazy
+  src={pic[2].url}
+  alt="Image"
+  placeholder="placeholder.jpg"
+  className="CardPic2"
+/> <Lazy
+  src={pic[3].url}
+  alt="Image"
+  placeholder="placeholder.jpg"
+  className="CardPic2"
+/>
+ 
+ 
 
 
 {/** 
@@ -296,11 +311,11 @@ const goToSlide = (slideIndex) => {
 <br/>
 <h3>Select other dates</h3>
 <br/>
-<h2 className='price'>${price.toLocaleString('en-US') || "null"}</h2>
+<h2 className='price'>${total.toLocaleString('en-US') || "null"}</h2>
 {user ? <>
 
  
-<button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.price, image: car.pic[0].url, listUser: car.listUser})}>
+<button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.total, image: car.pic[0].url, listUser: car.listUser})}>
                               Add to cart
                           </button>
                           {isSuccess && <div>Added!</div>} </> : <a href="/register">  <button className="btn-add" size="lg" >
@@ -335,13 +350,13 @@ const goToSlide = (slideIndex) => {
 <br/>
 <h3>Select other dates</h3>
 <br/>
-<h2 className='price'>${price.toLocaleString('en-US') || "null"}</h2>
+<h2 className='price'>${total.toLocaleString('en-US') || "null"}</h2>
   <br/>
   <>
   {user ? <>
 
  
-  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.price, image: car.pic[0].url, listUser: car.listUser})}>
+  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.total , image: car.pic[0].url, listUser: car.listUser})}>
                                 Add to cart
                             </button>
                             {isSuccess && <div>Added!</div>} </> : <a href="/register">  <button className="btn-add" size="lg" >
@@ -354,13 +369,13 @@ const goToSlide = (slideIndex) => {
 <br/>
 <h3>Select other dates</h3>
 <br/>
-<h2 className='price'>${price.toLocaleString('en-US') || "null"}</h2>
+<h2 className='price'>${total.toLocaleString('en-US') || "null"}</h2>
   <br/>
   <>
   {user ? <>
 
  
-  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.price, image: car.pic[0].url, listUser: car.listUser})}>
+  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.total, image: car.pic[0].url, listUser: car.listUser})}>
                                 Add to cart
                             </button>
                             {isSuccess && <div>Added!</div>} </> : <a href="/register">  <button className="btn-add" size="lg" >

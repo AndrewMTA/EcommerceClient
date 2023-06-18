@@ -25,6 +25,7 @@ function OrdersPage() {
   const [show, setShow] = useState(false);
   const [orderAddress, setOrderAddress] = useState([""])
   const [open, setOpen] = useState(false)
+  const [ownerId, setOwnerId] = useState("")
   const [pickupCode, setpickupCode] = useState()
   const [pickupDay, setPickupDay] = useState("")
   const [highlighted, setHighlighted] = useState(false)
@@ -76,6 +77,8 @@ function OrdersPage() {
     console.log(orderId);
   };
   
+
+
   const handleFulfillMany = () => {
     const highlightedOrders = orders.filter((order) => order.highlighted);
   
@@ -103,8 +106,7 @@ function OrdersPage() {
   const handleLabel = (addressObj, index) => {
     setOrderAddress(addressObj)
 
-    console.log("pp", addressObj)
-    console.log("peepee", addressObj[0].street)
+    
     setLabelLoading(true)
     if (orderAddress.length > 0) {
 
@@ -115,17 +117,17 @@ function OrdersPage() {
           requestedShipment: {
             shipper: {
               contact: {
-                personName: user?.sellerName || "",
+                personName: "Rob",
                 phoneNumber: 1234567890,
-                companyName: user?.sellerName || ","
+                companyName: "COMPANY"
               },
               address: {
                 streetLines: [
-                  user?.address[0]?.street || "123 w west street"
+                "7441 blackburn Ave"
                 ],
-                city: user?.address[0]?.city || "Springfield",
-                stateOrProvinceCode: "AR",
-                postalCode: 72601,
+                city: "Downers Grove",
+                stateOrProvinceCode: "IL",
+                postalCode: 60516,
                 countryCode: "US"
               }
             },
@@ -138,7 +140,7 @@ function OrdersPage() {
                 },
                 address: {
                   streetLines: [
-                    addressObj[0]?.street || "111 didnt ave"
+                    "111 didnt ave"
                   ],
                 city: "Collierville",
                   stateOrProvinceCode: "TN",
@@ -147,7 +149,7 @@ function OrdersPage() {
                 }
               }
             ],
-            shipDatestamp: "2020-07-03",
+            shipDatestamp: "2023-06-16",
             serviceType: "FEDEX_GROUND",
             packagingType: "YOUR_PACKAGING",
             pickupType: "USE_SCHEDULED_PICKUP",
@@ -169,7 +171,7 @@ function OrdersPage() {
             ]
           },
           accountNumber: {
-            value: "740561073"
+            value: "201698364"
           }
         }
 
@@ -222,7 +224,7 @@ function OrdersPage() {
 
   console.log("hh", orderProductIds)
 
-  function showOrder(productsObj, orderId) {
+  function showOrder(productsObj, orderId, owner) {
     let productsToShow = products.filter((product) => {
       const cartProductId = `${product._id}`; // Combine product ID and seller ID
       return productsObj[cartProductId];
@@ -235,8 +237,9 @@ function OrdersPage() {
       delete productCopy.description;
       return productCopy;
     });
-
+    console.log("Own", owner);
     console.log("go", productsToShow);
+    setOwnerId(owner)
     setOrderID(orderId);
     setShow(true);
     setOrderToShow(productsToShow);
@@ -332,23 +335,22 @@ console.log("street", user?.address[0]?.street)
   }
 
 
-  const filteredOrders = orders
-  .filter((order) => {
+  const filteredOrders = orders.filter((order) => {
     const productKeys = Object.keys(order.products);
-
+  
     for (let j = 0; j < productKeys.length; j++) {
       const productKey = productKeys[j];
       const product = order.products[productKey];
-
+  
       if (product.sellerId && product.sellerId === user?._id) {
         return true;
       }
     }
-
+  
     return false;
   })
   .sort((a, b) => new Date(b.date) - new Date(a.date));
-
+  
 
 
   const totalOrderAmount = filteredOrders.reduce((total, order) => total + order.total, 0);
@@ -384,7 +386,7 @@ console.log("street", user?.address[0]?.street)
   };
   useLoadScript({ googleMapsApiKey: 'AIzaSyDafqAOtxds8RDU33u_luv9E8KjuQSZ35M' })
   useEffect(() => {
-    console.log("poo", times);
+
 
   }, [times]);
 
@@ -433,57 +435,54 @@ console.log("street", user?.address[0]?.street)
 
 
 
-          {filteredOrders.slice(firstIndex, lastIndex).map((order, index) => {
-            // Assuming 'orders' is an array of objects
+{filteredOrders.slice(firstIndex, lastIndex).map((order, index) => {
+  // Assuming 'orders' is an array of objects
 
+  console.log("highlighted", order.highlighted)
+  if (order.highlighted) {
+    setHighlighted(true);
+  } else if (!highlighted) {
+    setHighlighted(false);
+  }
 
-            console.log("highlighted", order.highlighted )
-            if (order.highlighted) {
-              setHighlighted(true);
-            } else if (!highlighted) {
-              setHighlighted(false);
-            }
-
-            return (
-
-              <tr className={order.isChecked ? "highlighted" : ""}>
-                <td className={!order.highlighted ? "" : "highlighted"}><div className="row">{order._id}</div></td>
-                <td className={!order.highlighted ? "" : "highlighted"}>
-                  <a onClick={() => showOrder(order.products, order._id)}>
-                    <div className={`${order.status === "fulfilled" ? "warning" : "success"}`} text="white">
-                      {order.status}
-                    </div>
-                  </a>
-                </td>
-                <td className={!order.highlighted ? "" : "highlighted"}>{order.date}</td>
-                <td className={!order.highlighted ? "" : "highlighted"}>${order.total}</td>
-                <td className={!order.highlighted ? "" : "highlighted"}>
-                  {!order.hide && (
-                    <div onClick={() => handleLabel(order.address, index)} className="print">
-                      {labelloading === true ? <>Loading... </> : <>Print Label </>}
-                    </div>
-                  )}
-                  {order.hide && (
-                    <a href={`${url}`}>
-                      <div onClick={() => handleLabel(order.address, index)} className="print-g">
-                        View Label
-                      </div>
-                    </a>
-                  )}
-                </td>
-                <td onClick={handlePickup} className={!order.highlighted ? "pickup" : "highlighted"}>Schedule Pickup</td>
-                <td onClick={() => handleHighlight(order._id)} className={!order.highlighted ? "" : "highlighted"}>
-                  <input type="checkbox" checked={order.highlighted} />
-
-
-
-                </td>
-              </tr>
-
-
-
-            )
-          })}{" "}
+  return (
+    <tr className={order.isChecked ? "highlighted" : ""}>
+      <td className={!order.highlighted ? "" : "highlighted"}>
+        <div className="row">{order._id}</div>
+      </td>
+      <td className={!order.highlighted ? "" : "highlighted"}>
+        <a onClick={() => showOrder(order.products, order._id, order.owner)}>
+          <div className={`${order.status === "fulfilled" ? "warning" : "success"}`} text="white">
+            {order.status}
+          </div>
+        </a>
+      </td>
+      <td className={!order.highlighted ? "" : "highlighted"}>{order.date}</td>
+      <td className={!order.highlighted ? "" : "highlighted"}>${order.total}</td>
+      <td className={!order.highlighted ? "" : "highlighted"}>
+        {!order.hide && (
+          <div onClick={() => handleLabel(order.address, index)} className="print">
+            {labelloading === true ? <>Loading... </> : <>Print Label </>}
+          </div>
+        )}
+        {order.hide && (
+          <a href={`${url}`}>
+            <div onClick={() => handleLabel(order.address, index)} className="print-g">
+              View Label
+            </div>
+          </a>
+        )}
+      </td>
+      <td onClick={handlePickup} className={!order.highlighted ? "pickup" : "highlighted"}>Schedule Pickup</td>
+      <td onClick={() => handleHighlight(order._id)} className={!order.highlighted ? "" : "highlighted"}>
+        <input type="checkbox" checked={order.highlighted} />
+      </td>
+ {/* Display customer's name */}
+      
+    </tr>
+  )
+})}
+{" "}
           {filteredOrders.length - firstIndex === 2 ? (
             <span className="insert">insert</span>
           ) : (
@@ -738,7 +737,7 @@ console.log("street", user?.address[0]?.street)
           }
           {show &&
             <div className="Overlay3">
-              <div className="Modal9">
+              <div className="Modal-small">
                 <div closeButton>
                   <div> <h4>Order details</h4></div>
                 </div>
@@ -751,11 +750,19 @@ console.log("street", user?.address[0]?.street)
                         <span>Quantity: {order.count}  </span> {order.name}
                       </p>
                       <p>Price: ${Number(order.price) * order.count}</p>
+                 
+                    
                     </div>
 
                   </div>
                 ))}
+
+               <div className="flex-left">
+<p>Customer Email: {ownerId.email}</p>  </div>
+
                 <div className="flex-col-a">
+                  
+
                   <button className="green" onClick={handleFulfill}>
                     Fulfill Order
                   </button>

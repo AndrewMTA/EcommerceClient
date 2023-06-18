@@ -300,7 +300,7 @@ const Home = () => {
           <>
          
             <div className="select-wrappingz">
-              <div className="selectz">
+           {/**    <div className="selectz">
                 <h4>Style</h4>
                 <form action="#">
                   <select
@@ -321,7 +321,7 @@ const Home = () => {
                     })}
                   </select>{" "}
                 </form>
-              </div>
+              </div> */}
 {/*
           
               <div className="selectz">
@@ -554,6 +554,7 @@ const Home = () => {
        */}
         <div className="DisplayWrap">{/** <HandleDisplaySponsoer/> */}</div>
         <h2 className="pusher2">{make} For Sale</h2>
+    
         <div className="DisplayWrap">
           <HandleDisplay />
         </div>
