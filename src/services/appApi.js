@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const appApi = createApi({
     reducerPath: "appApi",
-    baseQuery: fetchBaseQuery({ baseUrl: "" }),
+    baseQuery: fetchBaseQuery({ baseUrl: "https://pizzaserver.onrender.com" }),
     endpoints: (builder) => ({
         signup: builder.mutation({
             query: (user) => ({
