@@ -315,7 +315,7 @@ const goToSlide = (slideIndex) => {
 {user ? <>
 
  
-<button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.total, image: car.pic[0].url, listUser: car.listUser})}>
+<button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, listStripe: car.listStripe,productId: car._id, price: car.total, beforeShipping: car.price, image: car.pic[0].url, listUser: car.listUser})}>
                               Add to cart
                           </button>
                           {isSuccess && <div>Added!</div>} </> : <a href="/register">  <button className="btn-add" size="lg" >
@@ -356,7 +356,7 @@ const goToSlide = (slideIndex) => {
   {user ? <>
 
  
-  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.total , image: car.pic[0].url, listUser: car.listUser})}>
+  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, listStripe: car.listStripe, beforeShipping: car.price, productId: car._id, price: car.total , image: car.pic[0].url, listUser: car.listUser})}>
                                 Add to cart
                             </button>
                             {isSuccess && <div>Added!</div>} </> : <a href="/register">  <button className="btn-add" size="lg" >
@@ -375,7 +375,7 @@ const goToSlide = (slideIndex) => {
   {user ? <>
 
  
-  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, productId: car._id, price: car.total, image: car.pic[0].url, listUser: car.listUser})}>
+  <button className="btn-add" size="lg" onClick={() => addToCart({ userId: user._id, listStripe: car.listStripe, beforeShipping: car.price, productId: car._id, price: car.total, image: car.pic[0].url, listUser: car.listUser})}>
                                 Add to cart
                             </button>
                             {isSuccess && <div>Added!</div>} </> : <a href="/register">  <button className="btn-add" size="lg" >

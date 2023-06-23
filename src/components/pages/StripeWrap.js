@@ -7,7 +7,7 @@
 
       return (
         <Elements stripe={stripePromise}>
-     <Register/>
+        <Register/>
         </Elements>
       )
     }

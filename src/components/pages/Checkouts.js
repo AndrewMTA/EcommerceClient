@@ -113,7 +113,7 @@ function CheckoutForm({ socket }) {
             };
           
             try {
-              const response = await axios.post(`:3500/verify-address`, checkAddress);
+              const response = await axios.post(`/verify-address`, checkAddress);
               console.log(response.data);
           
               if (response.data.customerMessages && response.data.customerMessages.length > 0) {
@@ -193,80 +193,76 @@ console.log( "hh", user.address.length)
     }
 
     
-
-    
-
     const handlePay = async (e) => {
-        e.preventDefault();
-        if (!stripe || !elements) {
-          // Stripe.js has not yet loaded.
-          // Make sure to disable form submission until Stripe.js has loaded.
-          return;
-        }
-      
-        const orderData = {
-          userId: user._id,
-          cart: user.cart,
-          address: user.address,
-        };
-      
-        const res = await axios.post("/process-payment", {
-          email: user.email,
-          amount: user.cart.total * 100,
-          accountId: "acct_1NBayLR3TKOw16t6",
-        });
-      
-        const clientSecret = res.data["client_secret"];
-      
-        const result = await stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: elements.getElement(CardElement),
-            billing_details: {
-              email: user.email,
-            },
-          },
-        });
-      
-        if (result.error) {
-        
- 
-        } else {
-          // The payment has been processed!
-          if (result.paymentIntent.status === "succeeded") {
-            try {
-                const res = await axios.post(`/orders/sellerId`, orderData);
-                const confirmation = await axios.post(`/confirm-order`, { email: user.email})
-                console.log(res.data);
-                console.log(confirmation.data);
-                navigate("/success")
-                setSeller(res.data)
-              } catch (error) {
-                console.log(error.message);
-              }
-              
-
-
-            createOrder(orderData)
-.then((data) => {
-                // Clear existing notification
-                console.log("res");
-      
-                // Access the sellerId from the response data
+      e.preventDefault();
+      if (!stripe || !elements) {
+        // Stripe.js has not yet loaded.
+        // Make sure to disable form submission until Stripe.js has loaded.
+        return;
+      }
     
-      
-                // Perform further actions with the sellerId if needed
-              })
-              .catch((error) => {
-                console.log("Error:", error);
-              });
-      
-        
+      const orderData = {
+        userId: user._id,
+        cart: user.cart,
+        address: user.address,
+      };
+      const cartItems = Object.values(user.cart);
+      const cart = cartItems.slice(3).map((item) => ({
+        amount: item.beforeShipping,
+        sellerId: item.sellerId,
+        listId: item.stripeId,
+        // Add any other necessary fields for each item
+      }));
+    
+      const orderInfo = {
+        cart: cart,
+        email: "riveraandrew830@gmail.com",
+        payment_method: "card",
+      };
+    
+      try {
+        const res = await axios.post("/process-orders", orderInfo);
+        const clientSecrets = res.data.paymentIntents;
+        console.log("Received client secrets:", clientSecrets); // Verify the client secrets array in the console
+    
+        for (const clientSecret of clientSecrets) {
+          console.log("Confirming payment intent with client secret:", clientSecret);
+          const result = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+              card: elements.getElement(CardElement),
+              billing_details: {
+                email: user.email,
+              },
+            },
+          });
+    
+          if (result.error) {
+            // Handle payment error
+            console.error(result.error);
+            return false;
+          } else {
+            // The payment has been processed!
+            if (result.paymentIntent.status === "succeeded") {
+              // Continue with successful payment
+            } else {
+              // Handle payment failure
+              return false;
+            }
           }
         }
-      };
-      
-  
-  
+    
+        // All payments were successful
+        const orderResponse = await axios.post(`/orders/sellerId`, orderData);
+        const confirmationResponse = await axios.post(`/confirm-order`, { email: user.email });
+        console.log("Order response:", orderResponse.data);
+        console.log("Confirmation response:", confirmationResponse.data);
+        navigate("/success");
+        setSeller(orderResponse.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    
   
 
 {/*

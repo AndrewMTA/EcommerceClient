@@ -75,7 +75,7 @@ const [quantity, setQuantity] = useState("")
     const stripe = useStripe();
   const elements = useElements();
   const  listUser  = useSelector((state) => state.user._id);
-
+  const  accountId  = useSelector((state) => state.user.accountId);
 
 const min = 1890;
 const max = 2025;
@@ -222,10 +222,12 @@ e.preventDefault()
     }
 
 
-    else axiosPrivate.post("/cars/new", {
+    else axiosPrivate.post("/cars/new", {     
+       listStripe: user.accountId,
       description: description,
       images: images,
       price: price.slice(0,9),
+      total: total,
       listUser: listUser,
       title: "Pizza",
       ingredients: ingredients,

@@ -280,11 +280,9 @@ const Register = () => {
       
       
 
-    const handlePayment = async (bankToken) => {
+    const handlePayment = async () => {
 
                             if (!stripe || !elements) {
-                                // Stripe.js has not yet loaded.
-                                // Make sure to disable form submission until Stripe.js has loaded.
                                 return;
                               }
                           
@@ -377,52 +375,53 @@ const createPerson = async (e) => {
 
 
      
-          const uploadDocument = async (file) => {
-            const formData = new FormData();
-            formData.set('purpose', 'identity_document');
-            formData.set('file', file);
-        
-            try {
-                console.log("Sending file")
-              const response = await fetch('https://files.stripe.com/v1/files', {
-                method: 'POST',
-                headers: {
-                  Authorization: `Bearer pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI`,
-                },
-                 
-                body: formData,
-              });
-        
-              const data = await response.json();
-              console.log(data);
-              console.log(data.id);
-              return data.id;
-            } catch (error) {
-              console.error(error);
-            }
-          };
-        
-          const updatePerson = async (person, account, fileId) => {
-            try {
-              const response = await fetch(`/update-person-file`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  person,
-                  account,
-                  file: fileId,
-                }),
-              });
-        
-              const data = await response.json();
-              console.log(data);
-            } catch (error) {
-              console.error(error);
-            }
-          };
-        
+const uploadDocument = async (file) => {
+  const formData = new FormData();
+  formData.set('purpose', 'identity_document');
+  formData.set('file', file);
+
+  try {
+      console.log("Sending file")
+    const response = await fetch('https://files.stripe.com/v1/files', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y`,
+      },
+       
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log(data);
+    console.log(data.id);
+    return data.id;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const updatePerson = async (person, account, fileId) => {
+  try {
+    const response = await fetch('http://localhost:3500/update-person-file', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        person,
+        account,
+        file: fileId,
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
 
     const processPayment = async () => {
         try {
@@ -597,7 +596,7 @@ console.log(validAddress.streetLine1)
                 try {
 
                     const response = await axios.post(`/register/seller`,
-                        JSON.stringify({ email: data.email, pwd, randomNum, buisnessName: data.buisnessName, phone: data.phone, website: data.website }),
+                        JSON.stringify({ email: data.email, pwd, randomNum, sellerName: data.companyName, accountNum , data}),
                         {
                             headers: { 'Content-Type': 'application/json' },
                             withCredentials: true   
