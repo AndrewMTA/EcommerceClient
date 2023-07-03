@@ -41,7 +41,7 @@ contactRole: '',
    })
 
 
-   console.log(details)
+   //console.log(details)
 
     const handleChange = (e) => {
       const {name, value} = e.target

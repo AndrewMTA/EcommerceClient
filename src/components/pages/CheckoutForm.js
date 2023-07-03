@@ -69,7 +69,7 @@ const [weight, setWeight] = useState("")
 const [quantity, setQuantity] = useState("")
 
 
-  console.log("huh", year.length)
+  //console.log("huh", year.length)
 
 
     const stripe = useStripe();
@@ -82,7 +82,7 @@ const max = 2025;
 
 const pizza = logos
 
-console.log(logos)
+//console.log(logos)
 
 
 
@@ -183,7 +183,7 @@ e.preventDefault()
 
 
     
-    const res = await axios.post("/create-payment", {
+    const res = await axiosPrivate.post("/create-payment", {
       email: email,
       amount: 2000
     });
@@ -201,11 +201,11 @@ e.preventDefault()
 
     if (result.error) {
       // Show error to your customer (e.g., insufficient funds)
-      console.log(result.error.message);
+      //console.log(result.error.message);
     } else {
       // The payment has been processed!
       if (result.paymentIntent.status === "succeeded") {
-        console.log("Money baby");
+        //console.log("Money baby");
         navigate("/success");
       
       }
@@ -215,7 +215,7 @@ e.preventDefault()
   const handleAddPost = () => {
 
     if ( !images || !price.slice(0,10) ) {
-      console.log( "fields", select, carModel, year.slice(0,4),price.slice(0,10) || phone || country || listEmail )
+      //console.log( "fields", select, carModel, year.slice(0,4),price.slice(0,10) || phone || country || listEmail )
       return alert("Missing fields!")
      
       

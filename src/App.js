@@ -33,7 +33,7 @@ import Reset from "./components/pages/PasswordReset"
 import Private from "./components/PrivateRoute"
 import Private2 from "./components/Private2"
 import { Routes, Route } from 'react-router-dom';
-import Orders from './components/pages/Orders';
+import Orders from './components/pages/OrdersWrap';
 import Status from './components/pages/Status';
 import Footer from './components/Footer';
 import Product from './components/pages/checkout';
@@ -66,38 +66,6 @@ function App() {
   const [notifications, setNotifications] = useState([]);
 const userId = user?._id;
 
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      if (user) {
-      try {
-        const userId = user?._id;
-       
-        const res = await axios.post(`orders/notifications/`, {userId});
-        setNotifications(res.data);
-      } catch (error) {
-        
-      }}
-    };
-console.log("dd", notifications)
-    fetchNotifications();
-
-    // Continuously checkconsole for new notifications every 5 seconds
-    const interval = setInterval(fetchNotifications, 30000);
-
-    // Clean up the interval on component unmount
-    return () => clearInterval(interval);
-  }, [userId]);
-  const matchingSellerIds =  seller?.sellerIds?.filter(sellerId => sellerId === user?._id) 
-
-  
- 
-
-
-
-  const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
-  const { page } = useParams();
-  const location = useLocation();
 
 
 
@@ -142,16 +110,7 @@ const [close, setclose] = useState(false);
   };
   
 
-const markAllNotificationsAsRead = async () => {
-  setclose(true)
-  silenceNoti()
-  try {
-    await axios.put(`/orders/notifications/mark-read`);
-    // Optionally, you can update the 'notifications' state in your component to mark all notifications as read
-  } catch (error) {
-    console.error(error);
-  }
-};
+
 
 
 
@@ -194,19 +153,26 @@ const markAllNotificationsAsRead = async () => {
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="/listing/:carID" element={<Info/>} />
         <Route path="/application" element={<Sellzza />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/verify/:randomNum" element={<Verify/>} />
+
+
+        <Route path="/verifyuser/:id" element={<Verify/>} />
         <Route path="/" element={<Hero/>} />
-        <Route path="/orders" element={<Orders/>} />
-        <Route path="/add-product" element={<Product/>} />
+      
+    
         <Route path="/orders/status/:id" element={<Status/>} />
         
         <Route path="/success" element={<Success />} />
-        <Route path="/account-settings" element={<Account />} />
+ 
 
      
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/passwordreset" element={<PasswordReset/>} />
 
-
+        <Route element={<Private />}>
+          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route path="/listings/:carID" element={<Listings/>} />
+          </Route>
+          </Route>
    
 
         <Route element={<Private />}>
@@ -214,6 +180,21 @@ const markAllNotificationsAsRead = async () => {
           </Route>
           
      <Route element={<PersistLogin />}>
+
+      
+     <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+     <Route path="/add-product" element={<Product/>} />
+        </Route>
+     <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+     <Route path="/account-settings" element={<Account />} />
+        </Route>
+        <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+        <Route path="/cart" element={<Cart />} />
+        </Route>
+
+     <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+        <Route path="/orders" element={<Orders/>} />
+        </Route>
           <Route element={<Private />}>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
           <Route path="/success/:carID" element={<Success/>} />
@@ -243,7 +224,7 @@ const markAllNotificationsAsRead = async () => {
 
           <Route element={<Private />}>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-            <Route path="/listings/:carID" element={<Listings/>} />
+            <Route path="/listings/" element={<Listings/>} />
           </Route>
           </Route>
 
@@ -265,7 +246,7 @@ const markAllNotificationsAsRead = async () => {
   <div className='OverLay'>
 <><div  className="Modal-small">  
 <div className="modal-flex">
-<div onClick={markAllNotificationsAsRead} className="close-modal">x</div>
+<div className="close-modal">x</div>
 
 
 {audio !== null ? 
@@ -276,7 +257,7 @@ const markAllNotificationsAsRead = async () => {
   </a>
 ))}
   <Link to="/orders">
-        <button  onClick={markAllNotificationsAsRead} className= 'pulse' >
+        <button  className= 'pulse' >
           Go to Orders
         </button>  </Link>
 </div>

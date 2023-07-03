@@ -15,7 +15,7 @@ import GooglePlacesAutocomplete from 'react-google-autocomplete';
 
 // const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
 const REGISTER_URL = `/register`;
-const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
+const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
 
 const Register = () => {
     const userRef = useRef();
@@ -106,7 +106,7 @@ const Register = () => {
         setDocument(true)
     }
   
-    console.log(data)
+    //console.log(data)
 
 
     useEffect(() => {
@@ -153,7 +153,7 @@ const Register = () => {
             // PII token created successfully
             const piiToken = result.token;
             // Use the piiToken for further processing or sending to the server
-            console.log(piiToken);
+            //console.log(piiToken);
           }
         });
 */}
@@ -187,7 +187,7 @@ const Register = () => {
       setDocument(false);
      
       const file = fileInputRef.current.files[0];
-      console.log(file);
+      //console.log(file);
       
       if (file) {
         const fileId = await uploadDocument(file);
@@ -196,7 +196,7 @@ const Register = () => {
         updatePerson(person, account, fileId);
         setDocument(false);
       } else {
-        console.log("No file selected");
+        //console.log("No file selected");
       }
     };
     const handleResend = async (e) => {
@@ -216,14 +216,14 @@ const Register = () => {
 
 
             );
-            // TODO: remove console.logs before deployment
+            // TODO: remove //console.logs before deployment
 
-            console.log(JSON.stringify(response?.data));
-            //console.log(JSON.stringify(response))
+            //console.log(JSON.stringify(response?.data));
+            ////console.log(JSON.stringify(response))
             setSuccess2(true);
 
 
-            console.log("peanutz")
+            //console.log("peanutz")
 
 
 
@@ -234,7 +234,7 @@ const Register = () => {
             } else if (err.response?.status === 409) {
                 setErrMsg('Email Taken');
             } else {
-             console.log("")
+             //console.log("")
             }
             errRef.current.focus();
         }
@@ -306,11 +306,11 @@ const Register = () => {
                           
                               if (result.error) {
                                 // Show error to your customer (e.g., insufficient funds)
-                                console.log(result.error.message);
+                                //console.log(result.error.message);
                               } else {
                                 // The payment has been processed!
                                 if (result.paymentIntent.status === "succeeded") {
-                                  console.log("Money baby");
+                                  //console.log("Money baby");
                                 const email = data.email
                               axios.put(`/user/add-membership`,  JSON.stringify({email}),
                               {
@@ -350,7 +350,7 @@ createBankAccount()
       
         try {
           const response = await axios.post(`/create-account`, { bankToken: tokenId, data });
-          console.log(response.data);
+          //console.log(response.data);
           setAccountNum(response.data);
 
         } catch (error) {
@@ -358,18 +358,18 @@ createBankAccount()
         }
       }
       
-console.log(accountNum)
+//console.log(accountNum)
       
 const createPerson = async (e) => {
   e.preventDefault()
   try {
     const res = await axios.post(`/create-person`, { data, accountNum });
     setPersonNum(res.data);
-    console.log("person", res.data);
+    //console.log("person", res.data);
     setPerson(false);
     setDocument(true);
   } catch (error) {
-    console.log("Error creating person:", error);
+    //console.log("Error creating person:", error);
   }
 };
 
@@ -381,19 +381,19 @@ const uploadDocument = async (file) => {
   formData.set('file', file);
 
   try {
-      console.log("Sending file")
+      //console.log("Sending file")
     const response = await fetch('https://files.stripe.com/v1/files', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y`,
+        Authorization: `Bearer pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI`,
       },
        
       body: formData,
     });
 
     const data = await response.json();
-    console.log(data);
-    console.log(data.id);
+    //console.log(data);
+    //console.log(data.id);
     return data.id;
   } catch (error) {
     console.error(error);
@@ -415,7 +415,7 @@ const updatePerson = async (person, account, fileId) => {
     });
 
     const data = await response.json();
-    console.log(data);
+    //console.log(data);
   } catch (error) {
     console.error(error);
   }
@@ -501,7 +501,7 @@ const updatePerson = async (person, account, fileId) => {
     
       try {
         const response = await axios.post(`/verify-address`, checkAddress);
-        console.log(response.data);
+        //console.log(response.data);
     
         if (response.data.customerMessages && response.data.customerMessages.length > 0) {
           setErrState(true);
@@ -521,7 +521,7 @@ const updatePerson = async (person, account, fileId) => {
           setBankInfo(true)
 
                     setSeller(null)
-console.log(validAddress.streetLine1)
+//console.log(validAddress.streetLine1)
           if (validAddress.streetLine1 == "") {
         setAddressError(true)
       } 
@@ -529,10 +529,10 @@ console.log(validAddress.streetLine1)
         }
       } catch (error) {
         setAddressError(true);
-        console.log(error);
+        //console.log(error);
       }
     };
-    console.log(validAddress.streetLine1)
+    //console.log(validAddress.streetLine1)
 
     const handleError = () => {
       if (validAddress.streetLine1 == "") {
@@ -541,11 +541,11 @@ console.log(validAddress.streetLine1)
         setAddressError(true)
       }
     }
-    console.log(validAddress.streetLine1)
+    //console.log(validAddress.streetLine1)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("pot")
+        //console.log("pot")
         if (selectedOption === 'no') {
 
             try {
@@ -561,10 +561,10 @@ console.log(validAddress.streetLine1)
 
 
                 );
-                // TODO: remove console.logs before deployment
+                // TODO: remove //console.logs before deployment
 
-                console.log(JSON.stringify(response?.data));
-                //console.log(JSON.stringify(response))
+                //console.log(JSON.stringify(response?.data));
+                ////console.log(JSON.stringify(response))
                 setSuccess(true);
 
                 setPwd('');
@@ -587,7 +587,7 @@ console.log(validAddress.streetLine1)
 
         else if (selectedOption === 'yes') {
             setSeller(true)
-            console.log("Yeah")
+            //console.log("Yeah")
             if (data.website !== '') {
                 setSelectedOption('')
                
@@ -605,7 +605,7 @@ console.log(validAddress.streetLine1)
                     );
    
     
-                    console.log(JSON.stringify(response?.data));
+                    //console.log(JSON.stringify(response?.data));
                 
     
                     setPwd('');
@@ -965,7 +965,7 @@ validateAddress()
 <label>Title</label>
 <input className="inputOnboard" onChange={handleChange} name="title" placeholder="Your title"/>
 <label htmlFor="confirm_pwd">
-                                        Phone Numberr
+                                        Phone Number
                                     </label>
                                     <input
                                         className="inputOnboard"

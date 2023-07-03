@@ -4,6 +4,7 @@ const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children, socket }) => {
   const [notification, setNotification] = useState(null);
+  const [fed, setFed] = useState(null);
   const [seller, setSeller] = useState([]);
 
   //const uri = "https://backend.render.com"
@@ -15,7 +16,7 @@ export const NotificationProvider = ({ children, socket }) => {
   };
 
   return (
-    <NotificationContext.Provider value={{  notification, seller, setSeller, clearNotification }}>
+    <NotificationContext.Provider value={{  notification, seller, fed, setFed, setSeller, clearNotification }}>
       {children}
     </NotificationContext.Provider>
   );

@@ -82,7 +82,7 @@ import Navbar from '../Navbar';
         }
       };
     
-    console.log(data)
+    //console.log(data)
     
 
   
@@ -103,7 +103,7 @@ import Navbar from '../Navbar';
           try {
             const response = await axios.put(`/update-address`, {data});
         
-            console.log(response.data); // Address updated successfully!
+            //console.log(response.data); // Address updated successfully!
             // Perform any additional actions after successful address update
         
           } catch (error) {

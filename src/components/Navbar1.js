@@ -103,7 +103,7 @@ const handleLogout =  () => {
      
      )}
 {user?.seller &&
-<a className='navA' href={`/listings/${user._id}`}><span className='NavOption'>Dashboard</span> </a>
+<a className='navA' href={`/listings/`}><span className='NavOption'>Dashboard</span> </a>
 
 
 }

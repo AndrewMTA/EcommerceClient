@@ -140,6 +140,22 @@ button {
 .wrap {
    display:flex
 }
+.new-feature {
+  position: relative;
+}
+
+.coming-soon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: 0.5s ease-in-out;
+}
+
+.new-feature:hover .coming-soon {
+  opacity: 1;
+}
+
 
 .min {
   width: 90px;
@@ -306,9 +322,9 @@ td {
 
 
 td {
-  margin-left: 50px;
+  margin-left: 0px;
   background-color: rgb(240, 240, 250);
-  padding: 5px 30px;
+  padding: 5px 5px;
   border: 1px solid rgb(152, 152, 152);
 }
 
@@ -362,7 +378,7 @@ td {
 th {
   margin-left: 0px;
   background-color: rgb(14, 14, 14);
-  padding: 10px 10px;
+  padding: 5px 5px;
   color: white;
 
   border: 1px solid rgb(106, 106, 106);
@@ -376,10 +392,23 @@ th {
   color: rgb(0, 0, 0);
   display: flex;
   width: 100%;
+  column-gap: 20px;
   z-index: 90;
 }
 
+.dash-option {
+  margin: 15px
+}
+
 .dash-options 
+{
+  padding-left: 25px;
+margin: 10px;
+cursor: pointer;
+
+}
+
+.dash-options1 
 {
   padding-left: 25px;
 margin: 10px;
@@ -427,8 +456,8 @@ li {
 
 
 .log2 {
-  width: 60px;
-  margin-top: -15px;
+  width: 52px;
+  margin-top: 0px;
   margin-left: 3px;
 
 }
@@ -568,8 +597,8 @@ li {
 .flexNav6 {
     
     color: rgb(0, 0, 0);
-    padding: 20px;
-    padding-bottom: 10px ;
+    padding: 10px;
+    padding-bottom: 5px ;
     width: 100%;
     margin-top: -4px;
     position:fixed;
@@ -786,13 +815,45 @@ li {
 
 
 .flex-row-end {
- margin-left: 712px;
+ 
    position: absolute;
    margin-top: 430px;
    font-size: larger;
+   display: flex;
+   width: 100%;
+   max-width: 600px;
+   padding: 100px;
+   margin-left: 100px;
+ margin-right: 100px;
+   justify-content: space-between;
   
 
 }
+.not-fail {
+  color: rgb(60, 224, 98)
+}
+
+.fail {
+  color: red
+}
+
+.row-pickup {
+  display: flex;
+  column-gap: 15px;
+  margin: 15px;
+  font-weight: 700;
+}
+
+.custom-table .reset-styles {
+  /* Resetting styles to default */
+  width: auto;
+  height: auto;
+  padding: 2px;
+  /* ... */
+}
+
+
+
 
 .settings-list {
   font-size: x-large;
@@ -991,6 +1052,7 @@ width: 270px;
     
     .optionWrap {
       margin-right: 60px;
+      margin-top: 8px;
     }
     
     
@@ -1748,7 +1810,10 @@ margin-left: 20px;
       height: 16px;
       margin-right: 0.5rem;
     }
-
+.hide-option {
+  display: flex;
+  column-gap: 10px;
+}
     .div-start{
       display: flex;
       flex-direction: column;
@@ -1833,7 +1898,9 @@ margin-left: 20px;
       .burger{
         display: none;
       } 
-
+.show-option {
+  display: none;
+}
       
       .Filter_btn{
         display: none;
@@ -1848,19 +1915,47 @@ margin-left: 20px;
       .optionWrap{
         display: none;
       } 
+
+      .hide-option {
+        display:none;
+      }
+
+      .show-option {
+        width: 100%;
+       display: flex;
+       flex-direction: column;
+       row-gap: 5px;
+        margin: 18px;
+        margin-bottom: 25px;
+        padding: 10px;
+        margin-top: -20px;
+        text-align: left;
+      }
     
       .dashboard {
         position: fixed;
-        background-color: white;
+        background-color: rgb(255, 255, 255);
         border-bottom: solid black 1px;
-        padding-top: 75px;
+     margin-top: 10px;
+     column-gap: 20px;
         border-top: none;
         color: rgb(0, 0, 0);
         display: flex;
         width: 100%;
         z-index: 90;
       }
+
+      .dash-option {
+       cursor: pointer;
+       margin: 15px;
+      }
      
+      .dash-options 
+{
+ display: none
+
+}
+
       
       }  
 

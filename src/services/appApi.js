@@ -1,125 +1,183 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { setCredentials, logOut } from '../features/authSlice';
+import axiosPrivate from "../api/axios";
 
-// create the api
+const baseQueryWithReauth = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result?.error?.originalStatus === 403) {
+    console.log('sending refresh token');
+    // send refresh token to get new access token
+    const refreshResult = await baseQuery('/refresh', api, extraOptions);
+    console.log(refreshResult);
+    if (refreshResult?.data) {
+      const user = api.getState().auth.user;
+      // store the new token
+      api.dispatch(setCredentials({ ...refreshResult.data, user }));
+      // retry the original query with new access token
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      api.dispatch(logOut());
+    }
+  }
+
+  return result;
+};
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: 'http://localhost:3500',
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 export const appApi = createApi({
-    reducerPath: "appApi",
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3500" }),
-    endpoints: (builder) => ({
-        signup: builder.mutation({
-            query: (user) => ({
-                url: "/user/signup",
-                method: "POST",
-                body: user,
-            }),
-        }),
+  reducerPath: "appApi",
+  baseQuery: baseQueryWithReauth,
 
-        login: builder.mutation({
-            query: (user) => ({
-                url: "/user/login",
-                method: "POST",
-                body: user,
-            }),
-        }),
+  endpoints: (builder) => ({
+    signup: builder.mutation({
+      query: (user) => ({
+        url: "/user/signup",
+        method: "POST",
+        body: user,
+        meta: { excludeAuthorization: true }, // Exclude authorization for this endpoint
+      }),
+    }),
 
-        highlight: builder.mutation({
-            query: (body) => ({
-                url: "/orders/highlight",
-                method: "POST",
-                body
-            }),
-        }),
+    login: builder.mutation({
+      query: (user) => ({
+        url: "/user/login",
+        method: "POST",
+        body: user,
+        meta: { excludeAuthorization: true }, // Exclude authorization for this endpoint
+      }),
+    }),
 
-        setNewOrderFalse: builder.mutation({
-            query: (body) => ({
-                url: `/user/updateOrder`,
-                method: "PATCH",
-                body
-            }),
-        }),
-          
-        findNewOrder: builder.mutation({
-            query: (user) => ({
-                url: "/user/orderStatus",
-                method: "POST",
-                body: user,
-            }),
-        }),
-        getDealer: builder.mutation({
-            query: (user) => ({
-                url: "/all",
-                method: "GET",
-                body: user,
-            }),
-        }),
+    highlight: builder.mutation({
+      query: (body) => ({
+        url: "/orders/highlight",
+        method: "POST",
+        body,
+      }),
+    }),
 
-        getListings: builder.mutation({
-            query: (payload) => ({
-              url: "/cars/listings",
-              method: "GET",
-              body: payload,
-            }),
-          }),
-     
-      
-        // creating product
-        createProduct: builder.mutation({
-            query: (Car) => ({
-                url: "/cars/",
-                body: Car,
-                method: "POST",
-            }),
-        }),
+    setNewOrderFalse: builder.mutation({
+      query: (body) => ({
+        url: `/user/updateOrder`,
+        method: "PATCH",
+        body,
+      }),
+    }),
 
-        deleteProduct: builder.mutation({
-            query: ({ product_id, user_id }) => ({
-                url: `/cars/${product_id}`,
-                body: {
-                    user_id,
-                },
-                method: "DELETE",
-            }),
-        }),
+    findNewOrder: builder.mutation({
+      query: (user) => ({
+        url: "/user/orderStatus",
+        method: "POST",
+        body: user,
+      }),
+    }),
+    addPickup: builder.mutation({
+      query: (body) => ({
+        url: "/orders/store-pickups",
+        method: "POST",
+        body,
+      }),
+    }),
+    cancelPickup: builder.mutation({
+      query: (body) => ({
+        url: "/orders/cancel-pickups",
+        method: "POST",
+        body,
+      }),
+    }),
 
-        updateProduct: builder.mutation({
-            query: (product) => ({
-                url: `/cars/${product.id}`,
-                body: product,
-                method: "PATCH",
-            }),
-        }),
+    getDealer: builder.mutation({
+      query: (user) => ({
+        url: "/all",
+        method: "GET",
+        body: user,
+        meta: { excludeAuthorization: true }, // Exclude authorization for this endpoint
+      }),
+    }),
 
-        // add to cart
-        addToCart: builder.mutation({
-            query: (cartInfo) => ({
-                url: "/cars/add-to-cart",
-                body: cartInfo,
-                method: "POST",
-            }),
-        }),
-        // remove from cart
-        removeFromCart: builder.mutation({
-            query: (body) => ({
-                url: "/cars/remove-from-cart",
-                body,
-                method: "POST",
-            }),
-        }),
+    getListings: builder.mutation({
+      query: (payload) => ({
+        url: "/cars/listings",
+        method: "GET",
+        body: payload,
+        meta: { excludeAuthorization: true }, // Exclude authorization for this endpoint
+      }),
+    }),
 
-        // increase cart
-        increaseCartProduct: builder.mutation({
-            query: (body) => ({
-                url: "/cars/increase-cart",
-                body,
-                method: "POST",
-            }),
-        }),
+    // creating product
+    createProduct: builder.mutation({
+      query: (Car) => ({
+        url: "/cars/",
+        body: Car,
+        method: "POST",
+      }),
+    }),
 
-        // decrease cart
-        decreaseCartProduct: builder.mutation({
-            query: (body) => ({
-                url: "/cars/decrease-cart",
-                body,
+    deleteProduct: builder.mutation({
+      query: ({ product_id, user_id }) => ({
+        url: `/cars/${product_id}`,
+        body: {
+          user_id,
+        },
+        method: "DELETE",
+      }),
+    }),
+
+    updateProduct: builder.mutation({
+      query: (product) => ({
+        url: `/cars/${product.id}`,
+        body: product,
+        method: "PATCH",
+      }),
+    }),
+
+    // add to cart
+    addToCart: builder.mutation({
+      query: (cartInfo) => ({
+        url: "/cars/add-to-cart",
+        body: cartInfo,
+        method: "POST",
+      }),
+    }),
+
+    addFedex: builder.mutation({
+        query: (body) => ({
+          url: "/user/add-fedex",
+          body,
+          method: "POST",
+        }),
+      }),
+    // remove from cart
+    removeFromCart: builder.mutation({
+      query: (body) => ({
+        url: "/cars/remove-from-cart",
+        body,
+        method: "POST",
+      }),
+    }),
+
+    // increase cart
+    increaseCartProduct: builder.mutation({
+      query: (body) => ({
+        url: "/cars/increase-cart",
+        body,
+        method: "POST",
+      }),
+    }),
+
+    // decrease cart
+    decreaseCartProduct: builder.mutation({
+      query: (body) => ({
+        url: "/cars/decrease-cart",
+        body
+,
                 method: "POST",
             }),
         }),
@@ -135,8 +193,11 @@ export const appApi = createApi({
 });
 
 export const {
+  useAddPickupMutation,
+  useCancelPickupMutation,
     useSetNewOrderFalseMutation,
     useFindNewOrderMutation,
+    useAddFedexMutation,
     useHighlightMutation,
     useSignupMutation,
     useLoginMutation,

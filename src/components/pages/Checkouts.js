@@ -1,5 +1,6 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import axios from "../../api/axios"
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +12,7 @@ import { useContext } from "react";
 function CheckoutForm({ socket }) {
    
  
-    
+  const axiosPrivate = useAxiosPrivate();
     const stripe = useStripe();
     const elements = useElements();
     const user = useSelector((state) => state.user);
@@ -32,7 +33,8 @@ function CheckoutForm({ socket }) {
   zip : ""   })
     const [paying, setPaying] = useState(false);
     const [details, setDetails] = useState({
-            
+            contactName: "",
+            phone: "",
         street: "",
         street2: "",
         city: "",
@@ -113,8 +115,8 @@ function CheckoutForm({ socket }) {
             };
           
             try {
-              const response = await axios.post(`/verify-address`, checkAddress);
-              console.log(response.data);
+              const response = await axiosPrivate.post(`/verify-address`, checkAddress);
+              //console.log(response.data);
           
               if (response.data.customerMessages && response.data.customerMessages.length > 0) {
                 setErrState(true);
@@ -133,7 +135,7 @@ function CheckoutForm({ socket }) {
               
       
                         
-      console.log(validAddress.streetLine1)
+      //console.log(validAddress.streetLine1)
                 if (validAddress.streetLine1 == "") {
               setAddressError(true)
             } 
@@ -141,7 +143,7 @@ function CheckoutForm({ socket }) {
               }
             } catch (error) {
               setAddressError(true);
-              console.log(error);
+              //console.log(error);
             }
           };
         const { clearNotification, setSeller } = useContext(NotificationContext);
@@ -158,40 +160,24 @@ function CheckoutForm({ socket }) {
             })
         }
 
-console.log( "hh", user.address.length)
+//console.log( "hh", user.address.length)
 
 
 
     const saveAddress = async (e) => {
       validateAddress();
         e.preventDefault();
-       const post = axios.post(`/user/address/${user._id}`, details)
-       console.log(post)
+       const post = axiosPrivate.post(`/user/address/${user._id}`, details)
+       //console.log(post)
        setNextPage(true)
       
     }
 
 
+    
 
 
-    const getToken = (e) => {
-        e.preventDefault()
-        const response = axios.post(`/orders/fedex`, {
-
-        grant_type: 'client_credentials',
-        client_id: "l788aa739b8bf64ff09ef3ab09514ec0fa",
-        client_secret: "83507d5ba01f481fa9220a2b502f566b"
-      
-      
-      
-        }, {
-            headers: {
-              'Access-Control-Allow-Origin': '*'
-            }})
-
-        console.log(response.data.access_token)
-    }
-
+  
     
     const handlePay = async (e) => {
       e.preventDefault();
@@ -207,12 +193,28 @@ console.log( "hh", user.address.length)
         address: user.address,
       };
       const cartItems = Object.values(user.cart);
-      const cart = cartItems.slice(3).map((item) => ({
-        amount: item.beforeShipping,
-        sellerId: item.sellerId,
-        listId: item.stripeId,
-        // Add any other necessary fields for each item
-      }));
+      const cart = cartItems.map((item) => {
+        if (
+          item.beforeShipping === undefined ||
+          item.sellerId === undefined ||
+          item.stripeId === undefined ||
+          item.total === undefined
+        ) {
+          return null; // Skip this item
+        }
+      
+        return {
+          amount: item.beforeShipping,
+          sellerId: item.sellerId,
+          listId: item.stripeId,
+          total: item.total
+        };
+      }).filter((item) => item !== null); // Remove skipped items
+      
+      //console.log(cart);
+      
+
+      //console.log("Cart", cart)
     
       const orderInfo = {
         cart: cart,
@@ -221,12 +223,12 @@ console.log( "hh", user.address.length)
       };
     
       try {
-        const res = await axios.post("/process-orders", orderInfo);
+        const res = await axiosPrivate.post("/process-orders", orderInfo);
         const clientSecrets = res.data.paymentIntents;
-        console.log("Received client secrets:", clientSecrets); // Verify the client secrets array in the console
+        //console.log("Received client secrets:", clientSecrets); // Verify the client secrets array in the console
     
         for (const clientSecret of clientSecrets) {
-          console.log("Confirming payment intent with client secret:", clientSecret);
+          //console.log("Confirming payment intent with client secret:", clientSecret);
           const result = await stripe.confirmCardPayment(clientSecret, {
             payment_method: {
               card: elements.getElement(CardElement),
@@ -252,52 +254,25 @@ console.log( "hh", user.address.length)
         }
     
         // All payments were successful
-        const orderResponse = await axios.post(`/orders/sellerId`, orderData);
-        const confirmationResponse = await axios.post(`/confirm-order`, { email: user.email });
-        console.log("Order response:", orderResponse.data);
-        console.log("Confirmation response:", confirmationResponse.data);
+        const orderResponse = await axiosPrivate.post(`/orders/sellerId`, orderData);
+        createOrder(orderData)
+        const confirmationResponse = await axiosPrivate.post(`/confirm-order`, { email: user.email });
+        //console.log("Order response:", orderResponse.data);
+        //console.log("Confirmation response:", confirmationResponse.data);
         navigate("/success");
+        await removeFromCart({ userId: user._id });
         setSeller(orderResponse.data);
       } catch (error) {
-        console.log(error.message);
+        //console.log(error.message);
       }
     };
     
   
 
 {/*
-    async function handlePay(e) {
-        e.preventDefault();
-        if (!stripe || !elements || user.cart.count <= 0) return;
-        setPaying(true);
-        const { client_secret } = await fetch("/create-payment", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer ",
-            },
-            body: JSON.stringify({ amount: user.cart.total }),
-        }).then((res) => res.json());
-        const { paymentIntent } = await stripe.confirmCardPayment(client_secret, {
-            payment_method: {
-                card: elements.getElement(CardElement),
-            },
-        });
-        setPaying(false);
+  
 
-        if (paymentIntent) {
-            createOrder({ userId: user._id, cart: user.cart, address, country }).then((res) => {
-                if (!isLoading && !isError) {
-                    setAlertMessage(`Payment ${paymentIntent.status}`);
-                    setTimeout(() => {
-                        // navigate("/orders");
-                    }, 3000);
-                }
-            });
-        }
-    }
-
-    console.log("addy", user)
+    //console.log("addy", user)
 */ }
     return (
         <div >
@@ -314,11 +289,15 @@ console.log( "hh", user.address.length)
                     <div md={6}>
                         <div className="mb-3">
                             <label>Full Name</label>
-                            <input className="inputOnboard"type="text" placeholder="First Name" value={user.name}  />
+                            <input name="contactName" className="inputOnboard" type="text" placeholder="Full Name" onChange={handleChange} value={user.contactName}  />
                         </div>
                     </div>
                   
-                  
+                    <div md={6}>
+                        <div className="mb-3">
+                            <label>Phone</label>
+                            <input name="phone" className="inputOnboard" type="text" placeholder="Phone" onChange={handleChange} value={user.phone}  />
+                            </div>            </div>
                 </div>
                 <div>
                     <div md={7}>

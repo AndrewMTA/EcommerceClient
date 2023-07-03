@@ -8,38 +8,29 @@ import Navbar from "../Navbar";
 import Soon from "../../assets/Soon.png";
 import ana from "./ana.png";
 import CarsCard2 from "../CarsCard2";
-import { axiosPrivate } from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useAddToCartMutation } from "../../services/appApi";
 import Footer from "../Footer";
 import SubNav from "./subNav";
 import Profile from "./zza.jpg"
 const MyListings = () => {
   const user = useSelector((state) => state.user);
-  
+  const axiosPrivate = useAxiosPrivate();
   useEffect(() => {
     axios
       .get("/cars")
       .then(({ data }) => dispatch(updateProducts(data)));
   }, []);
 
-  const handleSetPrivate = async (event) => {
-    event.preventDefault();
-    const updates = {};
-
-    const res = await axiosPrivate.put(
-      `/cars/update/${carID}`,
-      {}
-    );
-  };
 
   const [showing, setShowing] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const cars = useSelector((state) => state.products);
-console.log("user", user)
-  const { carID } = useParams();
-  const car = cars.find((car) => car.listUser === carID );
+//console.log("user", user)
+ 
+  const car = cars.find((car) => car.listUser === user._id );
 
   const setMenu = () => {
     setShow(true);
@@ -102,7 +93,7 @@ if (car) {
 
           {cars
             .filter((carz) => {
-              return carID === "" ? carz : carz.listUser.includes(carID);
+              return user._id === "" ? carz : carz.listUser.includes(user._id);
             })
             .map((carz) => (
               <>
@@ -118,7 +109,6 @@ if (car) {
 
                    
                  
-                      {" "}
                       <h3 className="h3">
                         ${carz.total || "Nothing yet"}{" "}
                       </h3>{" "}
@@ -129,7 +119,7 @@ if (car) {
                     <div className="displayEdit">
                       
                       <a href={`/edit/${carz._id}`}>
-                        {" "}
+               
                         <div className="manage">Edit</div>{" "}
                       </a>{" "}
                       {/**  <div className='manage'>Promote</div> */}{" "}
@@ -163,8 +153,18 @@ if (car) {
               </>
             ))}
 
-            {cars.length < 3 && <div className="insert">  gygygyg</div>}
-            {cars.length < 2 && <div className="insert">  gygygyg</div>}
+            {cars
+            .filter((carz) => {
+              return user._id === "" ? carz : carz.listUser.includes(user._id);
+            }).length < 3 && <div className="insert">  gygygyg</div>}
+            {cars
+            .filter((carz) => {
+              return user._id === "" ? carz : carz.listUser.includes(user._id);
+            }).length < 2 && <div className="insert">  gygygyg</div>}
+            {cars
+            .filter((carz) => {
+              return user._id === "" ? carz : carz.listUser.includes(user._id);
+            }).length < 1 && <div className="insert">  gygygyg</div>}
         </div>
 
       

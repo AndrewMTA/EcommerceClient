@@ -23,24 +23,26 @@ ReactDOM.render(
   <React.StrictMode>
      <NotificationProvider >
    <BrowserRouter>
+   <AuthProvider>
     <Provider store={store}>
      
   <PersistGate loading={<div>Loading...</div>} persistor={persistedStore}>
 
     <AppProvider>
     <FilterContextProvider>
-      <AuthProvider>
+      
   
         <Routes>
           <Route path="/*" element={<App />} />
         </Routes>
         
-      </AuthProvider>
+
       </FilterContextProvider>
       </AppProvider>
 
       </PersistGate>
           </Provider>
+          </AuthProvider>
           </BrowserRouter>
           </NotificationProvider>
   </React.StrictMode>,

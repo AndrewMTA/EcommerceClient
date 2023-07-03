@@ -1,10 +1,11 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import React, { useState } from "react";
-
+import axios from "../../api/axios"
 import { useSelector } from "react-redux";
 import CheckoutForm from "./Checkouts";
 import {
+  useAddToCartMutation,
   useIncreaseCartProductMutation,
   useDecreaseCartProductMutation,
   useRemoveFromCartMutation,
@@ -20,10 +21,9 @@ function CartPage() {
 
   const user = useSelector((state) => state.user);
   const products = useSelector((state) => state.products);
-  const userCartObj = user?.cart;
+  const userCartObj = user?.cart; 
 
   let cart = userCartObj ? products.filter((product) => userCartObj[product._id] != null) : [];
-
 
   const [increaseCart] = useIncreaseCartProductMutation();
   const [decreaseCart] = useDecreaseCartProductMutation();
@@ -39,7 +39,7 @@ function CartPage() {
     if (quantity <= 0) return alert("Can't proceed");
     decreaseCart(product);
   }
-
+//console.log(user.cart)
   return (
     <>
       <Navbar />
@@ -58,7 +58,9 @@ function CartPage() {
                 <div responsive="sm" className="cart-div">
                   <thead></thead>
                   <tbody>
-                    {cart?.map((item) => (
+                    {cart?.map((item) => {
+                      //console.log(item)
+                     return (
                       <tr key={item._id}>
                         <div className="sha_boing">
                           <div className="imgWrap">
@@ -71,6 +73,7 @@ function CartPage() {
                                     productId: item._id,
                                     price: item.total,
                                     userId: user?._id,
+                                    beforeShipping: item.price
                                   })
                                 }
                               ></i>
@@ -93,6 +96,7 @@ function CartPage() {
                               className="circle-m"
                               onClick={() =>
                                 handleDecrease({
+                                  beforeShipping: item.price,
                                   productId: item._id,
                                   price: item.total,
                                   userId: user._id,
@@ -109,6 +113,9 @@ function CartPage() {
                                   productId: item._id,
                                   price: item.total,
                                   userId: user._id,
+                                  beforeShipping: item.price
+
+
                                 })
                               }
                             >
@@ -119,7 +126,8 @@ function CartPage() {
 
                         <div className="fixer"></div>
                       </tr>
-                    ))}
+                    )}
+                    )}
                   </tbody>
                 </div>
                 <div>

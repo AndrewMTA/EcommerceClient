@@ -84,6 +84,10 @@ function HomePage() {
     const res = await axiosPrivate.put(
       `/cars/update/${carID}`,
       {
+
+       email: user.email,
+       userId: user._id,
+        refreshToken: user.refreshToken,
         images: images || car.pic,
         price: prices || price,
         category: categorys || category,
@@ -97,7 +101,7 @@ function HomePage() {
 
     if (res.error) {
       // Show error to your customer (e.g., insufficient funds)
-      console.log(res.error.message);
+      //console.log(res.error.message);
     } else {
       // The payment has been processed!
       if (res.status === 200) {

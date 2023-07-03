@@ -115,7 +115,7 @@ const Home = () => {
 
   const { updateFilterValue, all_products, clearFilters, sorting, updatePage } =
     useFilterContext();
-    console.log("h",updateFilterValue)
+    //console.log("h",updateFilterValue)
   const getUniqueMakes = (data) => {
     let newVal = data.map((curElem) => {
       return curElem;
@@ -164,7 +164,7 @@ const Home = () => {
     let handler = (e) => {
       if (!menuRef.current.contains(e.target)) {
         setShow(true);
-        console.log(menuRef.current);
+        //console.log(menuRef.current);
       }
     };
     document.addEventListener("mousedown", handler);
@@ -193,7 +193,7 @@ const Home = () => {
       .get("/cars")
       .then(({ data }) => dispatch(updateProducts(data)));
   }, []);
-
+console.log(user)
   const Pagination = () => {
     return (
       <ul className="pagination">

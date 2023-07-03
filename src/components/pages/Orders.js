@@ -3,15 +3,45 @@ import { DateTime } from 'luxon';
 import Fed from "./Fed.png"
 import { useSelector } from "react-redux";
 import { useHighlightMutation } from "../../services/appApi";
-import axios from "../../api/axios";
+import { useAddPickupMutation } from "../../services/appApi";
+import { useCancelPickupMutation } from "../../services/appApi";
+
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useDispatch } from "react-redux";
+import { deletePickup } from "../../features/userSlice";
 import SubNav from "./subNav"
 import Navbar from "../Navbar";
 import GoogleMapReact from 'google-map-react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useAddFedexMutation } from "../../services/appApi";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api"
 function OrdersPage() {
+  const [addFedex, { isSuccess }] =  useAddFedexMutation()
+  const pickupType = {
+   dropoff: "DROPOFF_AT_FEDEX_LOCATION",
+    pickup: "USE_SCHEDULED_PICKUP"
+  }
+
+  const axiosPrivate = useAxiosPrivate();
+  const fed_packages = {
+
+	packageType: "FEDEX_SMALL_BOX"	,      
+	packageType: "FEDEX_MEDIUM_BOX",	    
+	packageType: "FEDEX_LARGE_BOX"	 ,     
+  packageType: "FEDEX_EXTRA_LARGE_BOX",
+  packageType: "FEDEX_10KG_BOX"	      
+  }
+  
+  const [errorMsg, setErrorMsg] = useState();
+  const [labelInfo, setLabelInfo] = useState()
+  const [labelSelect, setLabelSelect] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [another, setAnother] = useState(false);
+  const [labelIndex, setLabelIndex] = useState("");
+  const [getAccount, setGetAccount] = useState(false)
   const user = useSelector((state) => state.user);
   const [orders, setOrders] = useState([]);
+  const [cardOnFile, setCardOnFile] = useState(false);
   const [url, setUrl] = useState();
   const [hide, setHide] = useState(false);
   const [orderId, setOrderID] = useState();
@@ -28,21 +58,87 @@ function OrdersPage() {
   const [ownerId, setOwnerId] = useState("")
   const [pickupCode, setpickupCode] = useState()
   const [pickupDay, setPickupDay] = useState("")
+  const [fedex, setFedEx] = useState("")
   const [highlighted, setHighlighted] = useState(false)
   const [match, setMatch] = useState(null)
   const handleClose = () => setShow(false);
   const [time, setTime] = useState('')
+  const [cancel, setCancel] = useState(false)
+  const [cancelPorps, setCancelProps] = useState('')
   const [times, setTimes] = useState("")
+  const [cancelState, setCancelState] = useState(null);
   const carsPerPage = 8;
   const lastIndex = page * carsPerPage;
   const firstIndex = lastIndex - carsPerPage;
   const pageCount = Math.ceil(orders.length / carsPerPage);
-  const [optionsPick, setOptionsPick] = useState()
+  const [optionsPick, setOptionsPicck] = useState()
   const numbers = [...Array(pageCount + 1).keys()].slice(1);
   const productState = useSelector((state) => state.products);
+  const [getAnother, setGetAnother] = useState(false)
   const [highlight, { isHighlighted }] = useHighlightMutation();
+  const [addPickup, { isaddPickuped }] = useAddPickupMutation();
+  const [successMessage, setSuccessMessage] = useState(false);
+  const [failMessage, setFailMessage] = useState(false);
+  const [formState, setFormState] = useState({
+    setter: '',
+    date: '',
+    originalTime: ''
+  });
+  const [selectedPackage, setSelectedPackage] = useState('');
   
+  // ...
 
+  const [cancelPickups, { isCancled}] = useCancelPickupMutation();
+const dispatch = useDispatch();
+const handleChange = (event) => {
+  setSelectedPickupType(event.target.value);
+};
+const confirmCancel = async () => {
+  const checkData = {
+    "associatedAccountNumber": {
+      "value": "740561073"
+    },
+    "pickupConfirmationCode": cancelState.props?.code || cancelState.props.pickups[cancelState.index]?.code,
+    "carrierCode": "FDXE",
+    "scheduledDate": cancelState.props?.time || cancelState.props.pickups[cancelState.index]?.time,
+    "location": cancelState.props?.location || cancelState.props.pickups[cancelState.index]?.location,
+  };
+  
+  try {
+    const response = await cancelPickups({ id: user._id, checkData, pickupId: cancelState.props?._id || cancelState.props.pickups[cancelState.index]?._id });
+    
+   
+      if (response.data) {
+       setCancelState(false)
+       setSuccessMessage(true);
+
+       setTimeout(() => {
+         setSuccessMessage(false);
+       }, 3000);
+      } else {
+        setTimeout(() => {
+          setFailMessage(false);
+        }, 3000);
+        alert("big issue");
+      }
+ 
+  } catch (error) {
+    console.error("Cancel DELETED pickup failed:", error);
+  }
+};
+
+
+console.log(cancelState)
+
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  
+  const handleMouseEnter = () => {
+    setShowComingSoon(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowComingSoon(false);
+  };
 
 
 
@@ -58,41 +154,48 @@ function OrdersPage() {
       setPage(page - 1);
     }
   };
+  const [selectedPickupType, setSelectedPickupType] = useState('');
 
   const handlePickupDate = (date, index) => {
     setPickupDay(date)
     setMatch(index)
   }
 
-  console.log("checked", isChecked)
+  //console.log("checked", isChecked)
   const handleFulfill = () => {
-    axios.put(`/orders/set-fulfill/`, { orderId })
+    axiosPrivate.put(`/orders/set-fulfill/`, { orderId, userId:user._id })
       .then(response => {
-        console.log(response.data);
+        //console.log(response.data);
         window.location.reload(); // Refresh the page
       })
       .catch(error => {
         console.error(error);
       });
-    console.log(orderId);
+    //console.log(orderId);
   };
+
+
+  const handleCancel = (index, props) => {
+    setCancelState({ index, props,  });
+  };
+
   
-
-
+//console.log("Cancel", cancelState)
+//console.log("ii", user)
   const handleFulfillMany = () => {
     const highlightedOrders = orders.filter((order) => order.highlighted);
-  
+
     if (highlightedOrders.length === 0) {
-      console.log("No highlighted orders to fulfill.");
+      //console.log("No highlighted orders to fulfill.");
       return;
     }
-  
+
     const orderIds = highlightedOrders.map((order) => order._id);
-    console.log(orderIds)
-    axios
-      .put(`/orders/set-fulfill-many`, { orderIds })
+    //console.log(orderIds)
+    axiosPrivate
+      .put(`/orders/set-fulfill-many`, { orderIds,  userId:user._id })
       .then(response => {
-        console.log(response.data);
+        //console.log(response.data);
         // Perform any necessary actions after fulfillment
         window.location.reload(); // Refresh the page
       })
@@ -100,103 +203,146 @@ function OrdersPage() {
         console.error(error);
       });
   };
+  const filteredOrders = orders.filter((order) => {
+    const productKeys = Object.keys(order.products);
+
+    for (let j = 0; j < productKeys.length; j++) {
+      const productKey = productKeys[j];
+      const product = order.products[productKey];
+
+      if (product.sellerId && product.sellerId === user?._id) {
+        return true;
+      }
+    }
+
+    return false;
+  })
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+const handleAddFedex = (e) => {
+
+  e.preventDefault()
+  //console.log(fedex, user?._id)
   
+addFedex({id: user?._id, fedex})
 
+}
 
-  const handleLabel = (addressObj, index) => {
-    setOrderAddress(addressObj)
+//console.log("FED", user?.fedexAccount)
 
-    
+  const handleLabel = () => {
+    setOrderAddress(labelInfo)
+console.log("LOGG")
+    if (!user.fedexAccount) {
+      
+      setGetAccount(true)
+      
+    setOpen(true);
+    } else {
+    const order = orders[labelIndex];
+    //console.log("oe", order)
     setLabelLoading(true)
-    if (orderAddress.length > 0) {
+    if (
+      labelInfo
+    ) {
 
 
       const shipmentData = {
+
         
-          labelResponseOptions: "URL_ONLY",
-          requestedShipment: {
-            shipper: {
-              contact: {
-                personName: "Rob",
-                phoneNumber: 1234567890,
-                companyName: "COMPANY"
+          "labelResponseOptions": "URL_ONLY",
+          "requestedShipment": {
+            "shipper": {
+              "contact": {
+                "personName": "SHIPPER NAME",
+                "phoneNumber": 1234567890,
+                "companyName":  user.sellerName,
               },
-              address: {
-                streetLines: [
-                "7441 blackburn Ave"
+              "address": {
+                "streetLines": [
+                 user.address[0].street,
+                  "RECIPIENT STREET LINE 2"
                 ],
-                city: "Downers Grove",
-                stateOrProvinceCode: "IL",
-                postalCode: 60516,
-                countryCode: "US"
+                "city":  user.address[0].city,
+                "stateOrProvinceCode":  user.address[0].state,
+                "postalCode":  user.address[0].zip,
+                "countryCode": "US"
               }
             },
-            recipients: [
+            "recipients": [
               {
-                contact: {
-                  personName: "RECIPIENT NAME",
-                  phoneNumber: 1234567890,
-                  companyName: "Recipient Company Name"
+                "contact": {
+                  "personName": order.email,
+                  "phoneNumber": 1234567890,
+                  "companyName": "Recipient Company Name"
                 },
-                address: {
-                  streetLines: [
-                    "111 didnt ave"
+                "address": {
+                  "streetLines": [
+                   order.address[0].street,
+                    "RECIPIENT STREET LINE 2"
                   ],
-                city: "Collierville",
-                  stateOrProvinceCode: "TN",
-                  postalCode: 38017,
-                  countryCode: "US"
+                  "city":  order.address[0].city,
+                  "stateOrProvinceCode":  order.address[0].state,
+                  "postalCode":  order.address[0].zip,
+                  "countryCode": "US"
                 }
               }
             ],
-            shipDatestamp: "2023-06-16",
-            serviceType: "FEDEX_GROUND",
-            packagingType: "YOUR_PACKAGING",
-            pickupType: "USE_SCHEDULED_PICKUP",
-            blockInsightVisibility: false,
-            shippingChargesPayment: {
-              paymentType: "SENDER"
+            "shipDatestamp": "2020-07-03",
+            "serviceType": "STANDARD_OVERNIGHT",
+            "packagingType": selectedPackage,
+            "pickupType": selectedPickupType,
+            "blockInsightVisibility": false,
+            "shippingChargesPayment": {
+              "paymentType": "SENDER"
             },
-            labelSpecification: {
-              imageType: "PDF",
-              labelStockType: "PAPER_85X11_TOP_HALF_LABEL"
+            "labelSpecification": {
+              "imageType": "PDF",
+              "labelStockType": "PAPER_85X11_TOP_HALF_LABEL"
             },
-            requestedPackageLineItems: [
+            "requestedPackageLineItems": [
               {
-                weight: {
-                  value: 10,
-                  units: "LB"
+                "weight": {
+                  "value": 10,
+                  "units": "LB"
                 }
               }
             ]
           },
-          accountNumber: {
-            value: "201698364"
+          "accountNumber": {
+            "value": "740561073"
           }
         }
 
+        
+      
+       
+//console.log("Uhuhducd",user)
 
-      console.log(shipmentData)
-      axios
-        .post("/orders/print-label", shipmentData)
+      //console.log(shipmentData)
+      axiosPrivate
+        .post("/orders/print-label", shipmentData, { userId:user._id})
         .then((response) => {
           const url =
-            response.data.output.transactionShipments[0].pieceResponses[0]
+            response.data.output?.transactionShipments[0].pieceResponses[0]
               .packageDocuments[0].url;
           setOrders((prevOrders) => {
             const updatedOrders = [...prevOrders];
-            updatedOrders[index].hide = true;
-            updatedOrders[index].labelLoading = false;
+            updatedOrders[labelIndex].hide = true;
+            updatedOrders[labelIndex].labelLoading = false;
             return updatedOrders;
           });
           setLabelLoading(false)
-          setUrl(() => url);
-          console.log(url);
+          if (url) {
+            window.open(url, "_blank");
+            setLabelSelect(false)
+          }
+          //console.log(url);
         })
         .catch((error) => {
           console.error(error);
         });
-    }
+    }}
   };
 
 
@@ -214,15 +360,15 @@ function OrdersPage() {
 
   const productMatch = idMatch.filter((match) => {
     const matchId = match.listUser.toString();
-    const userId = user?._id.toString();
+    const userId = user?._id?.toString();
     return matchId === userId;
   });
 
-  console.log("ii", productMatch)
+  //console.log("ii", productMatch)
 
-  console.log("match", idMatch);
+  //console.log("match", idMatch);
 
-  console.log("hh", orderProductIds)
+  //console.log("hh", orderProductIds)
 
   function showOrder(productsObj, orderId, owner) {
     let productsToShow = products.filter((product) => {
@@ -237,22 +383,35 @@ function OrdersPage() {
       delete productCopy.description;
       return productCopy;
     });
-    console.log("Own", owner);
-    console.log("go", productsToShow);
+    //console.log("Own", owner);
+    //console.log("go", productsToShow);
     setOwnerId(owner)
     setOrderID(orderId);
     setShow(true);
     setOrderToShow(productsToShow);
   }
 
-console.log("street", user?.address[0]?.street)
+  console.log("ssss", selectedPackage,selectedPickupType, user )
 
   const changeCPage = (id) => {
     setPage(id);
   };
+
   useEffect(() => {
     setLoading(true);
-    axios
+    axiosPrivate.get(`/orders`)
+      .then(({ data }) => {
+        setLoading(false);
+        setOrders(data);
+      })
+      .catch((e) => {
+        setLoading(false);
+        //console.log(e);
+      });
+  }, []);
+  useEffect(() => {
+    setLoading(true);
+    axiosPrivate
       .get(`/orders`)
       .then(({ data }) => {
         setLoading(false);
@@ -260,27 +419,20 @@ console.log("street", user?.address[0]?.street)
       })
       .catch((e) => {
         setLoading(false);
-        console.log(e);
+        //console.log(e);
       });
   }, []);
 
 
-
-  const getTime = (one, two) => {
-    console.log(one)
-    console.log(two)
-
-
-
-
-  }
-  const handleCheckboxChange = (index) => {
-    setOrders((prevOrders) => {
-      const updatedOrders = [...prevOrders];
-      updatedOrders[index].isChecked = !updatedOrders[index].isChecked;
-      return updatedOrders;
-    });
+  const handleChanges = (event) => {
+    setSelectedPackage(event.target.value);
   };
+ const handleStartLabel = (orderaddresses, index) => {
+setLabelSelect(true)
+setLabelInfo(orderaddresses)
+setLabelIndex(index)
+ }
+ console.log("LINDXXX", selectedPackage,selectedPickupType)
 
   const handleSetSubmit = (setter, date) => {
     setTime(setter);
@@ -289,73 +441,104 @@ console.log("street", user?.address[0]?.street)
     const originalTime = timeObject.toFormat('HH:mm:ss');
     setDateSubmit(date);
     setTimeSubmit(originalTime);
-    console.log("i", setter, date, originalTime);
+    
+    setFormState({
+      setter: setter,
+      date: date,
+      originalTime: originalTime
+    });
+ 
   };
+  useEffect(() => {
+    if (errorMsg) {
+      const timer = setTimeout(() => {
+        setErrorMsg(null);
+      }, 5000);
 
-  console.log("uuu", time, dateSubmit, timeSubmit)
+      return () => clearTimeout(timer);
+    }
+  }, [errorMsg]);
   const handleSubmitPickup = () => {
-    const submitData = {
 
-      associatedAccountNumber: {
-        value: "740561073"
+    
+    const submitData = {
+      "associatedAccountNumber": {
+        "value": "740561073"
       },
-      originDetail: {
-        pickupLocation: {
-          contact: {
-            personName: "Contact Name for Pickup",
-            phoneNumber: "1234567890"
+      "originDetail": {
+        "pickupLocation": {
+          "contact": {
+            "personName": user.sellerName,
+            "phoneNumber":"6303174481"
           },
-          address: {
-            streetLines: [
-              "7441 blackburn ave"
+          "address": {
+            "streetLines": [
+              user.address[0].street
             ],
-            city: "Downers Grove",
-            stateOrProvinceCode: "IL",
-            postalCode: "60516",
-            countryCode: "US"
+            "city": user.address[0].city,
+            "stateOrProvinceCode": user.address[0].state,
+            "postalCode": user.address[0].zip,
+            "countryCode": "US"
           }
         },
-        readyDateTimestamp: `2023-05-22T11:06:00Z`,
-        customerCloseTime: "17:00:00"
+        "readyDateTimestamp": `${formState.date}T${formState.originalTime}Z`,
+        "customerCloseTime": "19:00:00"
       },
-      carrierCode: "FDXE"
-
+      "carrierCode": "FDXE"
     }
-    axios
-      .post("/orders/schedule-pickup", submitData)
+
+    try{
+    axiosPrivate
+      .post("/orders/schedule-pickup", {submitData, userId:user._id})
       .then((response) => {
 
-        setpickupCode(response.data.output.pickupConfirmationCode)
- 
+        setpickupCode(response.data.output?.pickupConfirmationCode)
 
-      })
+        const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+        const [hours, minutes, seconds] = formState.originalTime.split(':');
+        const date = new Date();
+        date.setHours(parseInt(hours, 10));
+        date.setMinutes(parseInt(minutes, 10));
+        date.setSeconds(parseInt(seconds, 10));
+        
+        const formattedTime = date.toLocaleTimeString([], timeOptions);
+        
+        const pickupInfo = {
+          id: user._id,
+          code: response.data.output?.pickupConfirmationCode,
+          time: formState.date,
+          time2: formattedTime,
+          location: response.data.output?.location
+        };
 
-    setOpen(false);
+        //console.log("33", formattedTime)
+        
 
+addPickup({pickupInfo})
+
+  setOpen(false);
+  setPickupDay("");
+  setAnother(false)
+
+      })}catch(error)  {
+        setErrorMsg("There was an issue scheduling your pickup. Try another time.")
+        console.error("Error  scheduling pickup:", error);
+        // Handle the error as per your application's requirements
+      }
+      
   }
 
 
-  const filteredOrders = orders.filter((order) => {
-    const productKeys = Object.keys(order.products);
-  
-    for (let j = 0; j < productKeys.length; j++) {
-      const productKey = productKeys[j];
-      const product = order.products[productKey];
-  
-      if (product.sellerId && product.sellerId === user?._id) {
-        return true;
-      }
-    }
-  
-    return false;
-  })
-  .sort((a, b) => new Date(b.date) - new Date(a.date));
-  
 
+//console.log(pickupCode)
 
+const handleAnother = () => {
+  setAnother(true)
+}
   const totalOrderAmount = filteredOrders.reduce((total, order) => total + order.total, 0);
 
   const handlePickup = () => {
+
     const checkData = {
       pickupAddress: {
         postalCode: "60516",
@@ -370,25 +553,40 @@ console.log("street", user?.address[0]?.street)
       countryRelationship: "DOMESTIC"
 
     }
-    axios
+    axiosPrivate
       .post("/orders/check-times", checkData)
       .then((response) => {
 
-        setTimes(response.data.output.options)
-  
+        setTimes(response.data.output?.options)
+
 
       })
       .catch((error) => {
-  
+
       });
     setOpen(true);
 
-  };
-  useLoadScript({ googleMapsApiKey: 'AIzaSyDafqAOtxds8RDU33u_luv9E8KjuQSZ35M' })
+  }
+
   useEffect(() => {
 
 
   }, [times]);
+ 
+ 
+  //console.log(times)
+
+  const cancelPickup = () => {
+    const checkData =  {
+      "associatedAccountNumber": {
+        "value": user.fedexAccount
+      },
+      "pickupConfirmationCode": "1",
+      "carrierCode": "FDXE",
+      "scheduledDate": "2020-07-03",
+      "location": "NQAA"
+    }
+  }
 
   const handleHighlight = (orderId) => {
     setOrders((prevOrders) => {
@@ -398,14 +596,56 @@ console.log("street", user?.address[0]?.street)
         }
         return order;
       });
-  
+
       // Calculate the highlighted state based on the updated orders
       const newHighlighted = updatedOrders.some((order) => order.highlighted);
       setHighlighted(newHighlighted);
-  
+
       return updatedOrders;
     });
   };
+
+  const stripe = useStripe();
+  const elements = useElements();
+  const handleSubmitCard = async (event) => {
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js has not loaded yet.
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+
+    const { error, token } = await stripe.createToken(cardElement);
+
+    if (error) {
+      //console.log('Error:', error);
+    } else {
+      // Send the token to your backend server for further processing
+      saveCard(token.id);
+    }
+  };
+
+const saveCard = async (tokenId) => {
+  // Make a POST request to your backend API endpoint with the token ID
+  const response = await fetch('/api/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ tokenId }),
+  });
+
+  // Handle the response from the backend
+  const data = await response.json();
+  if (data.success) {
+    //console.log('Card saved successfully!');
+  } else {
+    //console.log('Error saving card:', data.error);
+  }
+};
+
 
   const HandleDisplay = () => {
 
@@ -435,54 +675,54 @@ console.log("street", user?.address[0]?.street)
 
 
 
-{filteredOrders.slice(firstIndex, lastIndex).map((order, index) => {
-  // Assuming 'orders' is an array of objects
+          {filteredOrders.slice(firstIndex, lastIndex).map((order, index) => {
+            // Assuming 'orders' is an array of objects
 
-  console.log("highlighted", order.highlighted)
-  if (order.highlighted) {
-    setHighlighted(true);
-  } else if (!highlighted) {
-    setHighlighted(false);
-  }
+            //console.log("highlighted", order.highlighted)
+            if (order.highlighted) {
+              setHighlighted(true);
+            } else if (!highlighted) {
+              setHighlighted(false);
+            }
 
-  return (
-    <tr className={order.isChecked ? "highlighted" : ""}>
-      <td className={!order.highlighted ? "" : "highlighted"}>
-        <div className="row">{order._id}</div>
-      </td>
-      <td className={!order.highlighted ? "" : "highlighted"}>
-        <a onClick={() => showOrder(order.products, order._id, order.owner)}>
-          <div className={`${order.status === "fulfilled" ? "warning" : "success"}`} text="white">
-            {order.status}
-          </div>
-        </a>
-      </td>
-      <td className={!order.highlighted ? "" : "highlighted"}>{order.date}</td>
-      <td className={!order.highlighted ? "" : "highlighted"}>${order.total}</td>
-      <td className={!order.highlighted ? "" : "highlighted"}>
-        {!order.hide && (
-          <div onClick={() => handleLabel(order.address, index)} className="print">
-            {labelloading === true ? <>Loading... </> : <>Print Label </>}
-          </div>
-        )}
-        {order.hide && (
-          <a href={`${url}`}>
-            <div onClick={() => handleLabel(order.address, index)} className="print-g">
-              View Label
-            </div>
-          </a>
-        )}
-      </td>
-      <td onClick={handlePickup} className={!order.highlighted ? "pickup" : "highlighted"}>Schedule Pickup</td>
-      <td onClick={() => handleHighlight(order._id)} className={!order.highlighted ? "" : "highlighted"}>
-        <input type="checkbox" checked={order.highlighted} />
-      </td>
- {/* Display customer's name */}
-      
-    </tr>
-  )
-})}
-{" "}
+            return (
+              <tr className={order.isChecked ? "highlighted" : ""}>
+                <td className={!order.highlighted ? "" : "highlighted"}>
+                  <div className="row">{order._id}</div>
+                </td>
+                <td className={!order.highlighted ? "" : "highlighted"}>
+                  <a onClick={() => showOrder(order.products, order._id, order.owner)}>
+                    <div className={`${order.status === "fulfilled" ? "warning" : "success"}`} text="white">
+                      {order.status}
+                    </div>
+                  </a>
+                </td>
+                <td className={!order.highlighted ? "" : "highlighted"}>{order.date}</td>
+                <td className={!order.highlighted ? "" : "highlighted"}>${order.total}</td>
+                <td className={!order.highlighted ? "" : "highlighted"}>
+                  {!order.hide && (
+                    <div onClick={() => handleStartLabel(order.address, index)} className="print">
+                      {labelloading === true ? <>Loading... </> : <>Print Label </>}
+                    </div>
+                  )}
+                  {order.hide && (
+                    <a href={`${url}`}>
+                      <div onClick={() => handleLabel(order.address, index)} className="print-g">
+                        View Label
+                      </div>
+                    </a>
+                  )}
+                </td>
+                
+                <td onClick={() => handleHighlight(order._id)} className={!order.highlighted ? "" : "highlighted"}>
+                  <input type="checkbox" checked={order.highlighted} />
+                </td>
+                {/* Display customer's name */}
+
+              </tr>
+            )
+          })}
+          {" "}
           {filteredOrders.length - firstIndex === 2 ? (
             <span className="insert">insert</span>
           ) : (
@@ -490,7 +730,7 @@ console.log("street", user?.address[0]?.street)
           )}
         </>
 
-      
+
 
 
 
@@ -510,11 +750,30 @@ console.log("street", user?.address[0]?.street)
         <>
 
           <Navbar />
+        
+          <div className="dashboard">
+        <a href={`/listings/${user?._id}`}>
+            <div className="dash-options">
+              Products
+            </div>
+            </a>
+           <a href="/orders"> <div className="dash-options"> 
+              Orders
+            </div> </a>
+            <a href="/account-settings"> <div className="dash-options"> 
+              Account
+            </div> </a>
+            
+         
 
-          <SubNav />
+           
+            </div>
+         
+
         </>
 
         <div className="center-div">
+       
           <br />
           <br />
           <h1 className="text-center pt-3">No orders yet</h1>
@@ -553,216 +812,293 @@ console.log("street", user?.address[0]?.street)
 
 
   return (
-
     <>
       <Navbar />
-      <SubNav />
-      <div className="dashboard">
+    
+     
+      <div className="dashboard">  
+      <div className="dash-option">
+              Products
+            </div>
+          
+           <a href="/orders"> <div className="dash-option"> 
+              Orders
+            </div> </a>
+            <a href="/account-settings"> <div className="dash-option"> 
+              Account
+            </div> </a>
+            
+         
 
 
+           
+     <div className="hide-option">
+     <div  onClick={handlePickup}  className="dash-option"> 
+              Fedex Schedule Pickup
+            </div> 
+         <div className="dash-option"> 
+            Fedex Drop Off
+            </div> 
+     </div>
 
-      </div>
-
-
+    
+            </div>
       <div className="center-div">
-
-
-
         <div className="center-div">
           <div className="start-move">
-
             <ul className="table-select">
-              {/**    <li className="tab">All</li> 
-
-         
-           <li className="tab">Unfulfilled</li> 
-           <li className="tab">Processing</li> 
-           <li className="tab">Fulfilled</li> */}
+              {/*<li className="tab">All</li>
+              <li className="tab">Unfulfilled</li>
+              <li className="tab">Processing</li>
+              <li className="tab">Fulfilled</li>*/}
             </ul>
-
-
-
           </div>
+      {labelSelect && <>
+          <div className="Overlay3">
+            <div className="Modal-smaller">
+            <label>Package Type</label>
+          <select value={selectedPackage} onChange={handleChanges}>
+      <option value="">Select a package type</option>
+      <option value="FEDEX_SMALL_BOX">FEDEX_SMALL_BOX</option>
+      <option value="FEDEX_MEDIUM_BOX">FEDEX_MEDIUM_BOX</option>
+      <option value="FEDEX_LARGE_BOX">FEDEX_LARGE_BOX</option>
+      <option value="FEDEX_EXTRA_LARGE_BOX">FEDEX_EXTRA_LARGE_BOX</option>
+      <option value="FEDEX_10KG_BOX">FEDEX_10KG_BOX</option>
+     
+    
+    </select>
+    <p>Pickup Type</p>
+    <select value={selectedPickupType} onChange={handleChange}>
 
-         { highlighted &&
-         <div className="button-space"> <div className="button2" onClick={handleFulfillMany}>Fulfill</div></div>
-           }  <table className="table table-bordered m-5">
+      <option value="">Select a pickup type</option>
+   
+      <option value="DROPOFF_AT_FEDEX_LOCATION">DROPOFF_AT_FEDEX_LOCATION</option>
+      <option value="USE_SCHEDULED_PICKUP">USE_SCHEDULED_PICKUP</option>
+    </select>
+    <button onClick={handleLabel}>Print Label</button>
+    </div>
+    </div>
+    </>}
+          {highlighted && (
+            <div className="button-space">
+              <div className="button2" onClick={handleFulfillMany}>
+                Fulfill
+              </div>
+            </div>
+          )}
+          <table className="table table-bordered m-5">
             <thead>
               <tr>
-
                 <th>Order ID</th>
                 <th>Status</th>
                 <th>Date</th>
                 <th>Total</th>
                 <th></th>
                 <th></th>
-                <th></th>
+            
               </tr>
-
-
             </thead>
             <tbody>
               <HandleDisplay />
-
-
-
-
+              
             </tbody>
-          
           </table>
-
-<div className="bottom-wrapping">
-          <div className="num__container">
-          {filteredOrders.length > 8 ? <Pagination /> : <></>}
+          <div className="bottom-wrapping">
+            <div className="num__container">
+              {filteredOrders.length > 8 ? <Pagination /> : <></>}
+              <h3>Current Pickups  {user.pickups?.length}</h3>  Revenue To Date: ${totalOrderAmount}
+            </div>
+          </div>
+          <div className="flex-row-end">
           
-        </div>
-
-        </div>
-        <div className="flex-row-end">Revenue To Date: ${totalOrderAmount}</div>
-          {pickupCode?.length > 0 ?
+          </div>
+          {pickupCode?.length > 0 ? (
             <>
-              your code: {pickupCode}
-
-            </> : <></>
-
-          }
-          {open &&
+              Pick Scheduled! your code is: {pickupCode}
+            </>
+          ) : (
+            <></>
+          )}
+          {open && (
             <div className="Overlay3">
               <div id="Mo-7" className="Modal-smaller">
                 <div closeButton>
-                  <div> <h4>Schedule Pickup</h4></div>
+                  <div></div>
                 </div>
-
-                <div className="div-start">
-                  {times ? (
-                    times.map((option, index) => {
-                      const dateObject = DateTime.fromISO(option.pickupDate);
-                      const month = dateObject.toFormat('LLL');
-                      const day = dateObject.toFormat('dd');
-                      const dayOfWeek = dateObject.toFormat('EEE');
-
-                      console.log(`${month}-${day}`);
-                      console.log("pee", dateObject);
-
-                      return (
-                        <>
-                          {pickupDay === "" ? (
-                            <div
-                              onClick={() =>
-                                handlePickupDate(`${dayOfWeek.slice(0, 5)}, ${month}, ${day}`, index,)
-                              }
-                              className="date-choice"
-                            >
-                              {`${dayOfWeek.slice(0, 5)}, ${month} ${day}`}
-                            </div>
-                          ) : (
-                            <></>
-                          )}
-                        </>
-                      );
-                    })
-                  ) : (
-                    <div>Loading pickup times...</div>
-                  )}
-
-                </div>
-                {pickupDay.length > 0 && (
-                  <div className="row-flex">
-
-                    <div className="date-choice">
-
-                      {pickupDay}
-                      {times?.map((option) => {
-
-
-
-
-
-
-
-                        return (
-
-
-
-                          <div key={option.pickupDate}>
-
-                            <select onChange={(e) => { handleSetSubmit(e.target.value, option.pickupDate) }} hidden={option.pickupDate.slice(8) !== pickupDay.slice(10)}>
-                              <option>- time -</option>
-                              {option.readyTimeOptions.map((time, index) => {
-                                const formattedTime = DateTime.fromISO(time).toFormat('hh:mm a');
-
-                                return (
-                                  <>
-
-                                    <option id={time} key={index}>{formattedTime} </option>;
-                                  </>
-                                )
-                              })}
-                            </select>
-                          </div>
-                        )
-                      })}
-                    </div>
-
-                    <div className="confirm-pick">
-                      {time !== '' &&
-                        <>
-
-                          <div className='box-time'>
-                            <div>Time</div>
-
-                            <h3>{pickupDay}, {time}</h3>
-
-                          </div>
-                          <div className="box-time">
-
-                            <div>Location</div>
-                            {user.address[0]?.street}, {user.address[0]?.street2} <br />
-                            {user.address[0]?.city}  {user.address[0]?.state}  {user.address[0]?.country}
-
-                          </div>
-                        </>
-                      }
-                    </div></div>
+                {getAccount &&  (
+                  <form className="left" onSubmit={handleAddFedex}>
+                    <h1>Ship with your FedEx account</h1>
+                    <p>Automate printing labels, schedule pickups, and more.</p>
+                    <input
+                      onChange={(e) => setFedEx(e.target.value)}
+                      placeholder="FedEx Account Number"
+                      className="inputOnboard"
+                    />
+                    <p>Don't have a fedex account? Sign up here.</p>
+                    <div className="flex-col-a"></div>
+                    <button type="submit">Submit</button>
+                  </form>
                 )}
+             
+                {!getAccount &&  (
+                  <div className="div-start">
+                   
+                    <div style={{ maxHeight: '450px', overflowY: 'auto' }}>
+                    {!another && <> 
+                    
+                    {!cancelState && <>
+                    <h3>Current Pickup  {user.pickups.length}</h3>
+                    {successMessage && <p className="not-fail">Success! Your cancellation was processed.</p>}
+                    {failMessage && <p className="fail">Oops! Something went wront. Try again later</p>}
+     
+                    <div className="custom-table">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {user.pickups.map((pickup, index) => (
+        <tr className="reset-styles" key={pickup._id}>
+          <td className="reset-styles">
+            {pickup.code || pickup.pickups[index].code}
+          </td>
+          <td className="reset-styles">
+            {pickup.time ? pickup.time.slice(5) : pickup.pickups[index].time?.slice(5)}
+          </td>
+          <td className="reset-styles">
+            {pickup.time2 || pickup.pickups[index].time2}
+          </td>
+          <td onClick={() => handleCancel(index, pickup)} className="cancel"> cancel </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div> </>}</>}
+{cancelState && <>
+<h3> Cancel Pickup</h3>
+<p className="bot">Are you sure you want to cancel your pick up?</p>
 
-                <div className="flex-col-a">
+<p className="tiny">Scheduled time</p>
+<h4>{ cancelState.props.time?.slice(5) || cancelState.props.pickups[cancelState.index].time?.slice(5)  } { cancelState.props.time2 || cancelState.props.pickups[cancelState.index].time2 }</h4>
+{isCancled && <>Pickup Canceled </>}
 
-                  <button className="fed" onClick={handleSubmitPickup}>
-                    Submit
-                  </button><img className="fed-logo" src={Fed} />
-                </div>
+{!isCancled && <>Not Cancled</>} 
+<button>Go Back</button><button onClick={confirmCancel}>Cancel</button>
+</>}
+{!another &&<>{!cancelState && <><button onClick={handleAnother}>Schedule Another Pickup</button> </>} </>}
+
+                      </div>
+                    {another && (
+                      <div>
+                        {times ? (
+                          times.map((option, index) => {
+                            const dateObject = DateTime.fromISO(option.pickupDate);
+                            const month = dateObject.toFormat('LLL');
+                            const day = dateObject.toFormat('dd');
+                            const dayOfWeek = dateObject.toFormat('EEE');
+  
+                            //console.log(`${month}-${day}`);
+                            //console.log("pee", dateObject);
+  
+                            return (
+                              <>
+                                {pickupDay === "" ? (
+                                  <div
+                                    onClick={() =>
+                                      handlePickupDate(`${dayOfWeek.slice(0, 5)}, ${month}, ${day}`, index)}
+                                    className="date-choice"
+                                  >
+                                    {`${dayOfWeek.slice(0, 5)}, ${month} ${day}`}
+                                  </div>
+                                ) : (
+                                  <></>
+                                )}
+                              </>
+                            );
+                          })
+                        ) : (
+                          <div>Loading pickup times...</div>
+                        )}
+  
+                        {pickupDay.length > 0 && (
+                          <div className="row-flex">
+                            <div className="date-choice">
+                              {pickupDay}
+                              {times?.map((option) => {
+                                return (
+                                  <div key={option.pickupDate}>
+                                    <select onChange={(e) => { handleSetSubmit(e.target.value, option.pickupDate) }} hidden={option.pickupDate.slice(8) !== pickupDay.slice(10)}>
+                                      <option>- time -</option>
+                                      {option.readyTimeOptions.map((time, index) => {
+                                        const formattedTime = DateTime.fromISO(time).toFormat('hh:mm a');
+                                        return (
+                                          <option id={time} key={index}>{formattedTime}</option>
+                                        );
+                                      })}
+                                    </select>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <div className="confirm-pick">
+                              {time !== '' && (
+                                <>
+                                  <div className='box-time'>
+                                    <div>Time</div>
+                                    <h3>{pickupDay}, {time}</h3>
+                                  </div>
+                                  <div className="box-time">
+                                    <div>Location</div>
+                                    {user.address[0]?.street}, {user.address[0]?.street2} <br />
+                                    {user.address[0]?.city}  {user.address[0]?.state}  {user.address[0]?.country}
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        )}
+  
+                        {!getAccount && (
+                          <div className="flex-col-a">
+                             {errorMsg && <p>{errorMsg}</p>}
+                            <button className="fed" onClick={handleSubmitPickup}>
+                              Submit
+                            </button>
+                            <img className="fed-logo" src={Fed} />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
-          }
-          {show &&
+          )}
+          {show && (
             <div className="Overlay3">
               <div className="Modal-small">
                 <div closeButton>
                   <div> <h4>Order details</h4></div>
                 </div>
                 {orderToShow.map((order) => (
-                  <div className="flex-cont">
+                  <div className="flex-cont" key={order._id}>
                     <img src={order.pic[0].url} style={{ minWidth: 125, maxWidth: 125, minHeight: 125, maxHeight: 125, objectFit: "cover" }} />
-
                     <div className="flex-col-b">
                       <p>
                         <span>Quantity: {order.count}  </span> {order.name}
                       </p>
                       <p>Price: ${Number(order.price) * order.count}</p>
-                 
-                    
                     </div>
-
                   </div>
                 ))}
-
-               <div className="flex-left">
-<p>Customer Email: {ownerId.email}</p>  </div>
-
+                <div className="flex-left">
+                  <p>Customer Email: {ownerId.email} {ownerId.phone}</p>  </div>
                 <div className="flex-col-a">
-                  
-
                   <button className="green" onClick={handleFulfill}>
                     Fulfill Order
                   </button>
@@ -772,12 +1108,28 @@ console.log("street", user?.address[0]?.street)
                 </div>
               </div>
             </div>
-          }
+          )}
+          <div
+            className="new-feature"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            {showComingSoon && <div className="coming-soon">Coming Soon</div>}
+          </div>
+                 
+     <div className="show-option">
+     <div  onClick={handlePickup}  className="dash-option"> 
+              Fedex Schedule Pickup
+            </div> 
+         <div className="dash-option"> 
+            Fedex Drop Off
+            </div> 
+     </div>
 
         </div>
       </div>
-    </>
-  );
-}
-
-export default OrdersPage;
+    </>);
+  }
+  
+  export default OrdersPage;
+  
