@@ -402,7 +402,7 @@ const uploadDocument = async (file) => {
 
 const updatePerson = async (person, account, fileId) => {
   try {
-    const response = await fetch('http://localhost:3500/update-person-file', {
+    const response = await fetch('https://pizzaserver.onrender.com/update-person-file', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

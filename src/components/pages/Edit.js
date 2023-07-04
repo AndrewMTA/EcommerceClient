@@ -195,7 +195,7 @@ function HomePage() {
     .then((res) => {
       setImgToRemove(null)
       setImages(prev => prev.filter((img) => img.public_id !== imgObj.public_id))
-    }).catch((e) => console.log(e))
+    }).catch((e) => console.log(""))
   }
   const pizza = logos
 

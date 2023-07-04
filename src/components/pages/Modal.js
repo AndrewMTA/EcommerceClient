@@ -16,8 +16,8 @@ const Modal = ({ open, onClose,   carMake,
     const deleteId = cars._id;
 
     axios.delete(`/cars/delete/${deleteId}`)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => console.log(""))
+      .catch((err) => console.log(""));
 
     window.location.reload();
   };

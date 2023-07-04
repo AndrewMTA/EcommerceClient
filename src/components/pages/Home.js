@@ -193,7 +193,7 @@ const Home = () => {
       .get("/cars")
       .then(({ data }) => dispatch(updateProducts(data)));
   }, []);
-console.log(user)
+
   const Pagination = () => {
     return (
       <ul className="pagination">

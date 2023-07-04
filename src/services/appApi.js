@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { setCredentials, logOut } from '../features/authSlice';
-import axiosPrivate from "../api/axios";
+import { setCredentials, logOut, selectCurrentToken } from '../features/authSlice';
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
@@ -11,13 +10,13 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     const refreshResult = await baseQuery('/refresh', api, extraOptions);
     console.log(refreshResult);
     if (refreshResult?.data) {
-      const user = api.getState().auth.user;
+      const token = selectCurrentToken(api.getState());
       // store the new token
-      api.dispatch(setCredentials({ ...refreshResult.data, user }));
+      api.dispatch(setCredentials({ ...refreshResult.data, token }));
       // retry the original query with new access token
       result = await baseQuery(args, api, extraOptions);
     } else {
-      api.dispatch(logOut());
+     console.log("Else")
     }
   }
 
@@ -25,12 +24,19 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 };
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:3500',
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseUrl: 'https://pizzaserver.onrender.com',
+  credentials: 'include',
+  prepareHeaders: (headers, {getState}) => {
+    const token = getState().auth.token
+    if (token) {
+  
+      headers.set("authorization", `Bearer ${token}`);
+    }
+    
+    return headers;
+  }
 });
+
 
 export const appApi = createApi({
   reducerPath: "appApi",
@@ -79,10 +85,10 @@ export const appApi = createApi({
       }),
     }),
     addPickup: builder.mutation({
-      query: (body) => ({
+      query: credentials => ({
         url: "/orders/store-pickups",
         method: "POST",
-        body,
+        body: {...credentials},
       }),
     }),
     cancelPickup: builder.mutation({

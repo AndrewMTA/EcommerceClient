@@ -482,7 +482,7 @@ setLabelIndex(index)
           }
         },
         "readyDateTimestamp": `${formState.date}T${formState.originalTime}Z`,
-        "customerCloseTime": "19:00:00"
+        "customerCloseTime": "20:00:00"
       },
       "carrierCode": "FDXE"
     }
@@ -514,7 +514,7 @@ setLabelIndex(index)
         //console.log("33", formattedTime)
         
 
-addPickup({pickupInfo})
+addPickup(pickupInfo)
 
   setOpen(false);
   setPickupDay("");
@@ -541,7 +541,7 @@ const handleAnother = () => {
 
     const checkData = {
       pickupAddress: {
-        postalCode: "60516",
+        postalCode: user.address[0].zip,
         countryCode: "US"
       },
       pickupRequestType: [
@@ -576,17 +576,7 @@ const handleAnother = () => {
  
   //console.log(times)
 
-  const cancelPickup = () => {
-    const checkData =  {
-      "associatedAccountNumber": {
-        "value": user.fedexAccount
-      },
-      "pickupConfirmationCode": "1",
-      "carrierCode": "FDXE",
-      "scheduledDate": "2020-07-03",
-      "location": "NQAA"
-    }
-  }
+
 
   const handleHighlight = (orderId) => {
     setOrders((prevOrders) => {
