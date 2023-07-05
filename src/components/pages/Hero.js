@@ -64,7 +64,7 @@ e.preventDefault()
         <div className="btn__wrapper">
         <a href="/pizza"><div className="By">Get Pizza →</div> </a>
         
-        <a href="/application">
+        <a href="/register">
         <div className="Sell" >Sell Pizza →</div>
 
         
