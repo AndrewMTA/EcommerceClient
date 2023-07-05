@@ -164,7 +164,24 @@ import Navbar from '../Navbar';
             </div>
            
             </div>
+            
             {tab.noti && (
+<>    For assistance with payments reach out to support@shipslices.com.</>
+            
+)}
+
+{tab.payments && (
+  <div className='notifications-box'>
+    For assistance with payments reach out to support@shipslices.com.
+  </div>
+)}
+
+{tab.more && (
+  <div className='notifications-box'>
+    More content goes here...
+  </div>
+)}
+  {/**
   <div className='notifications-box'>
     <div className="row">Notifications {isChecked ? <>on</> : <>off</> }
     <label className="toggle-switch">
@@ -187,21 +204,7 @@ import Navbar from '../Navbar';
      <input className="inputOnboard"  onChange={handleChange} name="country"placeholder='country' />
 
      <button onClick={updateAddress}>Save</button>
-  </div>
-)}
-
-{tab.payments && (
-  <div className='notifications-box'>
-    For assistance with payments reach out to support@shipslices.com.
-  </div>
-)}
-
-{tab.more && (
-  <div className='notifications-box'>
-    More content goes here...
-  </div>
-)}
-
+  </div>*/}
         </div>
         
       )

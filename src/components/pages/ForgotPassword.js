@@ -52,10 +52,10 @@ const ForgotPasswordScreen = () => {
         <div className="form-group">
             <br/>
           <p className="white">
-            Enter the email address you registered your account with to get a reset link.
+            Email support@shipslices.com to get a password reset link.
           </p>
 <br/>
-
+{/** 
 <div className="inputWrap">
           <label htmlFor="email">Email</label>
           <input
@@ -67,11 +67,11 @@ const ForgotPasswordScreen = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          </div>
-        </div>
+          </div>*/}
+        </div>{/** 
         <button type="submit"className="select">
           Send Email
-        </button>
+        </button>*/}
         </div>
       </form>
       </div>

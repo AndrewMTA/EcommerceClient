@@ -16,7 +16,8 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useAddFedexMutation } from "../../services/appApi";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api"
 function OrdersPage() {
-  const [addFedex, { isSuccess }] =  useAddFedexMutation()
+  const [addFedex, { isSuccess }] =  useAddFedexMutation();
+  const [dryIceWeight, setDryIceWeight ] = useState(0)
   const pickupType = {
    dropoff: "DROPOFF_AT_FEDEX_LOCATION",
     pickup: "USE_SCHEDULED_PICKUP"
@@ -34,8 +35,9 @@ function OrdersPage() {
   
   const [errorMsg, setErrorMsg] = useState();
   const [labelInfo, setLabelInfo] = useState()
+  const [isCheckd, setIsCheckd] = useState(true);
   const [labelSelect, setLabelSelect] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
   const [another, setAnother] = useState(false);
   const [labelIndex, setLabelIndex] = useState("");
   const [getAccount, setGetAccount] = useState(false)
@@ -289,7 +291,18 @@ console.log("LOGG")
               }
             ],
             "shipDatestamp": "2020-07-03",
-            "serviceType": "STANDARD_OVERNIGHT",
+            "serviceType": "FEDEX_2_DAY",
+           
+            "packageSpecialServices": {
+              "specialServiceTypes": [
+           "DRY_ICE"],
+              "shipmentDryIceDetail": {
+                "totalWeight" : {
+                  "units": "LB",
+                  "value": dryIceWeight
+                } , "packageCount": 1,
+              }
+            },
             "packagingType": selectedPackage,
             "pickupType": selectedPickupType,
             "blockInsightVisibility": false,
@@ -303,14 +316,14 @@ console.log("LOGG")
             "requestedPackageLineItems": [
               {
                 "weight": {
-                  "value": 10,
+                  "value": 5,
                   "units": "LB"
                 }
               }
             ]
           },
           "accountNumber": {
-            "value": "740561073"
+            "value": 	201698364
           }
         }
 
@@ -463,8 +476,9 @@ setLabelIndex(index)
     
     const submitData = {
       "associatedAccountNumber": {
-        "value": "740561073"
+        "value": user.fedexAccount
       },
+
       "originDetail": {
         "pickupLocation": {
           "contact": {
@@ -527,7 +541,9 @@ addPickup(pickupInfo)
       }
       
   }
-
+  const handleToggle = () => {
+    setIsChecked(!isChecked);
+  };
 
 
 //console.log(pickupCode)
@@ -843,17 +859,29 @@ const saveCard = async (tokenId) => {
               <li className="tab">Fulfilled</li>*/}
             </ul>
           </div>
+         
       {labelSelect && <>
           <div className="Overlay3">
             <div className="Modal-smaller">
-            <label>Package Type</label>
+            <div className="row">Dry Ice? (Recommended) {isCheckd ? <>Yes</> : <>No</> }
+    <label className="toggle-switch">
+      <input
+        type="checkbox"
+        checked={isCheckd}
+       
+      />
+    
+      <span className="slider"></span>
+    </label>
+<br/>
+</div>
+<label>Dry Ice Weight </label>
+<input className="inputOnboard" onChange={(e) => setDryIceWeight(e.target.value)} placeholder="Dry ice weight LB" />
+            <label>Packages Type</label>
           <select value={selectedPackage} onChange={handleChanges}>
-      <option value="">Select a package type</option>
-      <option value="FEDEX_SMALL_BOX">FEDEX_SMALL_BOX</option>
-      <option value="FEDEX_MEDIUM_BOX">FEDEX_MEDIUM_BOX</option>
-      <option value="FEDEX_LARGE_BOX">FEDEX_LARGE_BOX</option>
-      <option value="FEDEX_EXTRA_LARGE_BOX">FEDEX_EXTRA_LARGE_BOX</option>
-      <option value="FEDEX_10KG_BOX">FEDEX_10KG_BOX</option>
+  
+      <option value="YOUR_PACKAGING">MY PACKAGING</option>
+ 
      
     
     </select>
@@ -865,7 +893,7 @@ const saveCard = async (tokenId) => {
       <option value="DROPOFF_AT_FEDEX_LOCATION">DROPOFF_AT_FEDEX_LOCATION</option>
       <option value="USE_SCHEDULED_PICKUP">USE_SCHEDULED_PICKUP</option>
     </select>
-    <button onClick={handleLabel}>Print Label</button>
+    <button  disabled={dryIceWeight <= 0}onClick={handleLabel}>Print Label</button>
     </div>
     </div>
     </>}

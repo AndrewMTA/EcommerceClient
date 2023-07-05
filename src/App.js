@@ -46,7 +46,7 @@ import {Elements} from '@stripe/react-stripe-js';
 import alertSound from './Alert.wav';
 import { useDispatch, useSelector } from "react-redux";
 import { logout, resetNotifications } from "./features/userSlice";
-
+import CheckSeller from "./CheckSeller";
 import { addNotification } from "./features/userSlice";
 import NotificationContext from "./context/NotificationContext";
 import Off from "./on.png"
@@ -54,8 +54,8 @@ import On from "./off.png"
 import Navbar from './components/Navbar';
 const ROLES = {
   'User': 2001,
-  'Editor': 1984,
-  'Admin': 5150
+  'Seller': 5150,
+  
 }
 
 
@@ -165,14 +165,14 @@ const [close, setclose] = useState(false);
         
         <Route path="/success" element={<Success />} />
  
-
+        <Route path="/seller/:carID" element={<Seller />} />
      
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/passwordreset" element={<PasswordReset/>} />
 
         <Route element={<Private />}>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-            <Route path="/listings/:carID" element={<Listings/>} />
+            <Route path="/listings/" element={<Listings/>} />
           </Route>
           </Route>
    
@@ -183,20 +183,24 @@ const [close, setclose] = useState(false);
           
      <Route element={<PersistLogin />}>
 
-      
+     <Route element={<CheckSeller/>} >
      <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
      <Route path="/add-product" element={<Product/>} />
         </Route>
+        </Route>
+        <Route element={<CheckSeller checkUser={user?.seller}/>} >
      <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
      <Route path="/account-settings" element={<Account />} />
+        </Route>
         </Route>
         <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
         <Route path="/cart" element={<Cart />} />
         </Route>
 
-     <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+     <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
         <Route path="/orders" element={<Orders/>} />
         </Route>
+       
           <Route element={<Private />}>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
           <Route path="/success/:carID" element={<Success/>} />
@@ -207,32 +211,26 @@ const [close, setclose] = useState(false);
           </Route>
           </Route>
           <Route element={<Private2 />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
           <Route path="/delete/:carID" element={<Delete />} />
           </Route>
           </Route>
           
-          <Route element={<Private2 />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-          <Route path="/private/:carID" element={<SetPrivate />} />
-          </Route>
-          </Route>
+    
 
     <Route element={<Private2 />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
             <Route path="edit/:carID" element={<Edit />} />
           </Route>
           </Route>
 
           <Route element={<Private />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
             <Route path="/listings/" element={<Listings/>} />
           </Route>
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-            <Route path={`/delete/:carID`} element={<Lounge />} />
-          </Route>
+        
         </Route>
 
         {/* catch all */}

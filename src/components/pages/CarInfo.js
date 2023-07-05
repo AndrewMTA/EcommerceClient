@@ -38,7 +38,28 @@ const CarInfo = () => {
     display: "flex",
     justifyContent: "center",
   };
-  
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    const calculateNextDate = () => {
+      const newDate = new Date(currentDate);
+      newDate.setDate(currentDate.getDate() + 1); // Start with the next day
+
+      while (newDate.getDay() === 0) {
+        // Skip Sundays
+        newDate.setDate(newDate.getDate() + 1);
+      }
+
+      newDate.setDate(newDate.getDate() + 5); // Add 5 additional days
+      setCurrentDate(newDate);
+    };
+
+    calculateNextDate();
+  }, []);
+
+  const options = { month: 'long', day: 'numeric' };
+  const formattedDate = currentDate.toLocaleDateString(undefined, options);
+
   const dotStyle = {
     margin: "0 3px",
     cursor: "pointer",
@@ -307,7 +328,7 @@ const goToSlide = (slideIndex) => {
 </div>
 </div>
 <div className="small-add">
-  <h2>Get it by: May 22nd</h2>
+  <h2>Get it by:<div>{formattedDate}</div></h2>
 <br/>
 <h3>Select other dates</h3>
 <br/>
@@ -343,10 +364,10 @@ const goToSlide = (slideIndex) => {
  <>
     <div className='ContactForm'>
       <div className="row-titl">
-<h1 className='header' >{quant}  {category} {title}{quant > 1 && <>s</>}</h1> <h2 >from {seller}</h2> </div>
+<h1 className='header' >{quant}  {category} {title}{quant > 1 && <>s</>}</h1> <h2 >from <a href={`/seller/${listUser}`}>{seller}</a> </h2> </div>
 <br/>
 <div className="fff">
-<h2>Get it by: May 22nd</h2>
+<h2>Get it by:<div>{formattedDate}</div></h2>
 <br/>
 <h3>Select other dates</h3>
 <br/>
@@ -365,7 +386,7 @@ const goToSlide = (slideIndex) => {
     </>
     </div>
 <div className="right-side">
-<h2>Get it by: May 22nd</h2>
+<h2>Get it by:<div>{formattedDate}</div></h2>
 <br/>
 <h3>Select other dates</h3>
 <br/>

@@ -16,7 +16,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       // retry the original query with new access token
       result = await baseQuery(args, api, extraOptions);
     } else {
-     console.log("Else")
+      api.dispatch(logOut());
     }
   }
 
@@ -29,10 +29,13 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, {getState}) => {
     const token = getState().auth.token
     if (token) {
-  
+
       headers.set("authorization", `Bearer ${token}`);
     }
-    
+    if (!token) {
+   
+      headers.set("authorization", `Bearer 555`);
+    }
     return headers;
   }
 });

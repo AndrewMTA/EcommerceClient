@@ -420,6 +420,7 @@ function deletePic(imgObj) {
                 </div>
  
                 <div>
+                  <label>4 images required</label>
   <input hidden type="file" multiple onChange={handleFileUpload} accept="image/*" id="pic-upload" />
 
   <label htmlFor="pic-upload" className="ptag">
@@ -444,7 +445,7 @@ function deletePic(imgObj) {
 <div>
 
   <div>
-    Fedex 2 day A.M {weight > 0 && <>{shippingRange}</>}
+    Fedex 2 day {weight > 0 && <>{shippingRange}</>}
   </div>
   
 </div>

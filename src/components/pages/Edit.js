@@ -65,14 +65,7 @@ function HomePage() {
   const minShippingPrice = basePrice + (additionalPricePerPound * (weights - 1));
   const maxShippingPrice = maxBasePrice + (additionalPricePerPound * weights);
   const shippingRange = `$${minShippingPrice} - $${maxShippingPrice}`;
-  let total = "";
-  if (!isNaN(prices) && !isNaN(weights)) {
-    const parsedPrice = parseFloat(prices.replace(/[^0-9.-]+/g, ""));
-    const parsedWeight = parseFloat(weights.replace(/[^0-9.-]+/g, ""));
-    const shippingCost = 46 + (6 * (parsedWeight - 1));
-    const maxShippingPrice = parsedPrice + shippingCost;
-    total = maxShippingPrice
-  }
+  let total = prices
   const handleSubmit = async (event) => {
     event.preventDefault();
     const updates = {
@@ -246,31 +239,7 @@ function HomePage() {
                   </select>
                 
                 </div>
-                <label className="label">Total weight <span className="tiny">pounds (lb)</span> </label>
-<p className="tiny">Include weight of packing material</p>
-{weightWarning && <p className="warning2">Weight should be under 15 pounds.</p>}
-<input
-      value={weights}
-      maxLength={2}
-      onChange={(e) => {
-        const newWeight = e.target.value.replace(/[^0-9.-]+/g, "");
-        if (newWeight === "") {
-          setWeight(newWeight);
-          setWeightWarning(false);
-          // ... (rest of your code)
-        } else {
-          const parsedWeight = parseFloat(newWeight);
-          if (!isNaN(parsedWeight) && parsedWeight <= 15) {
-            setWeight(parsedWeight.toLocaleString('en-US'));
-            setWeightWarning(false);
-            // ... (rest of your code)
-          } else {
-            setWeightWarning(true);
-          }
-        }
-      }}
-      className={`inputOnboard8 ${weightWarning && weights !== "" ? "inputOnboard9" : ""}`}
-    />
+               
 <br/>
 
             

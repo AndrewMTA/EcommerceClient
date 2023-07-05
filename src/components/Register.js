@@ -15,7 +15,7 @@ import GooglePlacesAutocomplete from 'react-google-autocomplete';
 
 // const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
 const REGISTER_URL = `/register`;
-const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
+const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
 
 const Register = () => {
     const userRef = useRef();
@@ -385,7 +385,7 @@ const uploadDocument = async (file) => {
     const response = await fetch('https://files.stripe.com/v1/files', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI`,
+        Authorization: `Bearer pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y`,
       },
        
       body: formData,
