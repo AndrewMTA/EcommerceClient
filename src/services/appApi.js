@@ -24,7 +24,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 };
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://pizzaserver.onrender.com',
+  baseUrl: 'http://localhost:3500',
   credentials: 'include',
   prepareHeaders: (headers, {getState}) => {
     const token = getState().auth.token
@@ -146,7 +146,13 @@ export const appApi = createApi({
         method: "PATCH",
       }),
     }),
-
+    addAddress: builder.mutation({
+      query: (body) => ({
+        url: "/user/address/",
+        body,
+        method: "POST",
+      }),
+    }),
     // add to cart
     addToCart: builder.mutation({
       query: (cartInfo) => ({
@@ -202,6 +208,7 @@ export const appApi = createApi({
 });
 
 export const {
+  useAddAddressMutation,
   useAddPickupMutation,
   useCancelPickupMutation,
     useSetNewOrderFalseMutation,

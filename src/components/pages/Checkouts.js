@@ -5,6 +5,8 @@ import axios from "../../api/axios"
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useCreateOrderMutation } from "../../services/appApi";
+import { useAddAddressMutation } from "../../services/appApi";
+
 import {   useRemoveFromCartMutation} from "../../services/appApi";
 import CardInput from "./CardInput";
 import  NotificationContext from "../../context/NotificationContext";
@@ -20,6 +22,7 @@ function CheckoutForm({ socket }) {
       const [removeFromCart, {loading}] = useRemoveFromCartMutation()
     const [alertMessage, setAlertMessage] = useState("");
     const [createOrder, { isLoading, isError, isSuccess }] = useCreateOrderMutation();
+    const [addAddress, {  isAdded }] = useAddAddressMutation();
     const [country, setCountry] = useState("");
     const [address, setAddress] = useState("");
     const [nextPage, setNextPage] = useState("");
@@ -41,7 +44,7 @@ function CheckoutForm({ socket }) {
         state: "",
         country: "",
         zip: "",
-
+        id: user._id
         });
 
         const stateOptions = [
@@ -167,7 +170,8 @@ function CheckoutForm({ socket }) {
     const saveAddress = async (e) => {
       validateAddress();
         e.preventDefault();
-       const post = axiosPrivate.post(`/user/address/${user._id}`, details)
+       addAddress(details)
+
        //console.log(post)
        setNextPage(true)
       

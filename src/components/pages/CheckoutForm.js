@@ -227,7 +227,7 @@ e.preventDefault()
       description: description,
       images: images,
       price: price.slice(0,9),
-      total: total,
+      total: price,
       listUser: listUser,
       title: "Pizza",
       ingredients: ingredients,
@@ -398,22 +398,7 @@ function deletePic(imgObj) {
                     })}
                   </select>
              
-                  <label className="label">Total weight <span className="tiny">pounds (lb)</span> </label>
-<p className="tiny">Include weight of packing material</p>
-{weightWarning && <p className="warning2">Weight should be under 15 pounds.</p>}
-<input
-  maxLength={2}
-  onChange={(e) => {
-    const newWeight = parseFloat(e.target.value.replace(/[^0-9.-]+/g, ""));
-    if (newWeight <= 15 || e.target.value === "") {
-      setWeight(newWeight.toLocaleString('en-US'));
-      setWeightWarning(false);
-    } else {
-      setWeightWarning(true);
-    }
-  }}
-  className={`inputOnboard8 ${weightWarning && weight !== "" ? "inputOnboard9" : ""}`}
-/>
+    
 
 
           
@@ -445,13 +430,13 @@ function deletePic(imgObj) {
 <div>
 
   <div>
-    Fedex 2 day {weight > 0 && <>{shippingRange}</>}
+    Fedex 2 day 
   </div>
   
 </div>
 
             
-                <label className="label">Price<span className="required">*</span></label>
+                <label className="label">Price with shipping<span className="required">*</span></label>
                 <div className="flex-row">
                   <select className="inputOnboard1">
                     <option>USD</option>
@@ -491,12 +476,7 @@ function deletePic(imgObj) {
  
                 </div>
 
-                {!isNaN(total) && total !== "" && (
-  <div>
-    <label className="radioLabel">Total with shipping</label>
-    <div>{total !== "" ? <span>$</span> : <></>}{total}</div>
-  </div>
-)}
+          
 
 <p className="tiny">Any difference left over after shipping cost is sent to you.</p>
                  
@@ -543,7 +523,7 @@ function deletePic(imgObj) {
 
                   <>
     
-                  <label > <h3>Ingredients</h3></label> <p>{description.length}/425 max.</p>
+                  <label > <h3>Ingredients</h3></label>
 
 
 
@@ -592,9 +572,10 @@ onChange={(e) => setIngredients(e.target.value)}
     <div className="Textbox">
  
     <h3 className="h3">
-    {!isNaN(total) && total !== "" && (
+      
+    {!isNaN(price) && price !== "" && (
 
-    <div>{total !== "" ? <span>$</span> : <></>}{total}</div>
+    <div>{price !== "" ? <span>$</span> : <></>}{price}</div>
 
 )}
 

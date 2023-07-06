@@ -19,7 +19,7 @@ const ForgotPasswordScreen = () => {
 
     try {
       const { data } = await axios.post(
-        "https://pizzaserver.onrender.com/user/forgotpassword",
+        "http://localhost:3500/user/forgotpassword",
         { email },
         config
       );

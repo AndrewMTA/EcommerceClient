@@ -67,6 +67,7 @@ const Register = () => {
         email: "",
         companyName: "",
         phone: "",
+        phoneContact: "",
         taxid: "",
         website: "",
         routing: "",
@@ -89,7 +90,7 @@ const Register = () => {
         title: "",
         last4: "",
 
-    
+        emailCOntact: "",
       });
 
 
@@ -402,7 +403,7 @@ const uploadDocument = async (file) => {
 
 const updatePerson = async (person, account, fileId) => {
   try {
-    const response = await fetch('https://pizzaserver.onrender.com/update-person-file', {
+    const response = await fetch('http://localhost:3500/update-person-file', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -561,9 +562,9 @@ const updatePerson = async (person, account, fileId) => {
 
 
                 );
-                // TODO: remove //console.logs before deployment
+                // TODO
 
-                //console.log(JSON.stringify(response?.data));
+         
                 ////console.log(JSON.stringify(response))
                 setSuccess(true);
 
@@ -969,13 +970,13 @@ validateAddress()
                                     </label>
                                     <input
                                         className="inputOnboard"
-                                        name="phone"
-                                        value={data.phone}
+                                        name="phoneContact"
+                                        value={data.phoneContact}
                                         onChange={handleChange}
                                         required
                                     />
 <label>Email</label>
-<input className="inputOnboard" onChange={handleChange} name="email" placeholder="Email"/>
+<input className="inputOnboard" onChange={handleChange} name="emailContact" placeholder="Email"/>
 <label>Last 4 SSN</label>
 <input className="inputOnboard" type="password" onChange={handleChange} name="last4" placeholder="Last 4 SSN"/>
 <br/>

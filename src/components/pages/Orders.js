@@ -50,6 +50,7 @@ function OrdersPage() {
   const [loading, setLoading] = useState(false);
   const [labelloading, setLabelLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [weight, setWeight] = useState(5);
   const [dateSubmit, setDateSubmit] = useState()
   const [timeSubmit, setTimeSubmit] = useState()
   const products = useSelector((state) => state.products);
@@ -256,14 +257,14 @@ console.log("LOGG")
           "requestedShipment": {
             "shipper": {
               "contact": {
-                "personName": "SHIPPER NAME",
-                "phoneNumber": 1234567890,
+                "personName": user.sellerName,
+                "phoneNumber": user.phone,
                 "companyName":  user.sellerName,
               },
               "address": {
                 "streetLines": [
                  user.address[0].street,
-                  "RECIPIENT STREET LINE 2"
+                
                 ],
                 "city":  user.address[0].city,
                 "stateOrProvinceCode":  user.address[0].state,
@@ -275,13 +276,13 @@ console.log("LOGG")
               {
                 "contact": {
                   "personName": order.email,
-                  "phoneNumber": 1234567890,
+                  "phoneNumber": order.phone,
                   "companyName": "Recipient Company Name"
                 },
                 "address": {
                   "streetLines": [
                    order.address[0].street,
-                    "RECIPIENT STREET LINE 2"
+                   order.address[0].street2 || "", 
                   ],
                   "city":  order.address[0].city,
                   "stateOrProvinceCode":  order.address[0].state,
@@ -316,14 +317,14 @@ console.log("LOGG")
             "requestedPackageLineItems": [
               {
                 "weight": {
-                  "value": 5,
+                  "value": weight,
                   "units": "LB"
                 }
               }
             ]
           },
           "accountNumber": {
-            "value": 	201698364
+            "value": 	user.fedexAccount
           }
         }
 
