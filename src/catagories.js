@@ -37,41 +37,19 @@ name: "Deep Dish"
     name: "Hawaiin"
   
   },
-  {
-   
-    name: "Pizza and Wine"
-  },
   
   {
   
     name: "Stuffed Crust"
   },
-  {
-  
-    name: "Ravioli"
-  },{
 
-    name: "Pasta"
-    
-    },
     {
       
     
       name: "Cheese"
     
     },
-    {
-      
-      name: "Desserts"
-    },
     
-    {
-      name: "Cookies"
-    },
-    {
- 
-      name: "Wine"
-    }
 ]
 
 
