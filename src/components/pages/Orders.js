@@ -824,9 +824,9 @@ const saveCard = async (tokenId) => {
     
      
       <div className="dashboard">  
-      <div className="dash-option">
+      <a href="/listings">   <div className="dash-option">
               Products
-            </div>
+            </div></a>
           
            <a href="/orders"> <div className="dash-option"> 
               Orders
