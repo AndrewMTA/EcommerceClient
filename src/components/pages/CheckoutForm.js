@@ -423,8 +423,14 @@ function deletePic(imgObj) {
   </div>
 </div>
 
-           
+<div className="input-row">
 
+<div>If shippings costs more than <input className="Num-input" /></div>
+
+
+ <div>add <input className="Num-input2" /> to the customers final price at checkout.
+</div>
+</div>
 <label className="radioLabel">Shipping * </label>
 
 <div>

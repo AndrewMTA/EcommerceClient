@@ -1764,6 +1764,27 @@ margin-left: 20px;
      width: 52px
     }
     
+.Num-input {
+  width: 35px;
+  height: 30px;
+  padding: 5px;
+
+}
+
+.Num-input2 {
+  width:35px;
+  height: 30px;
+  padding: 5px;
+}
+
+    .input-row {
+      display: flex;
+     flex-direction: column;
+    height: 60px;
+    margin-bottom: 15px;
+    }
+
+
 
     .p {
       margin: 5px 0px;
