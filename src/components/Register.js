@@ -240,10 +240,12 @@ const Register = () => {
             errRef.current.focus();
         }
     }
+
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setAddressError(false)
-        if (name === "phone") {
+        if (name === "phone" || name === "phoneContact") {
           const formattedNumber = value.replace(/\D/g, ""); // Remove non-digit characters
       
           let formattedPhoneNumber = "";
@@ -273,7 +275,7 @@ const Register = () => {
             }
         
             setData((prev) => ({ ...prev, [name]: formattedTaxIdNumber }));
-          } else {
+          }  else {
             setData((prev) => ({ ...prev, [name]: value }));
           }
         };
@@ -306,7 +308,7 @@ const Register = () => {
                               });
                           
                               if (result.error) {
-                                // Show error to your customer (e.g., insufficient funds)
+                                setErrMsg( "There was an issue with your payment. Payment Declined");
                                 //console.log(result.error.message);
                               } else {
                                 // The payment has been processed!
@@ -328,15 +330,14 @@ const Register = () => {
 
     const handleAddPerson = (e) => {
 e.preventDefault()
-setPerson(true)
-setBankInfo(false)
 createBankAccount()
     }
 
-
     async function createBankAccount() {
-        const stripe = await stripePromise;
-      
+      const stripe = await stripePromise;
+      let tokenId;
+    
+      try {
         const tokenResponse = await stripe.createToken('bank_account', {
           country: 'us',
           currency: 'USD',
@@ -345,19 +346,35 @@ createBankAccount()
           account_holder_type: 'company',
           account_holder_name: data.nameOnAccount
         });
-      
-        const tokenId = tokenResponse.token.id;
+    
+        tokenId = tokenResponse.token.id;
         setBankToken(tokenId);
-      
-        try {
-          const response = await axios.post(`/create-account`, { bankToken: tokenId, data });
-          //console.log(response.data);
-          setAccountNum(response.data);
-
-        } catch (error) {
-          console.error('Error creating account:', error);
+    
+        if (tokenId) {
+          try {
+            const response = await axios.post(`/create-account`, { bankToken: tokenId, data });
+            setAccountNum(response.data);
+            if (response.data) {
+              setPerson(true);
+              setBankInfo(false);
+            }
+          } catch (error) {
+            console.error('Error creating account:', error);
+            setBankInfo(false);
+            setSeller(true);
+            setErrMsg("Something went wrong. Check your info and try again, or contact support.");
+          }
         }
+        else if (!tokenId)
+         {setErrMsg("Something went wrong. Check your info and try again, or contact support.");
+
+        }
+      } catch (error) {
+        console.error('Error creating token:', error);
+        setErrMsg("Something went wrong. Check your info and try again, or contact support.");
       }
+    }
+    
       
 //console.log(accountNum)
       
@@ -365,12 +382,23 @@ const createPerson = async (e) => {
   e.preventDefault()
   try {
     const res = await axios.post(`/create-person`, { data, accountNum });
+    const response = await axios.post(REGISTER_URL,
+      JSON.stringify({ email: data.email, pwd, randomNum }),
+      {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+      },
+
+
+
+
+  );
     setPersonNum(res.data);
     //console.log("person", res.data);
     setPerson(false);
     setDocument(true);
   } catch (error) {
-    //console.log("Error creating person:", error);
+    setErrMsg('Something went wrong, Double check info and try again. Or Contact support');
   }
 };
 
@@ -589,7 +617,9 @@ const updatePerson = async (person, account, fileId) => {
         else if (selectedOption === 'yes') {
             setSeller(true)
             //console.log("Yeah")
+            console.log("YEAH")
             if (data.website !== '') {
+              console.log("READY")
                 setSelectedOption('')
                
 
@@ -669,6 +699,7 @@ validateAddress()
 
 
                     <form onSubmit={handleSubmit} className="form" >
+                 
                         <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                         <a className='navA' href="/"><img src={logo} className="loge" /> </a>
             
@@ -765,6 +796,8 @@ validateAddress()
                                 </label>
                             </div>
 
+                            
+
                             <button>Get Started</button>
 
                             <p>
@@ -800,7 +833,7 @@ validateAddress()
                                         className="inputOnboard"
                                         type="text"
                                         name="companyName"
-                                        
+                                        value={data.companyName}
                                         onChange={handleChange}
                                         required
                                  
@@ -810,6 +843,7 @@ validateAddress()
 
                                     </label>
                                     <input
+                                    value={data.website}
                                         className="inputOnboard"
                                         type="text"
                                         id="website"
@@ -851,11 +885,11 @@ validateAddress()
 
 
 <label>Street Name</label>
-<input   className={`inputOnboard ${addressError ? 'error-input' : ''}`} onChange={handleChange} name="line1" placeholder="Address Line 1"/>
+<input   className={`inputOnboard ${addressError ? 'error-input' : ''}`} onChange={handleChange}     value={data.line1} name="line1" placeholder="Address Line 1"/>
 <label>City</label>
-<input   className={`inputOnboard ${addressError ? 'error-input' : ''}`} onChange={handleChange} name="city" placeholder="City"/>
+<input   className={`inputOnboard ${addressError ? 'error-input' : ''}`} onChange={handleChange} name="city" value={data.city} placeholder="City"/>
 <label>State</label>
-<select   className={`inputOnboard ${addressError ? 'error-input' : ''}`} name="state" onChange={handleChange}>
+<select   className={`inputOnboard ${addressError ? 'error-input' : ''}`} name="state"  value={data.state} onChange={handleChange}>
       {stateOptions.map((state) => (
         <option key={state.value} value={state.value}>
           {state.label}
@@ -864,6 +898,7 @@ validateAddress()
     </select>
 <label>Zip</label>
 <input
+value={data.zip} 
   className={`inputOnboard ${addressError ? 'error-input' : ''}`}
   onChange={handleChange}
   name="zip"
@@ -875,7 +910,7 @@ validateAddress()
                                  
  {addressError && <p style={{ color: 'red' }}>Error occurred while validating address</p>}
                                     </div>
-{validAddress?.streetLine1} {validAddress?.city} {validAddress?.state} {validAddress?.zip}
+
                                     <div className="button" onClick={validateAddress}>Next</div>
 
                                     <p>
@@ -898,13 +933,15 @@ validateAddress()
                         }
 
 {bankInfo && <>
-  
+
 <h1>Get paid</h1>
+
+
 <p>Link a banking institution to your account.</p>
 <label>Name</label>
-<input className="inputOnboard" onChange={handleChange} name="nameOnAccount"  placeholder="Account Holder Name"/>
-<label>Account Type</label>
-<select className="inputOnboard"  placeholder="Buisness Account"> 
+<input className="inputOnboard" onChange={handleChange} value={data.nameOnAccount} name="nameOnAccount"  placeholder="Account Holder Name"/>
+ {/** <label>Account Type</label>
+<select  className="inputOnboard"  placeholder="Buisness Account"> 
 <option>
     - Account Type -
 </option>
@@ -914,11 +951,11 @@ validateAddress()
 <option>
    Individual
 </option>
-</select>
-<label>Routing Number</label>
-<input className="inputOnboard" name="routing" onChange={handleChange} placeholder="Routing Number"/>
+</select> */}
+<label >Routing Number</label>
+<input  value={data.routing} className="inputOnboard" name="routing" onChange={handleChange} placeholder="Routing Number"/>
 <label>Account Number</label>
-<input className="inputOnboard" name="account" onChange={handleChange} placeholder="Account Number"/>
+<input  value={data.account} className="inputOnboard" name="account" onChange={handleChange} placeholder="Account Number"/>
 <p className="tiny">Personal data is handled with industry standard encryption to keep information secure. Shipslices uses a PCI complaint payment provider for all transactions.<img className="lock"src={lock}/></p>
 <button onClick={handleAddPerson}>Next</button>
 
@@ -977,9 +1014,18 @@ validateAddress()
                                     />
 <label>Email</label>
 <input className="inputOnboard" onChange={handleChange} name="emailContact" placeholder="Email"/>
+
 <label>Last 4 SSN</label>
-<input className="inputOnboard" type="password" onChange={handleChange} name="last4" placeholder="Last 4 SSN"/>
-<br/>
+<input
+  className="inputOnboard"
+  type="text"
+  pattern="[0-9]{4}"
+  maxLength="4"
+  onChange={handleChange}
+  name="last4"
+  placeholder="Last 4 SSN"
+  required
+/>
      
 <button onClick={createPerson}>Next</button>
 
@@ -999,7 +1045,8 @@ validateAddress()
                         {checkout && <>
                             <h1>Start Selling Nationally</h1>
                 
-                            <h1 className="big">$19<span className="lill">per month</span></h1>
+                            <h1 className="big">$20<span className="lill">per month</span></h1>
+                            <p className="tiny">+ 7.5% per product sold + 3% payment fee</p>
                             <h2>✔ Unlimited Product posts</h2>
                             <h2>✔ Fedex Shipping solutions</h2>
                             <h2>✔ Accept Online Payments</h2>
@@ -1014,8 +1061,8 @@ validateAddress()
                              
                             <CardInput />
 
-
-                            <button onClick={handlePayment} >Checkout</button>
+<br/>
+                            <div  className="pay-button" onClick={handlePayment} >Checkout</div> 
 
 
 

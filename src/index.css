@@ -8,6 +8,15 @@
 }
 
 
+.pay-button {
+  width:90px;
+  cursor:pointer;
+  padding: 9px;
+  background-color: rgb(244, 244, 244);
+  border: 1px solid black;
+}
+
+
 .start-move {
   background-color: rgba(0, 255, 255, 0);
   display: flex;
