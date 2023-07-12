@@ -761,7 +761,7 @@ const saveCard = async (tokenId) => {
           <div className="dashboard">
         <a href={`/listings/`}>
             <div className="dash-options">
-              Productss
+              Products
             </div>
             </a>
            <a href="/orders"> <div className="dash-options"> 
@@ -825,7 +825,7 @@ const saveCard = async (tokenId) => {
      
       <div className="dashboard">  
       <a href="/listings">   <div className="dash-option">
-              Productsz
+              Products
             </div></a>
           
            <a href="/orders"> <div className="dash-option"> 
