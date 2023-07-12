@@ -225,9 +225,9 @@ const [close, setclose] = useState(false);
           </Route>
 
           <Route element={<Private />}>
-       <Route element={<CheckSeller checkUser={user?.seller}/>} >
+
             <Route path="/listings/" element={<Listings/>} />
-          </Route>
+
           </Route>
 
         
