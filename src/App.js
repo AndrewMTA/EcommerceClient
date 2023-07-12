@@ -202,11 +202,9 @@ const [close, setclose] = useState(false);
         </Route>
 
 
-     <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
 
             <Route path="/listings/" element={<Listings/>} />
 
-  </Route>
 
        
           <Route element={<Private />}>
