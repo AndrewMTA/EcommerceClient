@@ -144,7 +144,7 @@ const [close, setclose] = useState(false);
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-     
+        <Route path="/listings/" element={<Listings/>} />
         <Route path="linkpage" element={<LinkPage />} />
         <Route path="emaillist" element={<EmailList/>} />
         <Route path="/pizza" element={<Home/>} />
@@ -203,7 +203,7 @@ const [close, setclose] = useState(false);
 
 
 
-            <Route path="/listings/" element={<Listings/>} />
+         
 
 
        
