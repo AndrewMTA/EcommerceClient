@@ -225,7 +225,7 @@ const [close, setclose] = useState(false);
           </Route>
 
           <Route element={<Private />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.Seller, ROLES.User]} />}>
+       <Route element={<CheckSeller checkUser={user?.seller}/>} >
             <Route path="/listings/" element={<Listings/>} />
           </Route>
           </Route>
