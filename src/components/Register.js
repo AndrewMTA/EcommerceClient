@@ -324,10 +324,10 @@ console.log("UPDATED", updatedAddress)
                                 const email = data.email
                                 const sellerName = data.companyName
                                 const phone = data.phone
-                                
-                              
+                                const accountNum = accountNum
+                              console.log("ACCOUNT", accountNum)
                              
-                              axios.put(`/user/add-membership`,  ({updatedAddress, email, sellerName, phone}),
+                              axios.put(`/user/add-membership`,  ({updatedAddress, email, sellerName, accountNum, phone}),
                               {
                                   headers: { 'Content-Type': 'application/json' },
                                   withCredentials: true
@@ -366,6 +366,7 @@ createBankAccount()
           try {
             const response = await axios.post(`/create-account`, { bankToken: tokenId, data });
             setAccountNum(response.data);
+            console.log(response.data)
             if (response.data) {
               setPerson(true);
               setBankInfo(false);
@@ -388,7 +389,7 @@ createBankAccount()
     }
     
       
-//console.log(accountNum)
+console.log("NUM", accountNum)
       
 const createPerson = async (e) => {
   e.preventDefault()

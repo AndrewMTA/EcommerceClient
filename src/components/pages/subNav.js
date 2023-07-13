@@ -12,7 +12,7 @@
 
       return (
         <div className="dashboard">
-        <a href={`/listings/${user?._id}`}>
+        <a href={`/listings/`}>
             <div className="dash-option">
               Products
             </div>

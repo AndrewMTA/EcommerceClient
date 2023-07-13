@@ -166,16 +166,15 @@ function CheckoutForm() {
 //console.log( "hh", user.address.length)
 
 
+const saveAddress = async (e) => {
+  validateAddress();
+    e.preventDefault();
+   const post = axiosPrivate.post(`/user/address/${user._id}`, details)
+   //console.log(post)
+   setNextPage(true)
+  
+}
 
-    const saveAddress = async (e) => {
-      validateAddress();
-        e.preventDefault();
-       addAddress(details)
-
-       //console.log(post)
-       setNextPage(true)
-      
-    }
 
 
     
@@ -353,7 +352,7 @@ function CheckoutForm() {
                 {user.address.map((info, index) => {
                     return (
                         <div onClick={handleAddress} className="addressBox">
-                           <b>Bob Dylan</b> 
+                           <b>{user?.contactName} || ""</b> 
                             <br/>
                              {info.street}
                              <br/>
@@ -385,7 +384,7 @@ function CheckoutForm() {
         <div className="min">Ship to:</div> 
                  
                         <div className="smaller">
-                           <b>Bob Dylan</b> {user.address[0]?.street} {user.address[0]?.street2} {user.address[0]?.city} {user.address[0]?.state} {user.address[0]?.country} {user.address[0]?.zip}
+                           <b>{user.contactName}</b> {user.address[0]?.street} {user.address[0]?.street2} {user.address[0]?.city} {user.address[0]?.state} {user.address[0]?.country} {user.address[0]?.zip}
                        {details?.street} {details?.street2} {details?.city} {details?.state} {details?.country} {details?.zip}
                         </div>
                 

@@ -43,7 +43,7 @@ axiosPrivate.delete(
 
         if (res.status === 200) {
           setTrue(true)
-          navigate(`/listings/${user._id}`)
+          navigate(`/listings/`)
         }
       }
       
