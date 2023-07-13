@@ -12,10 +12,9 @@ import { AuthProvider } from './context/AuthProvider';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { NotificationProvider } from "./context/NotificationContext";
 
-import { io } from "socket.io-client";
 
 // Create a socket instance and connect to the server
-const socket = io("");
+
 
 
 const persistedStore = persistStore(store);

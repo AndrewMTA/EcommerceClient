@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState, useContext } from "react";
 
 const NotificationContext = createContext();
 
-export const NotificationProvider = ({ children, socket }) => {
+export const NotificationProvider = ({ children}) => {
   const [notification, setNotification] = useState(null);
   const [fed, setFed] = useState(null);
   const [seller, setSeller] = useState([]);
@@ -16,7 +16,7 @@ export const NotificationProvider = ({ children, socket }) => {
   };
 
   return (
-    <NotificationContext.Provider value={{  notification, seller, fed, setFed, setSeller, clearNotification }}>
+    <NotificationContext.Provider value={{ seller, fed, setFed, setSeller, clearNotification }}>
       {children}
     </NotificationContext.Provider>
   );

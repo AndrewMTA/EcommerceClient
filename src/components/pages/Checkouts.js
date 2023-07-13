@@ -11,7 +11,7 @@ import {   useRemoveFromCartMutation} from "../../services/appApi";
 import CardInput from "./CardInput";
 import  NotificationContext from "../../context/NotificationContext";
 import { useContext } from "react";
-function CheckoutForm({ socket }) {
+function CheckoutForm() {
    
  
   const axiosPrivate = useAxiosPrivate();

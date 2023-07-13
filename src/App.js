@@ -211,7 +211,7 @@ const [close, setclose] = useState(false);
           </Route>
           </Route>
           <Route element={<Private2 />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.Seller]} />}>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Seller, ROLES.User]} />}>
           <Route path="/delete/:carID" element={<Delete />} />
           </Route>
           </Route>

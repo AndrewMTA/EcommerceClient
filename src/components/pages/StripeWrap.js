@@ -3,7 +3,7 @@
     import {Elements} from '@stripe/react-stripe-js';
     import {loadStripe} from '@stripe/stripe-js';
     const StripeWrap = () => {
-        const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
+        const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
 
       return (
         <Elements stripe={stripePromise}>

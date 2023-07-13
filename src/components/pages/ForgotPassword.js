@@ -19,7 +19,7 @@ const ForgotPasswordScreen = () => {
 
     try {
       const { data } = await axios.post(
-        "https://pizzaserver.onrender.com/user/forgotpassword",
+        "https://andrewmta-cautious-space-spoon-57667qxr4j524x69-3500.preview.app.github.dev/user/forgotpassword",
         { email },
         config
       );

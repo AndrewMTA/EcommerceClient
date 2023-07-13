@@ -15,7 +15,7 @@ import GooglePlacesAutocomplete from 'react-google-autocomplete';
 
 // const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
 const REGISTER_URL = `/register`;
-const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
+const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
 
 const Register = () => {
     const userRef = useRef();
@@ -95,7 +95,7 @@ const Register = () => {
 
 
       
-      
+     
     const [selectedFile, setSelectedFile] = useState(null);
 
     const handleFileChange = (event) => {
@@ -281,9 +281,16 @@ const Register = () => {
         };
       
       
-      
+        const updatedAddress = {
+          street: data.line1,
+           city: data.city,
+           state: data.state,
+           zip: data.zip,
+         }
+console.log("UPDATED", updatedAddress)
 
     const handlePayment = async () => {
+      console.log("PAY");
 
                             if (!stripe || !elements) {
                                 return;
@@ -315,7 +322,12 @@ const Register = () => {
                                 if (result.paymentIntent.status === "succeeded") {
                                   //console.log("Money baby");
                                 const email = data.email
-                              axios.put(`/user/add-membership`,  JSON.stringify({email}),
+                                const sellerName = data.companyName
+                                const phone = data.phone
+                                
+                              
+                             
+                              axios.put(`/user/add-membership`,  ({updatedAddress, email, sellerName, phone}),
                               {
                                   headers: { 'Content-Type': 'application/json' },
                                   withCredentials: true
@@ -381,9 +393,11 @@ createBankAccount()
 const createPerson = async (e) => {
   e.preventDefault()
   try {
+    const sellerTrue = true
     const res = await axios.post(`/create-person`, { data, accountNum });
     const response = await axios.post(REGISTER_URL,
-      JSON.stringify({ email: data.email, pwd, randomNum }),
+
+      JSON.stringify({ email: data.email, pwd, randomNum , seller: sellerTrue}),
       {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true
@@ -402,7 +416,7 @@ const createPerson = async (e) => {
   }
 };
 
-
+console.log("DATA",updatedAddress)
      
 const uploadDocument = async (file) => {
   const formData = new FormData();
@@ -414,7 +428,7 @@ const uploadDocument = async (file) => {
     const response = await fetch('https://files.stripe.com/v1/files', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y`,
+        Authorization: `Bearer pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI`,
       },
        
       body: formData,
@@ -429,9 +443,9 @@ const uploadDocument = async (file) => {
   }
 };
 
-const updatePerson = async (person, account, fileId) => {
+const updatePerson = async (person, account, fileId, ) => {
   try {
-    const response = await fetch('https://pizzaserver.onrender.com/update-person-file', {
+    const response = await fetch('https://andrewmta-cautious-space-spoon-57667qxr4j524x69-3500.preview.app.github.dev/update-person-file', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -440,6 +454,8 @@ const updatePerson = async (person, account, fileId) => {
         person,
         account,
         file: fileId,
+        sellerName: data.companyName,
+        email: data.email
       }),
     });
 
