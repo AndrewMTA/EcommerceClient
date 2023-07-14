@@ -5,7 +5,7 @@ import reducer from "../reducer/productReducer";
 const AppContext = createContext();
 
 //const API = "https://backend-6olc.onrender.com/cars/";
-const API = "https://andrewmta-cautious-space-spoon-57667qxr4j524x69-3500.preview.app.github.dev/cars/";
+const API = "https://pizzaserver.onrender.comcars/";
 const initialState = {
   isLoading: false,
   isError: false,
