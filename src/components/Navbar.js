@@ -18,7 +18,7 @@ const Navbar = () => {
   };
 
 
-  //console.log("user", user)
+  ////console.log("user", user)
    const dispatch = useDispatch();
    const logouts = useLogout();
 const handleLogout =  () => {

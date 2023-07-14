@@ -119,7 +119,7 @@ function CheckoutForm() {
           
             try {
               const response = await axiosPrivate.post(`/verify-address`, checkAddress);
-              //console.log(response.data);
+              ////console.log(response.data);
           
               if (response.data.customerMessages && response.data.customerMessages.length > 0) {
                 setErrState(true);
@@ -138,7 +138,7 @@ function CheckoutForm() {
               
       
                         
-      //console.log(validAddress.streetLine1)
+      ////console.log(validAddress.streetLine1)
                 if (validAddress.streetLine1 == "") {
               setAddressError(true)
             } 
@@ -146,7 +146,7 @@ function CheckoutForm() {
               }
             } catch (error) {
               setAddressError(true);
-              //console.log(error);
+              ////console.log(error);
             }
           };
         const { clearNotification, setSeller } = useContext(NotificationContext);
@@ -163,14 +163,14 @@ function CheckoutForm() {
             })
         }
 
-//console.log( "hh", user.address.length)
+////console.log( "hh", user.address.length)
 
 
 const saveAddress = async (e) => {
   validateAddress();
     e.preventDefault();
    const post = axiosPrivate.post(`/user/address/${user._id}`, details)
-   //console.log(post)
+   ////console.log(post)
    setNextPage(true)
   
 }
@@ -214,10 +214,10 @@ const saveAddress = async (e) => {
         };
       }).filter((item) => item !== null); // Remove skipped items
       
-      //console.log(cart);
+      ////console.log(cart);
       
 
-      //console.log("Cart", cart)
+      ////console.log("Cart", cart)
     
       const orderInfo = {
         cart: cart,
@@ -228,10 +228,10 @@ const saveAddress = async (e) => {
       try {
         const res = await axiosPrivate.post("/process-orders", orderInfo);
         const clientSecrets = res.data.paymentIntents;
-        //console.log("Received client secrets:", clientSecrets); // Verify the client secrets array in the console
+        ////console.log("Received client secrets:", clientSecrets); // Verify the client secrets array in the console
     
         for (const clientSecret of clientSecrets) {
-          //console.log("Confirming payment intent with client secret:", clientSecret);
+          ////console.log("Confirming payment intent with client secret:", clientSecret);
           const result = await stripe.confirmCardPayment(clientSecret, {
             payment_method: {
               card: elements.getElement(CardElement),
@@ -260,13 +260,13 @@ const saveAddress = async (e) => {
         const orderResponse = await axiosPrivate.post(`/orders/sellerId`, orderData);
         createOrder(orderData)
         const confirmationResponse = await axiosPrivate.post(`/confirm-order`, { email: user.email });
-        //console.log("Order response:", orderResponse.data);
-        //console.log("Confirmation response:", confirmationResponse.data);
+        ////console.log("Order response:", orderResponse.data);
+        ////console.log("Confirmation response:", confirmationResponse.data);
         navigate("/success");
         await removeFromCart({ userId: user._id });
         setSeller(orderResponse.data);
       } catch (error) {
-        //console.log(error.message);
+        ////console.log(error.message);
       }
     };
     
@@ -275,7 +275,7 @@ const saveAddress = async (e) => {
 {/*
   
 
-    //console.log("addy", user)
+    ////console.log("addy", user)
 */ }
     return (
         <div >

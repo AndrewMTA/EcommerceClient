@@ -13,7 +13,7 @@ import CarsCard2 from "../CarsCard2";
 import Footer from '../Footer';
 
 const MyListings = () => {
-    console.log(useParams())
+    //console.log(useParams())
 
     useEffect(() => {
       axios.get("/cars").then(({ data }) => dispatch(updateProducts(data)));

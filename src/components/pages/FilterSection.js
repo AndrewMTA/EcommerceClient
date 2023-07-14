@@ -32,7 +32,7 @@ const SelectModel = cars.filter((cars) => cars.model === selectModel);
 
 const unique = Array.from[new Set(cars)]
 
-//console.log(unique)
+////console.log(unique)
 
 useEffect(() => {
   axios.get("/cars").then(({ data }) => dispatch(updateProducts(data)));
@@ -96,7 +96,7 @@ const getUniqueMakes = (data) => {
   const modelData = getUniqueData(all_products, "model");
   const countryData = getUniqueData(all_products, "country");
   const colorsData = getUniqueData(all_products, "colors");
-  // //console.log(
+  // ////console.log(
   //   "🚀 ~ file: FilterSection.js ~ line 23 ~ FilterSection ~ makeData",
   //   colorsData
   // );

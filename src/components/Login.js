@@ -40,8 +40,8 @@ const Login = () => {
                     withCredentials: true
                 }
             );
-            console.log("");
-            ////console.log(JSON.stringify(response));
+            //console.log("");
+            //////console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
             setAuth({ email, pwd, roles, accessToken });

@@ -43,7 +43,7 @@ import Navbar from "../Navbar";
           config
         );
   
-        //console.log(data);
+        ////console.log(data);
         setSuccess(data.data);
       } catch (error) {
         setError(error.response.data.error);

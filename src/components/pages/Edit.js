@@ -94,7 +94,7 @@ function HomePage() {
 
     if (res.error) {
       // Show error to your customer (e.g., insufficient funds)
-      //console.log(res.error.message);
+      ////console.log(res.error.message);
     } else {
       // The payment has been processed!
       if (res.status === 200) {

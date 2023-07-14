@@ -15,7 +15,7 @@ import GooglePlacesAutocomplete from 'react-google-autocomplete';
 
 // const REGISTER_URL = 'https://backend-6olc.onrender.com/register';
 const REGISTER_URL = `/register`;
-const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
+const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
 
 const Register = () => {
     const userRef = useRef();
@@ -92,7 +92,8 @@ const Register = () => {
 
         emailCOntact: "",
       });
-
+      const fileEmail = data?.email
+      const fileSeller = data?.companyName
 
       
      
@@ -107,7 +108,7 @@ const Register = () => {
         setDocument(true)
     }
   
-    //console.log(data)
+    ////console.log(data)
 
 
     useEffect(() => {
@@ -119,6 +120,7 @@ const Register = () => {
         setErrMsg('');
     }, [email, pwd, matchPwd])
 
+    
 
 
     const [piiData, setPiiData ]= useState({
@@ -154,7 +156,7 @@ const Register = () => {
             // PII token created successfully
             const piiToken = result.token;
             // Use the piiToken for further processing or sending to the server
-            //console.log(piiToken);
+            ////console.log(piiToken);
           }
         });
 */}
@@ -196,6 +198,7 @@ const Register = () => {
         const account = accountNum;
         updatePerson(person, account, fileId);
         setDocument(false);
+
       } else {
         //console.log("No file selected");
       }
@@ -217,14 +220,14 @@ const Register = () => {
 
 
             );
-            // TODO: remove //console.logs before deployment
+            // TODO: remove ////console.logs before deployment
 
-            //console.log(JSON.stringify(response?.data));
-            ////console.log(JSON.stringify(response))
+            ////console.log(JSON.stringify(response?.data));
+            //////console.log(JSON.stringify(response))
             setSuccess2(true);
 
 
-            //console.log("peanutz")
+            ////console.log("peanutz")
 
 
 
@@ -235,7 +238,7 @@ const Register = () => {
             } else if (err.response?.status === 409) {
                 setErrMsg('Email Taken');
             } else {
-             //console.log("")
+             ////console.log("")
             }
             errRef.current.focus();
         }
@@ -287,58 +290,9 @@ const Register = () => {
            state: data.state,
            zip: data.zip,
          }
-console.log("UPDATED", updatedAddress)
+//console.log("UPDATED", updatedAddress)
 
-    const handlePayment = async () => {
-      console.log("PAY");
-
-                            if (!stripe || !elements) {
-                                return;
-                              }
-                          
-                          
-                              
-                              const res = await axios.post("/create-payments", {
-                                email: data.email,
-                                amount: 2000
-                              });
-                          
-                              const clientSecret = res.data["client_secret"];
-                          
-                              const result = await stripe.confirmCardPayment(clientSecret, {
-                                payment_method: {
-                                  card: elements.getElement(CardElement),
-                                  billing_details: {
-                                    email: data.email,
-                                  },
-                                },
-                              });
-                          
-                              if (result.error) {
-                                setErrMsg( "There was an issue with your payment. Payment Declined");
-                                //console.log(result.error.message);
-                              } else {
-                                // The payment has been processed!
-                                if (result.paymentIntent.status === "succeeded") {
-                                  //console.log("Money baby");
-                                const email = data.email
-                                const sellerName = data.companyName
-                                const phone = data.phone
-                                const accountNum = accountNum
-                              console.log("ACCOUNT", accountNum)
-                             
-                              axios.put(`/user/add-membership`,  ({updatedAddress, email, sellerName, accountNum, phone}),
-                              {
-                                  headers: { 'Content-Type': 'application/json' },
-                                  withCredentials: true
-                              },)
-                                setMemberAdded(true)
-                                setSuccess(true)
-                                }
-                              
-            
-                        }
-    }
+ 
 
     const handleAddPerson = (e) => {
 e.preventDefault()
@@ -366,7 +320,7 @@ createBankAccount()
           try {
             const response = await axios.post(`/create-account`, { bankToken: tokenId, data });
             setAccountNum(response.data);
-            console.log(response.data)
+            //console.log(response.data)
             if (response.data) {
               setPerson(true);
               setBankInfo(false);
@@ -376,20 +330,80 @@ createBankAccount()
             setBankInfo(false);
             setSeller(true);
             setErrMsg("Something went wrong. Check your info and try again, or contact support.");
+            setTimeout(() => {
+              setErrMsg("");
+            }, 3000);
+         
           }
         }
         else if (!tokenId)
          {setErrMsg("Something went wrong. Check your info and try again, or contact support.");
-
+         setTimeout(() => {
+          setErrMsg("");
+        }, 3000);
         }
       } catch (error) {
         console.error('Error creating token:', error);
         setErrMsg("Something went wrong. Check your info and try again, or contact support.");
-      }
+      
+        setTimeout(() => {
+          setErrMsg("");
+        }, 3000);}
     }
     
       
-console.log("NUM", accountNum)
+//console.log("NUM", accountNum)
+const handlePayment = async () => {
+  //console.log("PAY");
+
+                        if (!stripe || !elements) {
+                            return;
+                          }
+                      
+                      
+                          
+                          const res = await axios.post("/create-payments", {
+                            email: data.email,
+                            amount: 2000
+                          });
+                      
+                          const clientSecret = res.data["client_secret"];
+                      
+                          const result = await stripe.confirmCardPayment(clientSecret, {
+                            payment_method: {
+                              card: elements.getElement(CardElement),
+                              billing_details: {
+                                email: data.email,
+                              },
+                            },
+                          });
+                      
+                          if (result.error) {
+                            setErrMsg( "There was an issue with your payment. Payment Declined");
+                            setTimeout(() => {
+                              setErrMsg("");
+                            }, 3000);    ////console.log(result.error.message);
+                          } else {
+                            // The payment has been processed!
+                            if (result.paymentIntent.status === "succeeded") {
+                              ////console.log("Money baby");
+                            const email = data.email
+                            const sellerName = data.companyName
+                            const phone = data.phone
+                        
+                       
+                          axios.put(`/user/add-membership`,  ({updatedAddress, email, sellerName, accountNum, accountNum, phone}),
+                          {
+                              headers: { 'Content-Type': 'application/json' },
+                              withCredentials: true
+                          },)
+                            setMemberAdded(true)
+                            setSuccess(true)
+                            }
+                          
+        
+                    }
+}
       
 const createPerson = async (e) => {
   e.preventDefault()
@@ -409,7 +423,7 @@ const createPerson = async (e) => {
 
   );
     setPersonNum(res.data);
-    //console.log("person", res.data);
+    ////console.log("person", res.data);
     setPerson(false);
     setDocument(true);
   } catch (error) {
@@ -417,55 +431,57 @@ const createPerson = async (e) => {
   }
 };
 
-console.log("DATA",updatedAddress)
-     
+//console.log("DATA",updatedAddress)
+
 const uploadDocument = async (file) => {
   const formData = new FormData();
   formData.set('purpose', 'identity_document');
-  formData.set('file', file);
+  formData.append('file', file); // Append the selected file to the FormData
 
   try {
-      //console.log("Sending file")
     const response = await fetch('https://files.stripe.com/v1/files', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI`,
+        Authorization: `Bearer pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y`,
       },
-       
       body: formData,
     });
 
     const data = await response.json();
-    //console.log(data);
-    //console.log(data.id);
+    //console.log("FILE", data);
     return data.id;
   } catch (error) {
     console.error(error);
+    //console.log("FILE ERR");
   }
 };
 
-const updatePerson = async (person, account, fileId, ) => {
+
+
+const updatePerson = async (person, account, fileId) => {
   try {
-    const response = await fetch('https://andrewmta-cautious-space-spoon-57667qxr4j524x69-3500.preview.app.github.dev/update-person-file', {
-      method: 'POST',
+    console.log("UCK", person, fileId)
+
+    const response = axios.post('/update-person-file', {
+      person,
+      account,
+      file: fileId,
+      sellerName: fileSeller ,
+      email: fileEmail 
+    }, {
       headers: {
         'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        person,
-        account,
-        file: fileId,
-        sellerName: data.companyName,
-        email: data.email
-      }),
+        withCredentials: true
+      }
     });
-
-    const data = await response.json();
-    //console.log(data);
+    console.log("RES", response)
+    const data = response.data;
+    console.log("RESPONSE", data);
   } catch (error) {
     console.error(error);
   }
 };
+
 
 
 
@@ -547,7 +563,7 @@ const updatePerson = async (person, account, fileId, ) => {
     
       try {
         const response = await axios.post(`/verify-address`, checkAddress);
-        //console.log(response.data);
+        ////console.log(response.data);
     
         if (response.data.customerMessages && response.data.customerMessages.length > 0) {
           setErrState(true);
@@ -567,7 +583,7 @@ const updatePerson = async (person, account, fileId, ) => {
           setBankInfo(true)
 
                     setSeller(null)
-//console.log(validAddress.streetLine1)
+////console.log(validAddress.streetLine1)
           if (validAddress.streetLine1 == "") {
         setAddressError(true)
       } 
@@ -575,10 +591,10 @@ const updatePerson = async (person, account, fileId, ) => {
         }
       } catch (error) {
         setAddressError(true);
-        //console.log(error);
+        ////console.log(error);
       }
     };
-    //console.log(validAddress.streetLine1)
+    ////console.log(validAddress.streetLine1)
 
     const handleError = () => {
       if (validAddress.streetLine1 == "") {
@@ -587,11 +603,11 @@ const updatePerson = async (person, account, fileId, ) => {
         setAddressError(true)
       }
     }
-    //console.log(validAddress.streetLine1)
+    ////console.log(validAddress.streetLine1)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //console.log("pot")
+        ////console.log("pot")
         if (selectedOption === 'no') {
 
             try {
@@ -610,7 +626,7 @@ const updatePerson = async (person, account, fileId, ) => {
                 // TODO
 
          
-                ////console.log(JSON.stringify(response))
+                //////console.log(JSON.stringify(response))
                 setSuccess(true);
 
                 setPwd('');
@@ -633,10 +649,10 @@ const updatePerson = async (person, account, fileId, ) => {
 
         else if (selectedOption === 'yes') {
             setSeller(true)
-            //console.log("Yeah")
-            console.log("YEAH")
+            ////console.log("Yeah")
+            //console.log("YEAH")
             if (data.website !== '') {
-              console.log("READY")
+              //console.log("READY")
                 setSelectedOption('')
                
 
@@ -653,7 +669,7 @@ const updatePerson = async (person, account, fileId, ) => {
                     );
    
     
-                    //console.log(JSON.stringify(response?.data));
+                    ////console.log(JSON.stringify(response?.data));
                 
     
                     setPwd('');
@@ -1050,13 +1066,13 @@ value={data.zip}
 
 { document && <>
     <label>Upload ID</label>
-
+<form>
 <p className="tiny">ShipSlices requires an image of a State issued I.D or Drivers License of the account representitive.</p>
 <fieldset className="inputOnboard">
       <input type="file" id="file" ref={fileInputRef} name="file" className="field" onChange={handleFileChange} />
     </fieldset>
             <button onClick={handleSubmitDoc}>Next</button>
-
+            </form>
 </>}
 
                         {checkout && <>

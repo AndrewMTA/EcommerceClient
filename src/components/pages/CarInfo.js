@@ -123,7 +123,7 @@ const hideArrow = () => {
   setDisplay(true)
 }
 
-//console.log( "Num", cars.filter ((carz) => carz.listUser.includes(carID)))
+////console.log( "Num", cars.filter ((carz) => carz.listUser.includes(carID)))
 const [currentIndex, setCurrentIndex] = useState(0);
 const goToPrevious = () => {
   const isFirstSlide = currentIndex === 0;
@@ -164,7 +164,7 @@ const goToSlide = (slideIndex) => {
   
       if (res.error) {
         // Show error to your customer (e.g., insufficient funds)
-        //console.log(res.error.message);
+        ////console.log(res.error.message);
       } else {
         // The payment has been processed!
         if (res.status === 200) {

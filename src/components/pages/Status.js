@@ -23,7 +23,7 @@ function Status() {
     let handler = (e) => {
       if (!menuRef.current.contains(e.target)) {
         setShow(true);
-        //console.log(menuRef.current);
+        ////console.log(menuRef.current);
       }
     };
     document.addEventListener("mousedown", handler);

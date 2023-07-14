@@ -52,17 +52,17 @@ setPickupDay(date)
 setMatch(index)
 
 }
-  //console.log(time)
+  ////console.log(time)
 
   const handleFulfill = () => {
     axios.put(`/orders/set-fulfill/', { orderId }`)
       .then(response => {
-        //console.log(response.data);
+        ////console.log(response.data);
       })
       .catch(error => {
         console.error(error);
       });
-    //console.log(orderId);
+    ////console.log(orderId);
   };
   
 
@@ -138,7 +138,7 @@ setMatch(index)
           value: "740561073"
         }
       };
-  //console.log(shipmentData)
+  ////console.log(shipmentData)
   axios
   .post("/orders/print-label", shipmentData)
   .then((response) => {
@@ -153,7 +153,7 @@ setMatch(index)
     });
     setLabelLoading(false)
     setUrl(() => url);
-    //console.log(url);
+    ////console.log(url);
   })
   .catch((error) => {
     console.error(error);
@@ -171,7 +171,7 @@ setMatch(index)
         delete productCopy.description;
         return productCopy;
     });
-    //console.log(productsToShow);
+    ////console.log(productsToShow);
     setOrderID(orderId)
     setShow(true);
     setOrderToShow(productsToShow);
@@ -189,15 +189,15 @@ setMatch(index)
             })
             .catch((e) => {
                 setLoading(false);
-                //console.log(e);
+                ////console.log(e);
             });
     }, []);
 
 
 
    const getTime = (one, two) => {
-    //console.log(one)
-    //console.log(two)
+    ////console.log(one)
+    ////console.log(two)
 
 
 
@@ -211,10 +211,10 @@ const timeObject = DateTime.fromFormat(timeString, 'hh:mm a');
 const originalTime = timeObject.toFormat('HH:mm:ss');
     setDateSubmit(date);
     setTimeSubmit(originalTime);
-    //console.log("i", setter, date, originalTime);
+    ////console.log("i", setter, date, originalTime);
   };
   
-//console.log("uuu", time, dateSubmit, timeSubmit)
+////console.log("uuu", time, dateSubmit, timeSubmit)
     const handleSubmitPickup = () => {
       const submitData = {
         
@@ -248,7 +248,7 @@ const originalTime = timeObject.toFormat('HH:mm:ss');
      .then((response) => {
        
       setpickupCode(response.data.output.pickupConfirmationCode)
-     //console.log(response)
+     ////console.log(response)
      
      })
     
@@ -275,7 +275,7 @@ const originalTime = timeObject.toFormat('HH:mm:ss');
    .then((response) => {
      
    setTimes(response.data.output.options)
-   //console.log(response)
+   ////console.log(response)
    
    })
    .catch((error) => {
@@ -286,7 +286,7 @@ const originalTime = timeObject.toFormat('HH:mm:ss');
     };
     useLoadScript({googleMapsApiKey: 'AIzaSyDafqAOtxds8RDU33u_luv9E8KjuQSZ35M' })
     useEffect(() => {
-      //console.log("poo", times);
+      ////console.log("poo", times);
     
     }, [times]);
 
@@ -475,8 +475,8 @@ your code: {pickupCode}
     const day = dateObject.toFormat('dd');
     const dayOfWeek = dateObject.toFormat('EEE');
 
-    //console.log(`${month}-${day}`);
-    //console.log("pee", dateObject);
+    ////console.log(`${month}-${day}`);
+    ////console.log("pee", dateObject);
 
     return (
       <>

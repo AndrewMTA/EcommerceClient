@@ -15,7 +15,7 @@ import Navbar from "../Navbar";
 // ...
 
 
-const stripePromise = loadStripe("pk_test_51LGwewJ0oWXoHVY4KaHYgICxXbe41zPhsxY9jYfVqgyEHK3oX4bwaoAvgXByAF2Ek2UAVZ0L6FjddQvAvBIMsB7t00fE5UAlwI");
+const stripePromise = loadStripe("pk_live_51LGwewJ0oWXoHVY4hzmdZ1i4COqqKZ8PVlcoPHwL4lg6oAgqjEzR5EdVZXBrwjnToi3VfU9lT2vReJyVcRVuskDI00DovYoz0Y");
 
 function CartPage() {
 
@@ -39,7 +39,7 @@ function CartPage() {
     if (quantity <= 0) return alert("Can't proceed");
     decreaseCart(product);
   }
-//console.log(user.cart)
+////console.log(user.cart)
   return (
     <>
       <Navbar />
@@ -59,7 +59,7 @@ function CartPage() {
                   <thead></thead>
                   <tbody>
                     {cart?.map((item) => {
-                      //console.log(item)
+                      ////console.log(item)
                      return (
                       <tr key={item._id}>
                         <div className="sha_boing">

@@ -131,7 +131,7 @@ const confirmCancel = async () => {
 };
 
 
-console.log(cancelState)
+//console.log(cancelState)
 
   const [showComingSoon, setShowComingSoon] = useState(false);
   
@@ -164,17 +164,17 @@ console.log(cancelState)
     setMatch(index)
   }
 
-  //console.log("checked", isChecked)
+  ////console.log("checked", isChecked)
   const handleFulfill = () => {
     axiosPrivate.put(`/orders/set-fulfill/`, { orderId, userId:user._id })
       .then(response => {
-        //console.log(response.data);
+        ////console.log(response.data);
         window.location.reload(); // Refresh the page
       })
       .catch(error => {
         console.error(error);
       });
-    //console.log(orderId);
+    ////console.log(orderId);
   };
 
 
@@ -183,22 +183,22 @@ console.log(cancelState)
   };
 
   
-//console.log("Cancel", cancelState)
-//console.log("ii", user)
+////console.log("Cancel", cancelState)
+////console.log("ii", user)
   const handleFulfillMany = () => {
     const highlightedOrders = orders.filter((order) => order.highlighted);
 
     if (highlightedOrders.length === 0) {
-      //console.log("No highlighted orders to fulfill.");
+      ////console.log("No highlighted orders to fulfill.");
       return;
     }
 
     const orderIds = highlightedOrders.map((order) => order._id);
-    //console.log(orderIds)
+    ////console.log(orderIds)
     axiosPrivate
       .put(`/orders/set-fulfill-many`, { orderIds,  userId:user._id })
       .then(response => {
-        //console.log(response.data);
+        ////console.log(response.data);
         // Perform any necessary actions after fulfillment
         window.location.reload(); // Refresh the page
       })
@@ -225,17 +225,17 @@ console.log(cancelState)
 const handleAddFedex = (e) => {
 
   e.preventDefault()
-  //console.log(fedex, user?._id)
+  ////console.log(fedex, user?._id)
   
 addFedex({id: user?._id, fedex})
 
 }
 
-//console.log("FED", user?.fedexAccount)
+////console.log("FED", user?.fedexAccount)
 
   const handleLabel = () => {
     setOrderAddress(labelInfo)
-console.log("LOGG")
+//console.log("LOGG")
     if (!user.fedexAccount) {
       
       setGetAccount(true)
@@ -243,7 +243,7 @@ console.log("LOGG")
     setOpen(true);
     } else {
     const order = orders[labelIndex];
-    //console.log("oe", order)
+    ////console.log("oe", order)
     setLabelLoading(true)
     if (
       labelInfo
@@ -331,9 +331,9 @@ console.log("LOGG")
         
       
        
-//console.log("Uhuhducd",user)
+////console.log("Uhuhducd",user)
 
-      //console.log(shipmentData)
+      ////console.log(shipmentData)
       axiosPrivate
         .post("/orders/print-label", shipmentData, { userId:user._id})
         .then((response) => {
@@ -351,7 +351,7 @@ console.log("LOGG")
             window.open(url, "_blank");
             setLabelSelect(false)
           }
-          //console.log(url);
+          ////console.log(url);
         })
         .catch((error) => {
           console.error(error);
@@ -378,11 +378,11 @@ console.log("LOGG")
     return matchId === userId;
   });
 
-  //console.log("ii", productMatch)
+  ////console.log("ii", productMatch)
 
-  //console.log("match", idMatch);
+  ////console.log("match", idMatch);
 
-  //console.log("hh", orderProductIds)
+  ////console.log("hh", orderProductIds)
 
   function showOrder(productsObj, orderId, owner) {
     let productsToShow = products.filter((product) => {
@@ -397,15 +397,15 @@ console.log("LOGG")
       delete productCopy.description;
       return productCopy;
     });
-    //console.log("Own", owner);
-    //console.log("go", productsToShow);
+    ////console.log("Own", owner);
+    ////console.log("go", productsToShow);
     setOwnerId(owner)
     setOrderID(orderId);
     setShow(true);
     setOrderToShow(productsToShow);
   }
 
-  console.log("ssss", selectedPackage,selectedPickupType, user )
+  //console.log("ssss", selectedPackage,selectedPickupType, user )
 
   const changeCPage = (id) => {
     setPage(id);
@@ -420,7 +420,7 @@ console.log("LOGG")
       })
       .catch((e) => {
         setLoading(false);
-        //console.log(e);
+        ////console.log(e);
       });
   }, []);
   useEffect(() => {
@@ -433,7 +433,7 @@ console.log("LOGG")
       })
       .catch((e) => {
         setLoading(false);
-        //console.log(e);
+        ////console.log(e);
       });
   }, []);
 
@@ -446,7 +446,7 @@ setLabelSelect(true)
 setLabelInfo(orderaddresses)
 setLabelIndex(index)
  }
- console.log("LINDXXX", selectedPackage,selectedPickupType)
+ //console.log("LINDXXX", selectedPackage,selectedPickupType)
 
   const handleSetSubmit = (setter, date) => {
     setTime(setter);
@@ -526,7 +526,7 @@ setLabelIndex(index)
           location: response.data.output?.location
         };
 
-        //console.log("33", formattedTime)
+        ////console.log("33", formattedTime)
         
 
 addPickup(pickupInfo)
@@ -547,7 +547,7 @@ addPickup(pickupInfo)
   };
 
 
-//console.log(pickupCode)
+////console.log(pickupCode)
 
 const handleAnother = () => {
   setAnother(true)
@@ -591,7 +591,7 @@ const handleAnother = () => {
   }, [times]);
  
  
-  //console.log(times)
+  ////console.log(times)
 
 
 
@@ -627,7 +627,7 @@ const handleAnother = () => {
     const { error, token } = await stripe.createToken(cardElement);
 
     if (error) {
-      //console.log('Error:', error);
+      ////console.log('Error:', error);
     } else {
       // Send the token to your backend server for further processing
       saveCard(token.id);
@@ -647,9 +647,9 @@ const saveCard = async (tokenId) => {
   // Handle the response from the backend
   const data = await response.json();
   if (data.success) {
-    //console.log('Card saved successfully!');
+    ////console.log('Card saved successfully!');
   } else {
-    //console.log('Error saving card:', data.error);
+    ////console.log('Error saving card:', data.error);
   }
 };
 
@@ -685,7 +685,7 @@ const saveCard = async (tokenId) => {
           {filteredOrders.slice(firstIndex, lastIndex).map((order, index) => {
             // Assuming 'orders' is an array of objects
 
-            //console.log("highlighted", order.highlighted)
+            ////console.log("highlighted", order.highlighted)
             if (order.highlighted) {
               setHighlighted(true);
             } else if (!highlighted) {
@@ -1021,8 +1021,8 @@ const saveCard = async (tokenId) => {
                             const day = dateObject.toFormat('dd');
                             const dayOfWeek = dateObject.toFormat('EEE');
   
-                            //console.log(`${month}-${day}`);
-                            //console.log("pee", dateObject);
+                            ////console.log(`${month}-${day}`);
+                            ////console.log("pee", dateObject);
   
                             return (
                               <>

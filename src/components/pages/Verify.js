@@ -11,7 +11,7 @@ function Verify() {
   };
 
 const ID = id.id
-  //console.log(id.id)
+  ////console.log(id.id)
   const handleVerification = (e) => {
     e.preventDefault();
   

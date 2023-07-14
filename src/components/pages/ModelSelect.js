@@ -25,7 +25,7 @@
   
             className="select"
             onChange={(e) => {
-              //console.log(e.target.value);
+              ////console.log(e.target.value);
             }}
           >
             <option>Choose a model</option>
@@ -62,7 +62,7 @@
           <select
             className="select"
             onChange={(e) => {
-              //console.log(e.target.value);
+              ////console.log(e.target.value);
             }}
           >
             <option>Choose a model</option>
